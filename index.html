@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f8faf9">
+<meta name="description" content="Phoenix 技术报告：多教师视觉表征、世界动作模型、规模化预训练、精细交互与世界模型强化学习。">
+<title>Phoenix · 从规模化预训练到精细交互</title>
+<style>:root{--paper:#f8faf9;--white:#fff;--ink:#203537;--muted:#627574;--teal:#216f65;--line:#dce6e2;--mint:#eaf3ef;--blue:#bad0eb;--green:#c5ddcd;--cyan:#a8d0d5;--width:1120px;color-scheme:light}
+*{box-sizing:border-box;letter-spacing:0}html{scroll-behavior:smooth;scroll-padding-top:100px}body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;font-size:16px;line-height:1.8;-webkit-font-smoothing:antialiased}a{color:inherit;text-underline-offset:4px}button,select{font:inherit}button{cursor:pointer;color:inherit}a,button,select,summary{-webkit-tap-highlight-color:transparent}button:focus-visible,a:focus-visible,select:focus-visible,summary:focus-visible,[tabindex]:focus-visible{outline:3px solid #508fbc;outline-offset:4px}img{display:block;max-width:100%;height:auto}h1,h2,h3,p,figure{margin:0}h1,h2,h3{line-height:1.3}h2{font-size:34px;font-weight:600}h3{font-size:22px;font-weight:600}p+p{margin-top:16px}strong{font-weight:650}sub{line-height:0}code{font-size:12px;background:#edf1ef;padding:2px 4px;border-radius:3px}.wrap{width:min(100% - 64px,var(--width));margin-inline:auto;min-width:0}[hidden]{display:none!important}
+.skip{position:fixed;top:-90px;left:16px;z-index:90;background:white;padding:10px}.skip:focus{top:10px}.topbar{position:sticky;top:0;z-index:20;background:rgba(248,250,249,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}.nav-inner{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:28px}.wordmark{display:inline-flex;align-items:center;gap:10px;font-size:24px;font-weight:700;text-decoration:none;white-space:nowrap}.brand-dot{width:10px;height:10px;background:var(--teal);border-radius:2px;transform:rotate(-12deg)}nav{display:flex;gap:28px}nav a{text-decoration:none;color:var(--muted);font-size:13px;white-space:nowrap}nav a:hover,nav a[aria-current="location"]{color:var(--teal)}.eyebrow{font-size:11px;color:var(--teal);font-weight:600;line-height:1.5}
+.masthead{text-align:center;padding-top:46px}.masthead h1{font-size:72px;color:var(--teal);font-weight:650;line-height:1.1;margin:18px 0}.headline{font-size:28px;font-weight:500}.hero-copy{font-size:15px;color:var(--muted);margin:16px auto 0;max-width:680px;line-height:1.9}.hero-actions{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:24px}.button{display:inline-flex;align-items:center;justify-content:center;min-height:43px;padding:9px 19px;font-size:13px;font-weight:600;border:1px solid var(--line);border-radius:5px;text-decoration:none;background:white}.button.primary{background:var(--teal);border-color:var(--teal);color:white}.button:hover{filter:brightness(.96)}.text-link{font-size:13px;color:var(--teal);display:inline-block}.hero-actions .text-link{margin-left:6px}.hero-metrics{display:grid;grid-template-columns:repeat(3,1fr);margin-top:40px;border-block:1px solid var(--line);text-align:center}.hero-metrics>div{padding:20px 12px;display:flex;flex-direction:column;gap:1px}.hero-metrics>div+div{border-left:1px solid var(--line)}.hero-metrics strong{font-size:39px;font-weight:550;line-height:1.3;font-variant-numeric:tabular-nums}.hero-metrics strong span{font-size:23px}.hero-metrics>div>span{font-size:12px;color:var(--muted)}.metric-note{font-size:11px;color:var(--muted);margin-top:9px}
+.overview{padding-top:34px}.figure-heading{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--muted);margin-bottom:14px}.figure-heading a{text-decoration:none}.figure-link{display:block;background:white}.figure-link:focus-visible{outline-offset:3px}.figure-link img{width:100%}figcaption,.caption{font-size:12px;line-height:1.8;color:var(--muted);margin-top:12px}figcaption a{margin-left:8px;white-space:nowrap}.intro-grid{display:grid;grid-template-columns:1fr 1.45fr;gap:70px;padding:64px 0 72px}.intro-grid>div{color:var(--muted);font-size:15px}.intro-grid h2{padding-top:3px}
+.section{padding:76px 0;border-top:1px solid var(--line)}.tint{background:#f1f6f3}.section-heading{display:grid;grid-template-columns:1.2fr 1fr;gap:65px;align-items:end;margin-bottom:36px}.section-heading .eyebrow{margin-bottom:13px}.section-heading>p{color:var(--muted);font-size:14px;max-width:440px}.principles{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;margin:38px 0}.principles article{border-top:3px solid var(--blue);padding-top:16px}.principles article:nth-child(2){border-color:var(--cyan)}.principles article:nth-child(3){border-color:var(--green)}.index{font:12px ui-monospace,monospace;color:var(--muted)}.principles h3{font-size:18px;margin:12px 0}.principles p{font-size:13px;color:var(--muted);line-height:1.9}.feature-figure{margin-top:32px}.method-block{border-top:1px solid var(--line);margin-top:46px;padding-top:34px}.subsection-heading{display:flex;flex-direction:column;gap:9px;margin-bottom:19px}.module-code{font-size:11px;color:var(--teal);font-weight:600}.prose{max-width:940px;color:var(--muted);font-size:15px;line-height:1.95}.method-block figure{margin-top:25px}
+.data-metrics{display:grid;grid-template-columns:1fr 1fr .8fr;gap:36px;border-block:1px solid var(--line);margin-bottom:32px;padding:25px 0}.data-metrics>div{min-width:0}.data-metrics span{display:block;color:var(--muted);font-size:12px}.data-metrics strong{display:block;font-size:31px;font-weight:550;line-height:1.5;font-variant-numeric:tabular-nums}.data-metrics small{font-size:13px;margin-left:8px;font-weight:400;color:var(--muted)}#data>.wrap>.prose{margin-top:28px}details{border-block:1px solid var(--line);margin-top:24px}summary{min-height:58px;display:flex;gap:14px;align-items:center;font-size:14px;font-weight:550;cursor:pointer;list-style:none;padding:15px 0}summary::-webkit-details-marker{display:none}summary::after{content:"+";font-size:22px;color:var(--teal);margin-left:auto;line-height:1;flex-shrink:0}details[open]>summary::after{content:"−"}.summary-meta{font-size:11px;color:var(--muted);font-weight:400;margin-left:auto}summary:has(.summary-meta)::after{margin-left:5px}.detail-body{padding:5px 0 24px;color:var(--muted);font-size:14px}.detail-body .table-scroll{margin:15px 0}
+.tablist{display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--line)}.tablist button{border:0;border-bottom:2px solid transparent;border-radius:0;background:transparent;padding:13px 21px;font-size:13px;min-height:48px;font-weight:500;transition:background .15s,color .15s}.tablist button:hover{background:var(--mint)}.tablist button[aria-selected="true"]{color:var(--teal);border-bottom-color:var(--teal);background:var(--mint)}.benchmark-panel{padding-top:28px}.benchmark-summary{display:flex;justify-content:space-between;gap:32px;align-items:center;margin-bottom:32px}.benchmark-summary h3{font-size:25px;margin:8px 0}.benchmark-summary p:not(.eyebrow){font-size:13px;color:var(--muted)}.benchmark-score{text-align:right;flex-shrink:0}.benchmark-score strong{display:block;font-size:44px;color:var(--teal);font-weight:550;line-height:1.3}.benchmark-score small{font-size:24px}.benchmark-score>span{font-size:11px;color:var(--muted)}.bar-chart{padding:22px 0;border-block:1px solid var(--line)}.bar-row{display:grid;grid-template-columns:205px 1fr 85px;gap:20px;align-items:center;margin:13px 0}.bar-row>span{font-size:13px}.bar-row small{font-size:11px;color:var(--muted);margin-left:5px}.bar-track{height:25px;background:#edf1ef;overflow:hidden}.bar-fill{height:100%;display:block;background:#77b1a5}.bar-fill.baseline{background:#c5d1cd}.bar-row>strong{text-align:right;font-size:17px;font-variant-numeric:tabular-nums;font-weight:550}.result-callout{font-size:13px;color:var(--muted);margin-top:14px}.result-callout strong{color:var(--teal)}
+.table-scroll{width:100%;overflow-x:auto;overscroll-behavior-x:contain;border-top:1px solid #a9bcb4;scrollbar-width:thin}.report-table{border-collapse:collapse;width:100%;font-size:12px;color:var(--ink);border-bottom:1px solid #a9bcb4;font-variant-numeric:tabular-nums}.report-table th,.report-table td{padding:11px 12px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap;line-height:1.5}.report-table th:first-child,.report-table td:first-child{text-align:left}.report-table th{font-weight:500}.report-table thead{background:#edf3ef}.report-table thead th{font-size:11px;font-weight:600}.report-table .ours{background:#e5f1eb}.report-table .table-group th,.report-table .table-group td{background:#eff1f0;text-align:center;font-weight:600}.report-table tbody tr:not(.table-group):hover{background:#eff6f2}.report-table .ours th{color:#216458}.report-table strong{font-weight:700}.report-table u{text-underline-offset:3px}.split-stats{display:grid;grid-template-columns:1fr 1fr;gap:28px;padding:24px 0;border-block:1px solid var(--line);margin:26px 0}.split-stats>div>span{display:block;font-size:12px;color:var(--muted)}.split-stats strong{display:block;font-size:25px;font-weight:550;margin-top:5px}.split-stats strong span{color:#91a7a0;font-size:22px;margin:0 8px}
+.demo-tabs{margin-bottom:24px}.demo-tabs button{padding:12px 17px}.video-frame{background:#e1e9e5;aspect-ratio:24/7;width:100%;overflow:hidden}.video-frame video{display:block;width:100%;height:100%;object-fit:contain}.video-toolbar{display:flex;justify-content:space-between;gap:24px;align-items:center;padding:17px 0;border-bottom:1px solid var(--line);min-height:89px}.video-toolbar h3{font-size:18px}.video-toolbar p{font-size:12px;color:var(--muted);margin-top:3px}.video-actions{display:flex;gap:12px;align-items:center;font-size:12px;white-space:nowrap}.video-actions label{color:var(--muted)}.video-actions select{min-height:36px;padding:5px 6px;border:1px solid var(--line);background:white;border-radius:4px;color:var(--ink);font-size:12px}.video-actions a{margin-left:7px}#video-error{color:#993f37;font-size:13px;padding:12px 0}
+.analysis-block+.analysis-block{margin-top:46px;border-top:1px solid var(--line);padding-top:36px}.analysis-block figure,.analysis-block>.table-scroll{margin-top:26px}.finding-strip{border-left:3px solid var(--cyan);padding:14px 20px;background:#eef5f3;margin-top:23px}.finding-strip p{font-size:15px}.finding-strip strong{color:var(--teal)}.finding-strip>span{font-size:12px;color:var(--muted)}.demo-jump{margin-top:16px;margin-right:24px}.resources{padding-block:64px}.resource-links{display:grid;grid-template-columns:repeat(3,1fr);gap:0 32px}.resource-links a{display:flex;align-items:center;justify-content:space-between;gap:15px;text-decoration:none;padding:17px 0;border-top:1px solid var(--line);font-size:14px}.resource-links small{font-size:11px;color:var(--teal);white-space:nowrap}.resource-links a:hover span{text-decoration:underline}footer{border-top:1px solid var(--line);padding:28px 0}.footer-inner{display:flex;align-items:center;justify-content:space-between;gap:20px;font-size:11px;color:var(--muted)}.footer-inner .wordmark{font-size:19px;color:var(--ink)}.footer-inner>a:last-child{text-decoration:none}
+.expanded-details{margin-top:24px;border-top:1px solid var(--line)}.detail-heading{display:flex;align-items:center;gap:14px;margin:0;padding:18px 0;font-size:15px;line-height:1.6;font-weight:550}.expanded-details .detail-body{padding-top:0}.benchmark-links{display:flex;gap:28px;flex-wrap:wrap;padding:14px 0;border-block:1px solid var(--line)}.benchmark-links a{font-size:13px;color:var(--teal);font-weight:500;text-decoration:none}.benchmark-links a:hover{text-decoration:underline}.benchmark-panel+.benchmark-panel{border-top:1px solid var(--line);margin-top:42px;padding-top:36px}
+@media(max-width:680px){.detail-heading{font-size:13px;gap:10px}.benchmark-links{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}.benchmark-links a{font-size:11px;text-align:center}.benchmark-panel+.benchmark-panel{margin-top:28px;padding-top:28px}}
+.hero-actions .resource-pending{cursor:not-allowed;opacity:.65;text-decoration:underline;text-underline-offset:4px}
+@media(min-width:1600px){:root{--width:1220px}.masthead{padding-top:52px}.hero-metrics{margin-top:42px}.overview{padding-top:38px}}
+@media(max-width:900px){nav{gap:19px}.section-heading{gap:35px}.intro-grid{gap:35px}.data-metrics{gap:20px}.data-metrics strong{font-size:27px}.principles{gap:20px}.resource-links{grid-template-columns:1fr 1fr}.bar-row{grid-template-columns:170px 1fr 75px}.bar-row small{display:block;margin:0}.video-actions{gap:8px}}
+@media(max-width:680px){.wrap{width:calc(100% - 36px)}.nav-inner{gap:12px;min-height:90px;flex-wrap:wrap;padding-block:10px}.wordmark{font-size:21px}nav{width:100%;justify-content:space-between;gap:8px;padding-bottom:2px}nav a{font-size:12px}.masthead{padding-top:32px}.masthead h1{font-size:55px;margin:15px 0}.headline{font-size:22px;max-width:340px;margin-inline:auto}.hero-copy{font-size:13px;max-width:350px}.desktop-break{display:none}.hero-actions{gap:9px;margin-top:20px}.button{padding:9px 13px;font-size:12px}.hero-actions .text-link{font-size:12px}.hero-metrics{margin-top:28px}.hero-metrics>div{padding:18px 5px}.hero-metrics strong{font-size:28px}.hero-metrics strong span{font-size:16px}.hero-metrics>div>span{font-size:10px}.metric-note{font-size:10px}.overview{padding-top:28px}.figure-heading{font-size:10px}.intro-grid{grid-template-columns:1fr;gap:24px;padding:40px 0}.intro-grid h2 br{display:none}.intro-grid>div{font-size:14px}h2{font-size:28px}h3{font-size:21px}.section{padding:46px 0}.section-heading{grid-template-columns:1fr;gap:18px;margin-bottom:28px}.section-heading>p{font-size:13px}.section-heading .eyebrow{margin-bottom:10px}.principles{grid-template-columns:1fr;gap:22px;margin:28px 0}.principles article{padding-top:12px}.principles h3{margin:6px 0}.principles p{font-size:13px}.prose{font-size:14px}.method-block{margin-top:30px;padding-top:25px}.subsection-heading{margin-bottom:14px}.data-metrics{gap:14px;grid-template-columns:1fr 1fr;margin-bottom:24px;padding:18px 0}.data-metrics>div:last-child{grid-column:1/-1;border-top:1px solid var(--line);padding-top:12px;display:flex;align-items:center;gap:24px}.data-metrics strong{font-size:24px}.data-metrics small{font-size:11px;margin-left:5px}.data-metrics span{font-size:11px}figcaption,.caption{font-size:11px}.summary-meta{font-size:10px}summary{font-size:13px}.detail-body{font-size:13px}.tablist button{padding:11px 12px;font-size:12px;min-height:44px}.benchmark-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:0}.benchmark-tabs button{padding:12px 5px;font-size:11px}.benchmark-summary{align-items:start;gap:16px;margin-bottom:24px}.benchmark-summary h3{font-size:21px}.benchmark-summary .eyebrow{font-size:9px}.benchmark-summary p:not(.eyebrow){font-size:11px}.benchmark-score strong{font-size:32px}.benchmark-score small{font-size:18px}.benchmark-score>span{font-size:9px;display:block;max-width:110px;line-height:1.6}.bar-row{grid-template-columns:102px 1fr 62px;gap:10px}.bar-row>span{font-size:10px}.bar-row small{font-size:9px}.bar-row>strong{font-size:13px}.bar-track{height:20px}.result-callout{font-size:12px}.report-table{font-size:11px}.report-table th,.report-table td{padding:9px 10px}.demo-tabs{gap:0;display:grid;grid-template-columns:repeat(4,1fr);margin-bottom:18px}.demo-tabs button{padding:11px 4px;font-size:11px}.video-toolbar{gap:12px;flex-wrap:wrap;min-height:125px}.video-toolbar h3{font-size:17px}.video-toolbar p{font-size:11px}.video-actions{margin-left:auto}.video-actions label{display:none}.video-frame{min-height:94px}.split-stats{gap:16px}.split-stats strong{font-size:18px}.split-stats strong span{font-size:16px;margin:0 2px}.split-stats>div>span{font-size:11px}.finding-strip{padding:12px 14px}.finding-strip p{font-size:13px}.finding-strip>span{font-size:11px}.analysis-block+.analysis-block{margin-top:32px;padding-top:28px}.resource-links{grid-template-columns:1fr}.resources{padding-block:42px}.footer-inner{flex-wrap:wrap}.footer-inner>span{order:3;flex-basis:100%;font-size:10px}}
+@media(max-width:360px){.hero-metrics{grid-template-columns:repeat(3,minmax(0,1fr))}.hero-metrics strong{font-size:22px}.hero-metrics strong span{font-size:14px}.hero-metrics>div>span{font-size:9px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+@media print{.topbar,.hero-actions,.tablist,.video-actions,footer,.demo-jump{display:none}.wrap{width:100%;max-width:none}.section{padding:26px 0}.masthead{padding-top:0}body,.tint{background:white}[role="tabpanel"][hidden]{display:block!important}details>.detail-body{display:block!important}figure,table{break-inside:avoid}h2,h3{break-after:avoid}.table-scroll{overflow:visible}.report-table{font-size:9px}.report-table th,.report-table td{padding:5px}.video-frame{display:none}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳至正文</a>
+<header class="topbar"><div class="wrap nav-inner"><a class="wordmark" href="#top" aria-label="Phoenix 首页"><span class="brand-dot" aria-hidden="true"></span>Phoenix</a><nav aria-label="章节导航"><a href="#method">方法</a><a href="#data">数据</a><a href="#results">实验</a><a href="#demos">真机演示</a><a href="#analysis">分析</a></nav></div></header>
+<main id="main">
+<section class="masthead wrap" id="top" aria-labelledby="title">
+  <p class="eyebrow">机器人操作学习 · 技术报告 · 2026.10.13</p>
+  <h1 id="title">Phoenix</h1><p class="headline">从规模化预训练，到真实世界的精细交互</p>
+  <p class="hero-copy">贯通数据、预训练、后训练与强化学习，<br class="desktop-break">让通用操作能力转化为具体场景中的精细技能。</p>
+  <div class="hero-actions"><a class="button primary" href="#demos">观看真机演示</a><a class="button" href="#method">探索模型方法</a><span class="text-link resource-pending" role="link" aria-disabled="true" title="暂不链接">代码 ↗</span><span class="text-link resource-pending" role="link" aria-disabled="true" title="暂不链接">权重 ↗</span></div>
+  <div class="hero-metrics" aria-label="基准成功率"><div><strong>94.63<span>%</span></strong><span>LIBERO-Plus</span></div><div><strong>66.48<span>%</span></strong><span>LIBERO-Pro</span></div><div><strong>82.67<span>%</span></strong><span>RoboCasa-GR1</span></div></div>
+  <p class="metric-note">Phoenix-MWA，在各基准对应的后训练配置下评估。</p>
+</section>
+<section class="overview wrap" aria-label="Phoenix 世界动作模型总览">
+  <div class="figure-heading"><span>PHOENIX-MWA</span></div>
+  <figure><div class="figure-link"><img src="assets/world_action_model.png" width="3150" height="1695" fetchpriority="high" alt="Phoenix-MWA：视觉动态、语义潜变量与动作的联合世界动作建模架构"></div><figcaption>在观测与语言条件下，联合建模未来视觉状态与动作。</figcaption></figure>
+  <div class="intro-grid"><h2>通用能力，<br>从经验中生长。</h2><div class="abstract-copy"><p>让机器人从大规模经验中获得通用能力，并将其转化为真实世界中的精细技能，是 <strong>Phoenix</strong> 的核心目标。我们构建了一套贯通数据采集与处理、预训练、后训练及强化学习的机器人操作学习系统，探索如何让数据与计算规模的增长持续提升开放场景下的操作泛化能力，为精细交互提供可迁移的能力基础。</p>
+
+<p><strong>Phoenix-MWA</strong> 是这一系统的核心基座。它通过多教师蒸馏融合几何先验与时序知识，利用因果语义 VAE 构建紧凑的视觉潜空间，并在观测与语言指令的条件下联合生成未来视觉状态与动作，将环境动态预测与操作行为学习联系起来。我们构建了原始时长约 <strong>5.44 万小时</strong>、有效时长约 <strong>3.93 万小时</strong>、包含约 <strong>33.8 亿原始帧</strong>的多来源数据池，为规模化学习提供支撑。在相应任务的后训练配置下，模型在 <strong>LIBERO-Plus、LIBERO-Pro 和 RoboCasa-GR1</strong> 上分别取得 <strong>94.63%、66.48% 和 82.67%</strong> 的成功率。</p>
+
+<p>从通用操作走向精细交互，<strong>Phoenix-ILA</strong> 聚焦操作的“最后一厘米”：将位置、力觉与触觉融合为潜在交互单元，通过少量后训练数据学习具体任务中的接触与控制规律。<strong>Phoenix-PhysCanvas</strong> 则进一步构建以动作为条件的视觉与触觉世界模型仿真器，预测动作带来的环境变化与接触后果，为策略提供可交互的强化学习环境。</p>
+
+<p>通过预训练积累通用能力、后训练形成具体技能、强化学习持续优化执行，Phoenix 建立了从数据到交互的完整学习路径。我们将开源数据采集与处理、预训练及后训练代码，支持社区共同探索机器人操作能力的规模扩展与高效迁移。</p>
+</div></div>
+</section>
+<section class="section" id="method"><div class="wrap">
+  <div class="section-heading"><div><p class="eyebrow">01 / Method</p><h2>感知、预测与动作，<br>在同一个系统中学习。</h2></div><p>从视觉表征到世界动作建模，再到接触技能与闭环策略优化。</p></div>
+  <div class="principles"><article><span class="index">01</span><h3>Phoenix Encoder</h3><p>以 DINOv3 为骨干，通过特征对齐和遮挡预测，融合 VGGT 几何先验与 V-JEPA 时序知识。</p></article><article><span class="index">02</span><h3>Causal-Semantic VAE</h3><p>压缩高维视觉特征，以因果时序编码保留语义与空间结构，减少冗余并避免未来信息泄漏。</p></article><article><span class="index">03</span><h3>Phoenix-MWA</h3><p>在视觉动态与语义潜空间中联合预测未来状态和动作，将环境演化与操作行为联系起来。</p></article></div>
+  <figure class="feature-figure"><div class="figure-link"><img loading="lazy" src="assets/representation_design.png" width="3150" height="1306" alt="双教师蒸馏的 DINOv3 编码器与因果语义 VAE"></div><figcaption>双教师蒸馏视觉编码器与因果语义 VAE。</figcaption></figure>
+  <article class="method-block"><div class="subsection-heading"><span class="module-code">PHOENIX-ILA</span><h3>学习操作的“最后一厘米”</h3></div><p class="prose">在视觉历史条件下，联合编码动作与触觉，通过运动轨迹、局部接触形态和施力强度的重建约束，学习可解码的交互潜变量。固定交互编解码器及基模的视觉、视频分支，以条件流匹配训练动作分支，使策略学习接触密集任务中的控制规律。</p><figure><div class="figure-link"><img loading="lazy" src="assets/Phoenix-ILA_a.png" width="4631" height="1321" alt="Phoenix-ILA：动作、触觉形变与力代理量的联合交互表征"></div><figcaption>运动与接触信息共同构成潜在交互单元。</figcaption></figure></article>
+  <article class="method-block"><div class="subsection-heading"><span class="module-code">PHOENIX-PHYSCANVAS</span><h3>在世界模型中闭环改进策略</h3></div><p class="prose">PhysCanvas 根据动作推演未来视觉与触觉观测，MWA 再根据新观测生成动作，形成可交互的仿真闭环。通过场景、状态与模态一致性约束维持预测的一致性，并在其中进行强化学习后训练。</p><figure><div class="figure-link"><img loading="lazy" src="assets/Phoenix_v2.png" width="2906" height="695" alt="PhysCanvas 与 MWA 交互并开展强化学习后训练的闭环"></div><figcaption>动作驱动世界推演，未来观测驱动下一步决策。</figcaption></figure></article>
+</div></section>
+<section class="section tint" id="data"><div class="wrap">
+  <div class="section-heading"><div><p class="eyebrow">02 / Pretraining Data</p><h2>多来源经验，<br>统一的学习接口。</h2></div><p>整合 Robot、Ego 与 UMI 数据，将异构记录转化为时序、语言和动作对齐的训练样本。</p></div>
+  <div class="data-metrics"><div><span>原始来源</span><strong>54,413.23<small>小时</small></strong></div><div><span>有效数据</span><strong>39,306.25<small>小时</small></strong></div><div><span>原始帧数</span><strong>33.8<small>亿帧</small></strong></div></div>
+  <figure><div class="figure-link"><img loading="lazy" src="assets/pptx_tnr_20261015/pretraining_data_pool_tnr.png" width="2880" height="1628" alt="Phoenix 预训练数据池：机器人、第一人称视频和 UMI 数据的组成与有效时长"></div><figcaption>有效数据：Robot 12,220.75 小时，Ego 24,991.35 小时，UMI 2,094.15 小时。</figcaption></figure>
+  <p class="prose">我们进行格式统一、子集筛选、无效记录过滤和异常标签隔离，裁剪冗余静止边缘，保留满足时序连续性与任务边界约束的训练窗口。为 Ego 数据补充脚本级语言标注；对机器人数据进行坐标、单位、动作时序与有效维度对齐。在保持任务和动作语义一致的前提下，训练时采样不同语言表达。</p>
+  <figure class="feature-figure"><div class="figure-link"><img loading="lazy" src="assets/pptx_tnr_20261015/pretraining_data_pipeline_tnr.png" width="2880" height="1440" alt="预训练数据处理流程：Ego 与 UMI 标注，以及机器人坐标对齐和语言增强"></div><figcaption>按来源处理，按统一表示构建样本。</figcaption></figure>
+  <div class="expanded-details"><h4 class="detail-heading"><span>80 维统一状态与动作空间</span><span class="summary-meta">接口定义</span></h4><div class="detail-body"><p>固定语义槽位覆盖左右臂、末端执行器与夹爪，并保留灵巧手、躯干和底盘通道。单臂数据映射至右臂槽位；缺失或无效维度填零，通过逐时间步、逐维掩码排除其损失。</p><div class="table-scroll" tabindex="0" role="region" aria-label="80 维动作空间定义"><table class="report-table">
+<thead>
+<tr>
+<th scope="col">Component</th>
+<th scope="col">Indices</th>
+<th scope="col">Dims.</th>
+<th scope="col">State</th>
+<th scope="col">Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Arm joints</td>
+<td><code>[0,7)</code> / <code>[40,47)</code></td>
+<td>14</td>
+<td>Current left/right joint positions; up to 7 per arm</td>
+<td>Absolute joint position targets</td>
+</tr>
+<tr>
+<td>EEF position</td>
+<td><code>[7,10)</code> / <code>[47,50)</code></td>
+<td>6</td>
+<td>Left/right EEF XYZ positions in the reference frame</td>
+<td>XYZ translation increments in the reference frame</td>
+</tr>
+<tr>
+<td>EEF rotation</td>
+<td><code>[10,16)</code> / <code>[50,56)</code></td>
+<td>12</td>
+<td>Continuous 6D rotation representation for each EEF</td>
+<td>First 3 dims. per side: rotation-vector increment in the current EEF frame; last 3 masked</td>
+</tr>
+<tr>
+<td>Grippers</td>
+<td><code>[16,17)</code> / <code>[56,57)</code></td>
+<td>2</td>
+<td>Left/right gripper opening or state scalars</td>
+<td>Absolute gripper targets; no temporal differencing</td>
+</tr>
+<tr>
+<td>Dexterous hands</td>
+<td><code>[17,29)</code> / <code>[57,69)</code></td>
+<td>24</td>
+<td>Up to 12 independent hand-control channels per side</td>
+<td>Targets for the corresponding hand-control channels</td>
+</tr>
+<tr>
+<td>Torso</td>
+<td><code>[29,34)</code></td>
+<td>5</td>
+<td>Up to 5 torso joint positions</td>
+<td>Absolute joint position targets</td>
+</tr>
+<tr>
+<td>Lift</td>
+<td><code>[39,40)</code></td>
+<td>1</td>
+<td>Current lift height</td>
+<td>Absolute target height</td>
+</tr>
+<tr>
+<td>Head</td>
+<td><code>[74,77)</code></td>
+<td>3</td>
+<td>Up to 3 head joint positions</td>
+<td>Absolute joint position targets</td>
+</tr>
+<tr>
+<td>Mobile base</td>
+<td><code>[77,80)</code></td>
+<td>3</td>
+<td>Base X, Y and yaw, when available</td>
+<td>Local forward/left displacement and yaw increment; not velocity</td>
+</tr>
+<tr>
+<td>Reserved</td>
+<td><code>[34,39)</code> / <code>[69,74)</code></td>
+<td>10</td>
+<td>Unused; zero-filled and masked</td>
+<td>Unused; zero-filled and masked</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong><code>[0,80)</code></strong></td>
+<td><strong>80</strong></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+</div><p>状态使用末端绝对位姿及连续 6D 旋转表示。动作使用关节、夹爪绝对目标，以及参考坐标系下的平移增量和末端局部坐标系下的旋转向量。维数表示接口容量，不代表每条样本均有完整监督。</p></div></div>
+</div></section>
+<section class="section" id="results"><div class="wrap">
+  <div class="section-heading"><div><p class="eyebrow">03 / Benchmarks</p><h2>面向变化的环境，<br>评估操作泛化。</h2></div><p>在 LIBERO-Plus、LIBERO-Pro 与 RoboCasa-GR1 上报告成功率。不同基准采用各自对应的后训练与评估配置。</p></div>
+  <div class="benchmark-links" aria-label="基准跳转"><a href="#panel-plus">LIBERO-Plus</a><a href="#panel-pro">LIBERO-Pro</a><a href="#panel-robocasa">RoboCasa-GR1</a></div>
+  <div id="panel-plus" class="benchmark-panel" role="region" aria-label="LIBERO-Plus">
+    <div class="benchmark-summary"><div><p class="eyebrow">Seven Distribution Shifts</p><h3>LIBERO-Plus</h3><p>相机、初始状态、语言、光照、背景、噪声与布局扰动。</p></div><div class="benchmark-score"><strong>94.63<small>%</small></strong><span>Phoenix-MWA · w. Pretrain</span></div></div>
+    <div class="bar-chart" aria-label="LIBERO-Plus 成功率对比"><div class="bar-row"><span>Phoenix-MWA <small>w/o. Pretrain</small></span><div class="bar-track"><span class="bar-fill baseline" style="width:88.16%"></span></div><strong>88.16%</strong></div><div class="bar-row"><span>Phoenix-MWA <small>w. Pretrain</small></span><div class="bar-track"><span class="bar-fill" style="width:94.63%"></span></div><strong>94.63%</strong></div></div><p class="result-callout">预训练后，总成功率提高 <strong>6.47 pp</strong>。</p>
+    <div class="expanded-details"><h4 class="detail-heading"><span>完整对比 · 七类扰动</span><span class="summary-meta">Success rate (%)</span></h4><div class="detail-body"><div class="table-scroll" tabindex="0" role="region" aria-label="LIBERO-Plus 完整结果表"><table id="libero-plus-comparison" class="report-table">
+  <thead>
+    <tr><th scope="col">Method</th><th scope="col">Camera</th><th scope="col">Robot</th><th scope="col">Language</th><th scope="col">Light</th><th scope="col">Background</th><th scope="col">Noise</th><th scope="col">Layout</th><th scope="col">Total ↑</th></tr>
+  </thead>
+  <tbody>
+    <tr class="table-group"><th colspan="9" scope="row">VLA</th></tr>
+    <tr><th scope="row">OpenVLA</th><td>0.80</td><td>3.50</td><td>23.00</td><td>8.10</td><td>34.80</td><td>15.20</td><td>28.50</td><td>15.60</td></tr>
+    <tr><th scope="row">π0</th><td>13.80</td><td>6.00</td><td>58.80</td><td>85.00</td><td>81.40</td><td>79.00</td><td>68.90</td><td>53.60</td></tr>
+    <tr><th scope="row">π0-FAST</th><td>65.10</td><td>21.60</td><td>61.00</td><td>73.20</td><td>73.20</td><td>74.40</td><td>68.80</td><td>61.60</td></tr>
+    <tr><th scope="row">RIPT-VLA</th><td>55.20</td><td>31.20</td><td>77.60</td><td>88.40</td><td>91.60</td><td>73.50</td><td>74.20</td><td>68.40</td></tr>
+    <tr><th scope="row">OpenVLA-OFT</th><td>56.40</td><td>31.90</td><td>79.50</td><td>88.70</td><td>93.30</td><td>75.80</td><td>74.20</td><td>69.60</td></tr>
+    <tr><th scope="row">StarVLA</th><td>52.50</td><td>49.80</td><td>88.50</td><td>95.70</td><td>95.70</td><td>73.00</td><td>76.90</td><td>74.10</td></tr>
+    <tr><th scope="row">StarVLA-OFT</th><td>47.00</td><td>60.10</td><td>87.00</td><td>96.30</td><td>95.30</td><td>73.10</td><td>79.20</td><td>75.00</td></tr>
+    <tr><th scope="row">VLA-JEPA</th><td>63.30</td><td>67.10</td><td>85.40</td><td>95.60</td><td>93.60</td><td>66.30</td><td>85.10</td><td>79.50</td></tr>
+    <tr><th scope="row">ABot-M0</th><td>60.40</td><td>67.90</td><td>86.40</td><td>96.20</td><td>91.60</td><td>86.40</td><td>82.60</td><td>80.50</td></tr>
+    <tr><th scope="row">FoMoVLA</th><td>64.00</td><td>62.20</td><td><u>94.00</u></td><td>94.10</td><td>96.20</td><td>82.20</td><td>79.60</td><td>80.50</td></tr>
+    <tr><th scope="row">VLAct</th><td>73.90</td><td>68.40</td><td>81.50</td><td>96.70</td><td>96.70</td><td>86.00</td><td>83.30</td><td>82.60</td></tr>
+    <tr><th scope="row">VLANeXt</th><td><u>90.40</u></td><td>65.70</td><td>81.80</td><td>95.90</td><td>82.50</td><td>94.10</td><td>80.80</td><td>83.90</td></tr>
+    <tr><th scope="row">InternVLA-A1.5</th><td>83.10</td><td>55.10</td><td>86.90</td><td>96.40</td><td>98.20</td><td>95.60</td><td>85.20</td><td>84.80</td></tr>
+    <tr><th scope="row">π0.5</th><td>75.80</td><td>79.40</td><td>83.30</td><td>95.50</td><td>95.00</td><td>89.60</td><td>87.00</td><td>85.70</td></tr>
+    <tr><th scope="row">ACoT-VLA</th><td>72.60</td><td>82.60</td><td>87.50</td><td>97.70</td><td>96.50</td><td>87.80</td><td>88.10</td><td>86.60</td></tr>
+    <tr><th scope="row">Quantile Head</th><td>71.60</td><td>80.70</td><td>87.60</td><td>96.10</td><td>97.20</td><td>94.80</td><td>87.80</td><td>87.10</td></tr>
+    <tr><th scope="row">QuoVLA</th><td>82.30</td><td>87.60</td><td>88.20</td><td>98.20</td><td>95.90</td><td>90.80</td><td><u>89.30</u></td><td>90.30</td></tr>
+    <tr><th scope="row">Qwen-RobotManip-Context</th><td>89.90</td><td>83.90</td><td>86.50</td><td><u>98.60</u></td><td><strong>99.90</strong></td><td><u>97.90</u></td><td>87.50</td><td>91.40</td></tr>
+  </tbody>
+  <tbody>
+    <tr class="table-group"><th colspan="9" scope="row">WAM</th></tr>
+    <tr><th scope="row">Fast-WAM</th><td>16.40</td><td>44.50</td><td>68.90</td><td>78.20</td><td>53.70</td><td>37.70</td><td>60.70</td><td>51.50</td></tr>
+    <tr><th scope="row">OpenWAM-α</th><td>33.80</td><td>76.10</td><td>88.00</td><td>97.00</td><td>87.10</td><td>39.80</td><td>77.50</td><td>69.20</td></tr>
+    <tr><th scope="row">4D-WAM</th><td>45.20</td><td>64.30</td><td>90.60</td><td>94.30</td><td>57.70</td><td>69.10</td><td>79.20</td><td>71.00</td></tr>
+    <tr><th scope="row">ST-WAM</th><td>55.40</td><td>60.10</td><td>79.30</td><td>93.00</td><td>74.20</td><td>79.50</td><td>74.30</td><td>72.80</td></tr>
+    <tr><th scope="row">Faster-WAM</th><td>67.90</td><td>49.00</td><td>92.10</td><td>94.30</td><td>57.00</td><td>82.30</td><td>82.70</td><td>75.00</td></tr>
+    <tr><th scope="row">JEPA-WAM</th><td>79.20</td><td>59.20</td><td>68.20</td><td>93.30</td><td>94.60</td><td>83.60</td><td>76.10</td><td>79.20</td></tr>
+    <tr><th scope="row">Being-H0.7</th><td>82.00</td><td>59.00</td><td>82.80</td><td>97.80</td><td>90.00</td><td>93.50</td><td>88.50</td><td>82.10</td></tr>
+    <tr><th scope="row">Cosmos-Policy</th><td>75.80</td><td>63.30</td><td>81.70</td><td>96.50</td><td>88.90</td><td>92.70</td><td>82.20</td><td>82.20</td></tr>
+    <tr><th scope="row">Fast-WAM-IDM</th><td>65.40</td><td>86.00</td><td>89.50</td><td>96.30</td><td>74.40</td><td>87.60</td><td>80.70</td><td>82.60</td></tr>
+    <tr><th scope="row">CF-WAM</th><td>66.92</td><td>84.90</td><td>90.50</td><td>98.25</td><td>67.84</td><td>88.94</td><td>81.11</td><td>82.65</td></tr>
+    <tr><th scope="row">ImageWAM</th><td>80.80</td><td>50.30</td><td>91.40</td><td>98.10</td><td>85.50</td><td>93.80</td><td>80.50</td><td>83.10</td></tr>
+    <tr><th scope="row">ABot-M0.5</th><td>70.50</td><td>87.40</td><td>88.60</td><td>94.00</td><td>89.70</td><td>75.50</td><td>85.20</td><td>83.40</td></tr>
+    <tr><th scope="row">InternW0-Δ</th><td><strong>90.60</strong></td><td><u>91.10</u></td><td>92.90</td><td>95.80</td><td><u>99.40</u></td><td>94.00</td><td>88.40</td><td><u>92.80</u></td></tr>
+    <tr class="ours"><th scope="row">Phoenix-MWA (w/o. Pretrain)</th><td>79.36</td><td>90.19</td><td>83.73</td><td>97.72</td><td>87.73</td><td>94.82</td><td>85.90</td><td>88.16</td></tr>
+    <tr class="ours"><th scope="row">Phoenix-MWA (w. Pretrain)</th><td>88.24</td><td><strong>94.00</strong></td><td><strong>95.51</strong></td><td><strong>99.91</strong></td><td>98.88</td><td><strong>98.31</strong></td><td><strong>90.23</strong></td><td><strong>94.63</strong></td></tr>
+  </tbody>
+</table>
+</div></div></div>
+  </div>
+  <div id="panel-pro" class="benchmark-panel" role="region" aria-label="LIBERO-Pro"><div class="benchmark-summary"><div><p class="eyebrow">Object · Position · Semantics · Task</p><h3>LIBERO-Pro</h3><p>从物体、位置、语义与任务维度考察泛化能力。</p></div><div class="benchmark-score"><strong>66.48<small>%</small></strong><span>Phoenix-MWA · w. Pretrain</span></div></div><div class="expanded-details"><h4 class="detail-heading"><span>完整对比</span><span class="summary-meta">Success rate (%)</span></h4><div class="detail-body"><div class="table-scroll" tabindex="0" role="region" aria-label="LIBERO-Pro 完整结果表"><table id="libero-pro-comparison" class="report-table">
+  <thead>
+    <tr><th scope="col">Method</th><th scope="col">Obj.</th><th scope="col">Pos.</th><th scope="col">Sem.</th><th scope="col">Task</th><th scope="col">Avg.</th></tr>
+  </thead>
+  <tbody>
+    <tr class="table-group"><th colspan="6" scope="row">VLA</th></tr>
+    <tr><th scope="row">OpenVLA-OFT</th><td>27.63</td><td>5.75</td><td>59.00</td><td>0.63</td><td>23.25</td></tr>
+    <tr><th scope="row">NORA</th><td>70.50</td><td>0.00</td><td>86.25</td><td>0.00</td><td>39.00</td></tr>
+    <tr><th scope="row">MolmoAct</th><td>76.00</td><td>1.50</td><td>85.75</td><td>1.50</td><td>41.00</td></tr>
+    <tr><th scope="row">π0</th><td>90.50</td><td>0.00</td><td>90.50</td><td>0.00</td><td>45.25</td></tr>
+    <tr><th scope="row">X-VLA</th><td>79.00</td><td>0.75</td><td>96.75</td><td>6.75</td><td>46.00</td></tr>
+    <tr><th scope="row">VLA-Adapter</th><td>73.75</td><td>0.00</td><td>90.75</td><td>19.75</td><td>46.06</td></tr>
+    <tr><th scope="row">OpenVLA</th><td><u>93.00</u></td><td>0.00</td><td>97.25</td><td>0.00</td><td>47.56</td></tr>
+    <tr><th scope="row">SimVLA</th><td>81.50</td><td>8.30</td><td><u>98.80</u></td><td>6.00</td><td>48.60</td></tr>
+    <tr><th scope="row">HABILIS Brain 0</th><td>71.85</td><td>18.05</td><td>93.00</td><td>21.45</td><td>51.09</td></tr>
+    <tr><th scope="row">π0.5</th><td><strong>96.00</strong></td><td>20.75</td><td>95.75</td><td>0.75</td><td>53.31</td></tr>
+    <tr><th scope="row">Quantile Head</th><td>85.80</td><td>31.30</td><td>97.80</td><td>26.00</td><td>60.20</td></tr>
+    <tr><th scope="row">QuoVLA</th><td>88.25</td><td>36.00</td><td><strong>99.50</strong></td><td>25.50</td><td>62.31</td></tr>
+    <tr><th scope="row">Continuous Reasoning</th><td>84.60</td><td><u>39.30</u></td><td>94.90</td><td><u>37.10</u></td><td><u>64.00</u></td></tr>
+  </tbody>
+  <tbody>
+    <tr class="table-group"><th colspan="6" scope="row">WAM</th></tr>
+    <tr><th scope="row">PatchWAM</th><td>80.80</td><td>8.80</td><td>96.80</td><td>5.00</td><td>47.85</td></tr>
+    <tr><th scope="row">Flex-π</th><td>87.25</td><td>11.75</td><td>98.25</td><td>5.00</td><td>51.00</td></tr>
+    <tr><th scope="row">GAM</th><td>75.75</td><td>32.75</td><td>95.00</td><td><strong>40.50</strong></td><td>61.00</td></tr>
+    <tr class="ours"><th scope="row">Phoenix-MWA (w. Pretrain)</th><td>91.30</td><td><strong>42.55</strong></td><td>98.50</td><td>33.55</td><td><strong>66.48</strong></td></tr>
+  </tbody>
+</table>
+</div></div></div></div>
+  <div id="panel-robocasa" class="benchmark-panel" role="region" aria-label="RoboCasa-GR1"><div class="benchmark-summary"><div><p class="eyebrow">Articulated Objects · Pick &amp; Place</p><h3>RoboCasa-GR1</h3><p>关节物体操作与抓放任务。</p></div><div class="benchmark-score"><strong>82.67<small>%</small></strong><span>Phoenix-MWA · w. Pretrain</span></div></div><div class="split-stats"><div><span>Articulated objects</span><strong>84.33%</strong></div><div><span>Pick &amp; Place</span><strong>82.11%</strong></div></div><div class="expanded-details"><h4 class="detail-heading"><span>完整对比</span><span class="summary-meta">Success rate (%)</span></h4><div class="detail-body"><div class="table-scroll" tabindex="0" role="region" aria-label="RoboCasa-GR1 完整结果表"><table id="robocasa-gr1-comparison" class="report-table">
+  <thead>
+    <tr><th scope="col">Method</th><th scope="col">Art.</th><th scope="col">P&amp;P</th><th scope="col">Avg.</th></tr>
+  </thead>
+  <tbody>
+    <tr class="table-group"><th colspan="4" scope="row">VLA</th></tr>
+    <tr><th scope="row">GR00T N1.6</th><td>24.20</td><td>55.40</td><td>47.60</td></tr>
+    <tr><th scope="row">StarVLA-OFT</th><td>43.70</td><td>50.40</td><td>48.80</td></tr>
+    <tr><th scope="row">StarVLA-α</th><td>49.00</td><td>55.40</td><td>53.80</td></tr>
+    <tr><th scope="row">TwinBrainVLA</th><td>56.70</td><td>53.90</td><td>54.60</td></tr>
+    <tr><th scope="row">CoRE-VLA</th><td>56.20</td><td>56.60</td><td>56.50</td></tr>
+    <tr><th scope="row">ABot-M0</th><td>61.70</td><td>57.10</td><td>58.30</td></tr>
+    <tr><th scope="row">RLDX-1</th><td>57.67</td><td>59.00</td><td>58.70</td></tr>
+    <tr><th scope="row">JoyAI-RA 0.1</th><td>71.67</td><td>60.38</td><td>63.20</td></tr>
+    <tr><th scope="row">DIAL</th><td>74.30</td><td>68.90</td><td>70.20</td></tr>
+    <tr><th scope="row">ACE-Ego-0</th><td>59.00</td><td>77.40</td><td>72.80</td></tr>
+  </tbody>
+  <tbody>
+    <tr class="table-group"><th colspan="4" scope="row">WAM</th></tr>
+    <tr><th scope="row">DiT4DiT</th><td>50.30</td><td>50.90</td><td>50.80</td></tr>
+    <tr><th scope="row">LDA-1B</th><td>56.30</td><td>55.10</td><td>55.40</td></tr>
+    <tr><th scope="row">Fast-WAM-IDM</th><td>59.70</td><td>78.70</td><td>73.90</td></tr>
+    <tr><th scope="row">Fast-WAM</th><td>62.00</td><td>78.80</td><td>74.60</td></tr>
+    <tr><th scope="row">WALA</th><td><u>80.33</u></td><td>73.45</td><td>75.17</td></tr>
+    <tr><th scope="row">LAWA (Full)</th><td>73.00</td><td><u>83.44</u></td><td>80.80</td></tr>
+    <tr><th scope="row">CF-WAM</th><td>75.00</td><td><strong>85.00</strong></td><td><u>82.50</u></td></tr>
+    <tr class="ours"><th scope="row">Phoenix-MWA (w. Pretrain)</th><td><strong>84.33</strong></td><td>82.11</td><td><strong>82.67</strong></td></tr>
+  </tbody>
+</table>
+</div></div></div></div>
+  <p class="caption">数据来自技术报告第 4 节；总分提升不代表每项扰动均有提升。完整表保留原报告的分组、加粗和下划线标记。</p>
+</div></section>
+<section class="section tint" id="demos"><div class="wrap">
+  <div class="section-heading"><div><p class="eyebrow">04 / Real-World Manipulation</p><h2>让能力落在<br>每一次真实交互上。</h2></div><p>从双臂物体操作到精细接触任务。以下为真机演示片段，统计成绩见对应实验。</p></div>
+  <div class="tablist demo-tabs" role="tablist" aria-label="真机演示任务"><button type="button" role="tab" id="demo-tab-tube" aria-controls="demo-panel" aria-selected="true" tabindex="0" data-video="0">插试管</button>
+<button type="button" role="tab" id="demo-tab-blocks" aria-controls="demo-panel" aria-selected="false" tabindex="-1" data-video="1">拆放积木</button>
+<button type="button" role="tab" id="demo-tab-bottle" aria-controls="demo-panel" aria-selected="false" tabindex="-1" data-video="2">拧瓶盖</button>
+<button type="button" role="tab" id="demo-tab-cube" aria-controls="demo-panel" aria-selected="false" tabindex="-1" data-video="3">魔方操作</button>
+<button type="button" role="tab" id="demo-tab-cucumber" aria-controls="demo-panel" aria-selected="false" tabindex="-1" data-video="4">削黄瓜</button>
+<button type="button" role="tab" id="demo-tab-plate" aria-controls="demo-panel" aria-selected="false" tabindex="-1" data-video="5">擦盘子</button>
+<button type="button" role="tab" id="demo-tab-pouch" aria-controls="demo-panel" aria-selected="false" tabindex="-1" data-video="6">笔袋任务</button>
+<button type="button" role="tab" id="demo-tab-breakfast" aria-controls="demo-panel" aria-selected="false" tabindex="-1" data-video="7">早餐物品操作</button></div>
+  <div id="demo-panel" role="tabpanel" aria-labelledby="demo-tab-tube"><div class="video-frame"><video id="demo-video" width="1920" height="560" controls playsinline preload="none" poster="assets/web_posters/tube.jpg" src="demo/shiguan_bimanual_step015000_rtc_three_views.mp4" aria-label="插试管真机三视角演示">当前浏览器不支持视频播放。<a href="demo/shiguan_bimanual_step015000_rtc_three_views.mp4">打开视频</a></video></div><div class="video-toolbar"><div><h3 id="video-title">插试管</h3><p id="video-note">双臂协同与精细插入</p></div><div class="video-actions"><label for="playback-rate">倍速</label><select id="playback-rate" aria-label="视频播放倍速"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="1.5">1.5×</option><option value="2">2×</option></select><a id="video-original" href="demo/shiguan_bimanual_step015000_rtc_three_views.mp4" target="_blank" rel="noopener">打开视频 ↗</a></div></div><p id="video-error" role="alert" hidden>视频暂时无法播放，请尝试单独打开视频。</p></div>
+  <noscript><ul><li><a href="demo/jimu_step015000_rtc_three_views.mp4">积木</a></li><li><a href="demo/bottle_02_step015000_rtc_three_views.mp4">瓶盖</a></li><li><a href="demo/mofang_step015000_rtc_three_views.mp4">魔方</a></li><li><a href="demo/huanggua_three_views_background_blur_v3.mp4">削黄瓜</a></li><li><a href="demo/plate_rtc_three_views_background_blur_v3.mp4">擦盘子</a></li><li><a href="demo/pouch2459_50k_rollout000004_left_base_right_titlebar.mp4">笔袋</a></li><li><a href="demo/breakfast273_30k_rtc_three_views.mp4">早餐物品操作</a></li></ul></noscript>
+</div></section>
+<section class="section" id="analysis"><div class="wrap">
+  <div class="section-heading"><div><p class="eyebrow">05 / Analysis</p><h2>从表征空间，<br>到预测与接触行为。</h2></div><p>分析预训练如何改变表征、改善视频预测，并支持精细技能与策略后训练。</p></div>
+  <article class="analysis-block"><div class="subsection-heading"><span class="module-code">05.1 / REPRESENTATION</span><h3>更均衡的视觉特征谱</h3></div><p class="prose">从预训练验证集与 LIBERO-Plus 各抽取 10,000 帧，三个编码器共享相同采样帧。通过对中心化 CLS 和 Patch Mean 特征矩阵进行奇异值分解，计算 Effective Rank，衡量特征变化在主方向上的分布均衡程度。</p><figure><div class="figure-link"><img loading="lazy" src="assets/pptx_tnr_20261015/effective_rank_tnr.png" width="2880" height="1132" alt="DINOv3、DINOv3 (VGGT-Ω) 与 Phoenix Encoder 在两个数据域上的有效秩对比"></div><figcaption>相较 VGGT-Ω 初始化模型，Phoenix Encoder 在两个数据域上的有效秩均有所回升；DINOv3 原始模型的有效秩仍然最高。</figcaption></figure><div class="expanded-details"><h4 class="detail-heading">完整有效秩数值与解释</h4><div class="detail-body"><div class="table-scroll" tabindex="0" role="region" aria-label="有效秩结果表"><table class="report-table">
+<thead>
+<tr>
+<th scope="col">Model</th>
+<th scope="col">Pretraining Validation Set<br>CLS</th>
+<th scope="col">Pretraining Validation Set<br>Patch Mean</th>
+<th scope="col">LIBERO-Plus<br>CLS</th>
+<th scope="col">LIBERO-Plus<br>Patch Mean</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DINOv3</td>
+<td>714.80</td>
+<td>608.17</td>
+<td>605.73</td>
+<td>505.93</td>
+</tr>
+<tr>
+<td>DINOv3 (VGGT-Ω)</td>
+<td>603.69</td>
+<td>526.75</td>
+<td>470.49</td>
+<td>413.01</td>
+</tr>
+<tr class="ours">
+<td>Phoenix Encoder (Ours)</td>
+<td>638.80</td>
+<td>568.13</td>
+<td>481.96</td>
+<td>440.06</td>
+</tr>
+</tbody>
+</table>
+</div><p>相较 DINOv3 (VGGT-Ω)，Phoenix Encoder 的 CLS / Patch Mean 有效秩在预训练验证集分别提高 5.81% / 7.86%，在 LIBERO-Plus 分别提高 2.44% / 6.55%。较低有效秩可能反映任务专门化或潜在维度坍缩；较高有效秩表示变化分布更均衡，不能单独等同于更高的控制性能。</p></div></div></article>
+  <article class="analysis-block"><div class="subsection-heading"><span class="module-code">05.2 / FUTURE PREDICTION</span><h3>更准确的未来视频预测</h3></div><p class="prose">三组统一在 LIBERO 后训练 20k steps，对 LIBERO-Plus 中预先固定的 200 个共同完整窗口评分。每个窗口只评估 8 个未来帧，主视角、腕部视角与窗口之间等权平均。</p><div class="table-scroll" tabindex="0" role="region" aria-label="视频生成质量结果表"><table class="report-table">
+<thead>
+<tr>
+<th scope="col">Model</th>
+<th scope="col">PSNR ↑</th>
+<th scope="col">SSIM ↑</th>
+<th scope="col">LPIPS ↓</th>
+<th scope="col">DINO-GT ↑</th>
+<th scope="col">CLIP-GT ↑</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FastWAM</td>
+<td>20.75</td>
+<td>0.77</td>
+<td>0.19</td>
+<td>85.33</td>
+<td>91.50</td>
+</tr>
+<tr class="ours">
+<td>Phoenix-MWA (w/o. Pretrain)</td>
+<td>20.96</td>
+<td>0.78</td>
+<td>0.17</td>
+<td>86.06</td>
+<td>91.46</td>
+</tr>
+<tr class="ours">
+<td>Phoenix-MWA (w. Pretrain)</td>
+<td><strong>23.31</strong></td>
+<td><strong>0.81</strong></td>
+<td><strong>0.12</strong></td>
+<td><strong>90.28</strong></td>
+<td><strong>93.09</strong></td>
+</tr>
+</tbody>
+</table>
+</div><div class="finding-strip"><p>相比 FastWAM，预训练模型的 <strong>PSNR 提高 2.56 dB</strong>，<strong>LPIPS 降低 36.84%</strong>。</p><span>像素保真度、感知相似性与语义一致性共同改善。</span></div><p class="caption">↑ 越高越好，↓ 越低越好。DINO-GT 与 CLIP-GT 为余弦相似度 × 100。</p></article>
+  <article class="analysis-block"><div class="subsection-heading"><span class="module-code">05.3 / CONTACT-RICH SKILLS</span><h3>把运动与接触一起学会</h3></div><p class="prose">在削皮、擦拭盘子任务上，比较直接动作生成与交互潜变量生成。F<sub>ext</sub> L1 衡量由触觉形变导出的合力代理与专家参考的偏差。</p><div class="table-scroll" tabindex="0" role="region" aria-label="接触密集任务结果表"><table class="report-table">
+<thead>
+<tr>
+<th scope="col">方法</th>
+<th scope="col">削皮 SR ↑</th>
+<th scope="col">削皮 F<sub>ext</sub> L1 ↓</th>
+<th scope="col">擦拭 SR ↑</th>
+<th scope="col">擦拭 F<sub>ext</sub> L1 ↓</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FastWAM</td>
+<td>10%</td>
+<td>2.01 ± 0.53</td>
+<td>50%</td>
+<td>1.54 ± 0.35</td>
+</tr>
+<tr class="ours">
+<td>Phoenix-MWA†</td>
+<td>20%</td>
+<td>1.85 ± 0.63</td>
+<td>75%</td>
+<td>1.62 ± 0.41</td>
+</tr>
+<tr class="ours">
+<td>Phoenix-MWA-ILA†</td>
+<td>40%</td>
+<td>1.22 ± 0.51</td>
+<td>90%</td>
+<td>1.38 ± 0.45</td>
+</tr>
+</tbody>
+</table>
+</div><div class="finding-strip"><p>采用交互潜变量后，削皮成功率 <strong>20% → 40%</strong>，擦拭成功率 <strong>75% → 90%</strong>。</p><span>两项任务的接触误差同时降低。</span></div><a class="text-link demo-jump" href="#demos" data-demo="4">削黄瓜演示 ↗</a><a class="text-link demo-jump" href="#demos" data-demo="5">擦盘子演示 ↗</a></article>
+  <article class="analysis-block"><div class="subsection-heading"><span class="module-code">05.4 / WORLD-MODEL RL</span><h3>仿真世界中的学习，迁移到真实任务</h3></div><p class="prose">SFT 30k steps 后，在 PhysCanvas 中进行 GRPO 后训练，再在不同物体位置与光照条件下评估真机表现。每个任务报告三组环境条件下的成功率。</p><div class="table-scroll" tabindex="0" role="region" aria-label="世界模型强化学习结果表"><table class="report-table">
+<thead>
+<tr>
+<th scope="col">Task</th>
+<th scope="col">Method</th>
+<th scope="col">三次成功率</th>
+<th scope="col">平均成功率 ± 总体标准差</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Test Tube</td>
+<td>SFT 30k steps</td>
+<td>55%、70%、50%</td>
+<td>58.33% ± 8.50 pp</td>
+</tr>
+<tr>
+<td>Test Tube</td>
+<td>SFT 30k + PhysCanvas GRPO</td>
+<td>95%、75%、55%</td>
+<td>75.00% ± 16.33 pp</td>
+</tr>
+<tr>
+<td>Blocks</td>
+<td>SFT 30k steps</td>
+<td>80%、80%、80%</td>
+<td>80.00% ± 0.00 pp</td>
+</tr>
+<tr>
+<td>Blocks</td>
+<td>SFT 30k + PhysCanvas GRPO</td>
+<td>90%、85%、85%</td>
+<td>86.67% ± 2.36 pp</td>
+</tr>
+</tbody>
+</table>
+</div><div class="split-stats"><div><span>试管任务 · 平均成功率</span><strong>58.33% <span>→</span> 75.00%</strong></div><div><span>积木任务 · 平均成功率</span><strong>80.00% <span>→</span> 86.67%</strong></div></div><div class="expanded-details"><h4 class="detail-heading">结果边界与局限性</h4><div class="detail-body"><p>后训练收益在不同环境条件下并不均衡。试管任务的总体标准差由 8.50 pp 增至 16.33 pp；积木任务由 0.00 pp 增至 2.36 pp。世界模型与奖励模型的适配，以及仿真场景对现实变化的覆盖仍需进一步研究。透明物体也可能对光照、背景和操作精度更敏感。</p></div></div></article>
+</div></section>
+</main>
+<footer><div class="wrap footer-inner"><a class="wordmark" href="#top">Phoenix</a><span>预训练数据、机器人任务性能与视频预测 · 技术报告</span><a href="#top">回到顶部 ↑</a></div></footer>
+<script type="application/json" id="video-data">[{"id": "tube", "title": "插试管", "note": "双臂协同与精细插入", "src": "demo/shiguan_bimanual_step015000_rtc_three_views.mp4", "poster": "assets/web_posters/tube.jpg", "duration": 25.067, "size": 52533109, "width": 1920, "height": 560}, {"id": "blocks", "title": "拆放积木", "note": "物体操作与双臂配合", "src": "demo/jimu_step015000_rtc_three_views.mp4", "poster": "assets/web_posters/blocks.jpg", "duration": 18.967, "size": 34952422, "width": 1920, "height": 560}, {"id": "bottle", "title": "拧瓶盖", "note": "抓取、旋转与接触协同", "src": "demo/bottle_02_step015000_rtc_three_views.mp4", "poster": "assets/web_posters/bottle.jpg", "duration": 21.0, "size": 38464499, "width": 1920, "height": 560}, {"id": "cube", "title": "魔方操作", "note": "连续操作与姿态调整", "src": "demo/mofang_step015000_rtc_three_views.mp4", "poster": "assets/web_posters/cube.jpg", "duration": 23.0, "size": 41400322, "width": 1920, "height": 560}, {"id": "cucumber", "title": "削黄瓜", "note": "持续工具接触", "src": "demo/huanggua_three_views_background_blur_v3.mp4", "poster": "assets/web_posters/cucumber.jpg", "duration": 83.8, "size": 32112362, "width": 1920, "height": 560}, {"id": "plate", "title": "擦盘子", "note": "贴面运动与接触控制", "src": "demo/plate_rtc_three_views_background_blur_v3.mp4", "poster": "assets/web_posters/plate.jpg", "duration": 28.6, "size": 8131418, "width": 1920, "height": 560}, {"id": "pouch", "title": "笔袋任务", "note": "日常物体操作", "src": "demo/pouch2459_50k_rollout000004_left_base_right_titlebar.mp4", "poster": "assets/web_posters/pouch.jpg", "duration": 33.7, "size": 14509920, "width": 1920, "height": 560}, {"id": "breakfast", "title": "早餐物品操作", "note": "日常场景操作", "src": "demo/breakfast273_30k_rtc_three_views.mp4", "poster": "assets/web_posters/breakfast.jpg", "duration": 53.1, "size": 71695754, "width": 1920, "height": 560}]</script><script>'use strict';
+(() => {
+  function bindTabs(group, activate) {
+    const tabs = [...group.querySelectorAll('[role="tab"]')];
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => activate(tab));
+      tab.addEventListener('keydown', event => {
+        let next;
+        if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
+        if (event.key === 'ArrowLeft') next = (index + tabs.length - 1) % tabs.length;
+        if (event.key === 'Home') next = 0;
+        if (event.key === 'End') next = tabs.length - 1;
+        if (next !== undefined) {
+          event.preventDefault();
+          activate(tabs[next]);
+          tabs[next].focus();
+        }
+      });
+    });
+    return tabs;
+  }
+  function selectTab(tabs, selected) {
+    tabs.forEach(tab => {
+      const active = tab === selected;
+      tab.setAttribute('aria-selected', String(active));
+      tab.tabIndex = active ? 0 : -1;
+    });
+  }
+  const videos = JSON.parse(document.getElementById('video-data').textContent);
+  const video = document.getElementById('demo-video');
+  const panel = document.getElementById('demo-panel');
+  const speed = document.getElementById('playback-rate');
+  const error = document.getElementById('video-error');
+  let current = 0;
+  function activateVideo(tab) {
+    const index = Number(tab.dataset.video);
+    if (index === current) return;
+    const resume = !video.paused;
+    video.pause();
+    current = index;
+    const item = videos[index];
+    selectTab(demoTabs, tab);
+    panel.setAttribute('aria-labelledby', tab.id);
+    video.poster = item.poster;
+    video.src = item.src;
+    video.setAttribute('aria-label', item.title + '真机三视角演示');
+    document.getElementById('video-title').textContent = item.title;
+    document.getElementById('video-note').textContent = item.note;
+    document.getElementById('video-original').href = item.src;
+    error.hidden = true;
+    video.load();
+    video.playbackRate = Number(speed.value);
+    if (resume) video.play().catch(() => {});
+  }
+  const demoTabs = bindTabs(document.querySelector('.demo-tabs'), activateVideo);
+  speed.addEventListener('change', () => { video.playbackRate = Number(speed.value); });
+  video.addEventListener('loadedmetadata', () => { video.playbackRate = Number(speed.value); });
+  video.addEventListener('error', () => { error.hidden = false; });
+  video.addEventListener('loadeddata', () => { error.hidden = true; });
+  document.querySelectorAll('[data-demo]').forEach(link => {
+    link.addEventListener('click', () => activateVideo(demoTabs[Number(link.dataset.demo)]));
+  });
+  document.addEventListener('visibilitychange', () => { if (document.hidden) video.pause(); });
+  if ('IntersectionObserver' in window) {
+    const pauseObserver = new IntersectionObserver(entries => {
+      if (!entries[0].isIntersecting) video.pause();
+    }, {threshold: 0});
+    pauseObserver.observe(video);
+    const links = [...document.querySelectorAll('nav a')];
+    const sectionObserver = new IntersectionObserver(entries => {
+      const active = entries.filter(entry => entry.isIntersecting).at(-1);
+      if (!active) return;
+      links.forEach(link => {
+        if (link.hash === '#' + active.target.id) link.setAttribute('aria-current', 'location');
+        else link.removeAttribute('aria-current');
+      });
+    }, {rootMargin: '-15% 0px -65% 0px', threshold: 0});
+    links.forEach(link => sectionObserver.observe(document.querySelector(link.hash)));
+  }
+})();
+</script>
+</body></html>
