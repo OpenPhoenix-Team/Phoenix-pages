@@ -1,27 +1,32 @@
 # Phoenix
 
-Static project website for Phoenix. The site includes the technical overview,
-benchmark tables, figures, and eight real-world robot demonstrations.
+Static project website for Phoenix, including the technical overview, benchmark
+tables, figures, and eight real-world robot demonstrations.
 
-## Preview
+## Pages
 
-Open `index.html` with a browser that supports H.264 video. Keep `assets/` and
-`demo/` beside the HTML file. No build step or external dependencies are needed.
+- `index.html`: current English homepage.
+- `index_en.html`: the same English page at its explicit language URL.
+- `index_zh.html`: existing Chinese report, available from the language link.
 
-## GitHub Pages
+The latest editorial updates apply to the English page. The Chinese report is
+retained as a separate version.
 
-In this repository, select **Settings > Pages > Deploy from a branch**,
-then select **main** and **/(root)**. After a successful deployment, the default
-site address is <https://openphoenix-team.github.io/Phoenix-pages/>.
+## Preview and deployment
 
-The `.nojekyll` file marks this as a plain static site. All asset URLs are
-relative so the site works under the `/Phoenix-pages/` project path.
+No build step is required. Serve this directory with any static HTTP server.
+GitHub Pages deploys from `main` at the repository root:
+https://openphoenix-team.github.io/Phoenix-pages/
+
+The `.nojekyll` file marks this as a plain static site. Asset URLs are relative
+so the site works under the `/Phoenix-pages/` project path.
 
 ## Media
 
-Videos are web-optimized H.264/MP4 copies with fast-start metadata. Their
-resolution, frame rate, frame count, and duration are retained; encoding is
-lossy. Source recordings are not modified. Figures and posters are unchanged.
+Videos are the existing web-optimized H.264/MP4 copies with fast-start metadata.
+Their resolution, frame rate, frame count, and duration match the source videos;
+encoding is lossy. Playback defaults to 1x actual execution speed.
+Figures and posters are copied from the current report without re-encoding.
 
-Code and model-weight buttons intentionally have no destination yet. The site
-does not publish source Markdown, PDF reports, training data, or checkpoints.
+Code and model links point to the OpenPhoenix GitHub and Hugging Face projects.
+Source reports, backups, training data, and checkpoints are not published here.
