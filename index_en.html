@@ -265,98 +265,11 @@ footer::before{content:"";position:absolute;top:0;height:1px;background:var(--li
 </figure>
 </article>
 <article class="data-subsection" id="data-action-space" aria-labelledby="data-action-space-heading"><div class="subsection-heading"><h3 id="data-action-space-heading">III.3 Action space design</h3></div>
-<p class="prose">We use a unified 80-dimensional state and action space.</p>
-<p class="prose">Fixed semantic slots cover the left and right arms, end effectors, and grippers, with additional channels for dexterous hands, the torso, and the mobile base. Single-arm data maps to the right-arm slots. Missing or invalid dimensions are zero-filled and excluded from the loss through per-timestep, per-dimension masks.</p><div class="table-scroll" tabindex="0" role="region" aria-label="Definition of the 80-dimensional action space"><table class="report-table">
-<thead>
-<tr>
-<th scope="col">Component</th>
-<th scope="col">Indices</th>
-<th scope="col">Dims.</th>
-<th scope="col">State</th>
-<th scope="col">Action</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Arm joints</td>
-<td><code>[0,7)</code> / <code>[40,47)</code></td>
-<td>14</td>
-<td>Current left/right joint positions; up to 7 per arm</td>
-<td>Absolute joint position targets</td>
-</tr>
-<tr>
-<td>EEF position</td>
-<td><code>[7,10)</code> / <code>[47,50)</code></td>
-<td>6</td>
-<td>Left/right EEF XYZ positions in the reference frame</td>
-<td>XYZ translation increments in the reference frame</td>
-</tr>
-<tr>
-<td>EEF rotation</td>
-<td><code>[10,16)</code> / <code>[50,56)</code></td>
-<td>12</td>
-<td>Continuous 6D rotation representation for each EEF</td>
-<td>First 3 dims. per side: rotation-vector increment in the current EEF frame; last 3 masked</td>
-</tr>
-<tr>
-<td>Grippers</td>
-<td><code>[16,17)</code> / <code>[56,57)</code></td>
-<td>2</td>
-<td>Left/right gripper opening or state scalars</td>
-<td>Absolute gripper targets; no temporal differencing</td>
-</tr>
-<tr>
-<td>Dexterous hands</td>
-<td><code>[17,29)</code> / <code>[57,69)</code></td>
-<td>24</td>
-<td>Up to 12 independent hand-control channels per side</td>
-<td>Targets for the corresponding hand-control channels</td>
-</tr>
-<tr>
-<td>Torso</td>
-<td><code>[29,34)</code></td>
-<td>5</td>
-<td>Up to 5 torso joint positions</td>
-<td>Absolute joint position targets</td>
-</tr>
-<tr>
-<td>Lift</td>
-<td><code>[39,40)</code></td>
-<td>1</td>
-<td>Current lift height</td>
-<td>Absolute target height</td>
-</tr>
-<tr>
-<td>Head</td>
-<td><code>[74,77)</code></td>
-<td>3</td>
-<td>Up to 3 head joint positions</td>
-<td>Absolute joint position targets</td>
-</tr>
-<tr>
-<td>Mobile base</td>
-<td><code>[77,80)</code></td>
-<td>3</td>
-<td>Base X, Y and yaw, when available</td>
-<td>Local forward/left displacement and yaw increment; not velocity</td>
-</tr>
-<tr>
-<td>Reserved</td>
-<td><code>[34,39)</code> / <code>[69,74)</code></td>
-<td>10</td>
-<td>Unused; zero-filled and masked</td>
-<td>Unused; zero-filled and masked</td>
-</tr>
-<tr>
-<td><strong>Total</strong></td>
-<td><strong><code>[0,80)</code></strong></td>
-<td><strong>80</strong></td>
-<td>—</td>
-<td>—</td>
-</tr>
-</tbody>
-</table>
-</div><p class="prose">States use absolute end-effector poses with continuous 6D rotation representations. Actions use absolute joint and gripper targets, translation increments in the reference frame, and rotation vectors in the local end-effector frame. Dimensionality describes interface capacity: not every sample provides supervision for every dimension.</p>
+<figure class="action-space-figure">
+<div class="figure-link"><img loading="lazy" decoding="async" src="assets/phoenix-80d-two-lines-tnr-tight.png" width="2800" height="543" alt="Unified 80-dimensional layout: Left spans indices 0 to 40 and Right spans 40 to 80, with labeled arm joints, EEF XYZ, EEF rotation, gripper, dexterous hand, torso, lift, head, mobile base, and reserved segments."></div>
+<figcaption><strong>Figure 7.</strong> Unified 80-dimensional state and action layout.</figcaption>
+</figure>
+<p class="prose">As shown in Figure 7, we use a unified 80-dimensional state and action space with fixed semantic slots for left and right arm joints, end-effector positions and orientations, grippers, and dexterous hands, alongside torso, lift, head, and mobile-base channels and reserved dimensions. Semantically equivalent components across robots map to the same slots, with single-arm data consistently mapped to the right-arm slots. Missing, invalid, and unused dimensions are zero-filled and excluded from the loss using per-timestep, per-dimension masks, enabling a unified interface across different robot configurations.</p>
 </article>
 </div></section>
 <section class="section" id="results"><div class="wrap">
@@ -548,7 +461,7 @@ footer::before{content:"";position:absolute;top:0;height:1px;background:var(--li
 </div></section>
 <section class="section" id="analysis"><div class="wrap">
   <div class="section-heading"><div><h2 id="section-6">VI. Analysis</h2></div><p>We examine how pretraining changes representations and video prediction, and how the broader system supports precise skills and policy post-training.</p></div>
-  <article class="analysis-block"><div class="subsection-heading"><h3 id="section-6-1">VI.1 What changes in representation, prediction, and contact?</h3></div><p class="prose">To assess whether pretraining yields a more balanced visual feature spectrum, we sample 10,000 frames each from the pretraining validation set and LIBERO-Plus, using identical frames for all three encoders. Singular value decomposition of the centered CLS and Patch Mean feature matrices gives the effective rank, measuring how evenly feature variation is distributed across principal directions.</p><figure><div class="figure-link"><img loading="lazy" src="assets/pptx_tnr_20261015/effective_rank_tnr.png" width="2880" height="1132" alt="Effective rank of DINOv3, DINOv3 (VGGT-Ω), and Phoenix Encoder across two data domains"></div><figcaption><strong>Figure 7.</strong> Phoenix Encoder recovers effective rank relative to the VGGT-Ω initialization in both domains; the original DINOv3 model still has the highest effective rank.</figcaption></figure><div class="expanded-details"><h4 class="detail-heading" id="section-6-1-1">VI.1.1 Effective rank: measurements and interpretation</h4><div class="detail-body"><div class="table-scroll" tabindex="0" role="region" aria-label="Effective-rank results"><table class="report-table">
+  <article class="analysis-block"><div class="subsection-heading"><h3 id="section-6-1">VI.1 What changes in representation, prediction, and contact?</h3></div><p class="prose">To assess whether pretraining yields a more balanced visual feature spectrum, we sample 10,000 frames each from the pretraining validation set and LIBERO-Plus, using identical frames for all three encoders. Singular value decomposition of the centered CLS and Patch Mean feature matrices gives the effective rank, measuring how evenly feature variation is distributed across principal directions.</p><figure><div class="figure-link"><img loading="lazy" src="assets/pptx_tnr_20261015/effective_rank_tnr.png" width="2880" height="1132" alt="Effective rank of DINOv3, DINOv3 (VGGT-Ω), and Phoenix Encoder across two data domains"></div><figcaption><strong>Figure 8.</strong> Phoenix Encoder recovers effective rank relative to the VGGT-Ω initialization in both domains; the original DINOv3 model still has the highest effective rank.</figcaption></figure><div class="expanded-details"><h4 class="detail-heading" id="section-6-1-1">VI.1.1 Effective rank: measurements and interpretation</h4><div class="detail-body"><div class="table-scroll" tabindex="0" role="region" aria-label="Effective-rank results"><table class="report-table">
 <thead>
 <tr>
 <th scope="col">Model</th>
@@ -815,7 +728,7 @@ const dialog=document.getElementById('figure-dialog');
 document.querySelectorAll('figure:not(.pipeline-platforms) img').forEach(img=>{
 const button=document.createElement('button'); button.type='button'; button.className='expand-figure'; button.textContent='View full-size figure ↗';
 img.closest('figure').append(button);
-button.addEventListener('click',()=>{let full=dialog.querySelector('img');if(!full){full=document.createElement('img');dialog.insertBefore(full,dialog.querySelector('p'));}full.src=img.src;full.alt=img.alt;const caption=img.closest('figure').querySelector('figcaption');dialog.querySelector('p').replaceChildren(...[...caption.childNodes].map(node=>node.cloneNode(true)));dialog.showModal();});
+button.addEventListener('click',()=>{let full=dialog.querySelector('img');if(!full){full=document.createElement('img');dialog.insertBefore(full,dialog.querySelector('p'));}full.src=img.src;full.alt=img.alt;const caption=img.closest('figure').querySelector('figcaption');dialog.querySelector('p').replaceChildren(...(caption?[...caption.childNodes].map(node=>node.cloneNode(true)):[]));dialog.showModal();});
 });
 document.getElementById('close-figure').onclick=()=>dialog.close();
 dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close();});
