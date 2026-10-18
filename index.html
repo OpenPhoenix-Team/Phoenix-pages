@@ -152,6 +152,12 @@ dialog .expanded-caption{font-family:var(--font-editorial);font-size:13px;line-h
 .article-toc .toc-level-2{padding-left:23px;font-size:12px}
 .article-toc .toc-level-3{padding-left:32px;font-size:11px}
 main h2[id],main h3[id],main h4[id]{scroll-margin-top:110px}
+
+/* Organization logo above the Phoenix title. */
+.masthead .organization-brand{display:block;width:240px;max-width:100%;margin:0 0 26px;border:0;text-decoration:none}
+.masthead .organization-brand img{display:block;width:100%;height:auto}
+.masthead .organization-brand:focus-visible{outline:2px solid var(--teal);outline-offset:6px;border-radius:2px}
+@media(max-width:680px){.masthead .organization-brand{width:200px;margin-bottom:22px}}
 </style>
 </head>
 <body>
@@ -174,6 +180,8 @@ main h2[id],main h3[id],main h4[id]{scroll-margin-top:110px}
 <a class="toc-level-3" href="#section-4-2-1">IV.2.1 Full comparison</a>
 <a class="toc-level-2" href="#section-4-3">IV.3 RoboCasa-GR1</a>
 <a class="toc-level-3" href="#section-4-3-1">IV.3.1 Full comparison</a>
+<a class="toc-level-2" href="#section-4-4">IV.4 RoboTwin 2.0 C2R</a>
+<a class="toc-level-3" href="#section-4-4-1">IV.4.1 Full comparison</a>
 <a class="toc-level-1" href="#section-5">V. Real-world demonstrations (1× speed)</a>
 <a class="toc-level-2" href="#demo-heading-long-horizon">V.1 Long-Horizon Manipulation</a>
 <a class="toc-level-2" href="#demo-heading-tactile">V.2 Tactile-Guided Manipulation</a>
@@ -188,6 +196,7 @@ main h2[id],main h3[id],main h4[id]{scroll-margin-top:110px}
 </aside>
 <main id="main">
 <section class="masthead wrap" id="top" aria-labelledby="title">
+  <a class="organization-brand" href="https://anyverse.com/" target="_blank" rel="noopener noreferrer" aria-label="Anyverse Dynamics official website"><img src="assets/anyverse-dynamics-logo.png" width="3190" height="667" alt="Anyverse Dynamics"></a>
   <h1 id="title"><span class="title-phoenix">Phoenix<span class="title-colon">:</span></span> <span class="title-description">Scaling Robotic Manipulation through World Modeling and Physical Interaction Learning</span></h1>
 
   <div class="hero-actions"><a class="resource-button" href="https://github.com/OpenPhoenix-Team/Phoenix-MWA" target="_blank" rel="noopener noreferrer"><svg class="resource-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 .297C5.37.297 0 5.67 0 12.297c0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.043-1.61-4.043-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.09-.745.083-.729.083-.729 1.205.084 1.838 1.237 1.838 1.237 1.07 1.835 2.809 1.305 3.495.998.108-.776.418-1.305.762-1.605-2.665-.305-5.467-1.334-5.467-5.93 0-1.31.467-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23a11.51 11.51 0 0 1 3-.404c1.02.005 2.045.138 3 .404 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg><span>Code</span></a><a class="resource-button" href="https://huggingface.co/collections/OpenPhoenix/phoenix-mwa" target="_blank" rel="noopener noreferrer"><span class="resource-icon huggingface-icon" aria-hidden="true">🤗</span><span>Models</span></a></div>
@@ -195,7 +204,7 @@ main h2[id],main h3[id],main h4[id]{scroll-margin-top:110px}
 <section id="overview" class="overview wrap" aria-label="Overview of Phoenix world-action modeling">
   <div class="intro-grid"><h2 id="section-1">I. Introduction: Learning general capabilities from experience</h2><div class="abstract-copy"><p>The goal of <strong>Phoenix</strong> is to learn general robotic manipulation capabilities from large-scale experience and translate them into precise interaction skills in the physical world. To this end, we develop a unified system spanning data collection and processing, pretraining, post-training, and reinforcement learning. This system provides the basis for investigating how scaling data and compute can improve manipulation generalization in open environments and establish a transferable foundation for fine-grained interaction.</p>
 
-<p><strong>Phoenix-MWA</strong> is the foundation model of this system. It leverages dual-teacher distillation to combine geometric priors with temporal knowledge and a causal-semantic VAE to construct a compact visual latent space. Conditioned on observations and language instructions, the model jointly generates future visual states and actions, connecting the prediction of environmental dynamics with the learning of manipulation behavior. To facilitate reproducibility, Phoenix-MWA uses open-source datasets for pretraining. Its multi-source pretraining pool contains approximately <strong>54,400 raw hours</strong>, approximately <strong>39,300 effective hours</strong>, and roughly <strong>3.38 billion raw frames</strong>. Under the corresponding task-specific post-training configurations, the model achieves success rates of <strong>94.63% on LIBERO-Plus</strong>, <strong>66.48% on LIBERO-Pro</strong>, <strong>82.67% on RoboCasa-GR1</strong>, and <strong>72.42% on RoboTwin clean2random (C2R)</strong>.</p>
+<p><strong>Phoenix-MWA</strong> is the foundation model of this system. It leverages dual-teacher distillation to combine geometric priors with temporal knowledge and a causal-semantic VAE to construct a compact visual latent space. Conditioned on observations and language instructions, the model jointly generates future visual states and actions, connecting the prediction of environmental dynamics with the learning of manipulation behavior. To facilitate reproducibility, Phoenix-MWA uses open-source datasets for pretraining. Its multi-source pretraining pool contains approximately <strong>54,400 raw hours</strong>, approximately <strong>39,300 effective hours</strong>, and roughly <strong>3.38 billion raw frames</strong>. Under the corresponding task-specific post-training configurations, the model achieves success rates of <strong>94.63% on LIBERO-Plus</strong>, <strong>66.48% on LIBERO-Pro</strong>, <strong>82.67% on RoboCasa-GR1</strong>, and <strong>72.42% on RoboTwin 2.0 Clean2Random (C2R)</strong>.</p>
 
 <p>Moving from general manipulation to precise interaction, <strong>Phoenix-ILA</strong> focuses on the <em>last centimeter</em> of manipulation. It combines position, force, and touch into latent interaction units, using a small amount of post-training data to learn task-specific contact and control patterns. <strong>Phoenix-PhysCanvas</strong> takes a step further: an action-conditioned visual and tactile world-model simulator predicts how actions change the environment and its contact state, providing an interactive environment for policy reinforcement learning.</p>
 
@@ -316,7 +325,7 @@ main h2[id],main h3[id],main h4[id]{scroll-margin-top:110px}
 </article>
 </div></section>
 <section class="section" id="results"><div class="wrap">
-  <div class="section-heading"><div><h2 id="section-4">IV. Benchmark results</h2></div><p>We report success rates on LIBERO-Plus, LIBERO-Pro, and RoboCasa-GR1. Each benchmark uses its corresponding post-training and evaluation configuration.</p></div>
+  <div class="section-heading"><div><h2 id="section-4">IV. Benchmark results</h2></div><p>We report success rates on LIBERO-Plus, LIBERO-Pro, RoboCasa-GR1, and RoboTwin 2.0 Clean2Random. Each benchmark uses its corresponding post-training and evaluation configuration.</p></div>
   <div id="panel-plus" class="benchmark-panel" role="region" aria-label="LIBERO-Plus">
 <div class="benchmark-summary"><div><h3 id="section-4-1">IV.1 LIBERO-Plus</h3></div><div class="benchmark-score"><strong>94.63<small>%</small></strong></div></div>
     <div class="bar-chart" aria-label="LIBERO-Plus success-rate comparison"><div class="bar-row"><span>Phoenix-MWA <small>w/o. Pretrain</small></span><div class="bar-track"><span class="bar-fill baseline" style="width:88.16%"></span></div><strong>88.16%</strong></div><div class="bar-row"><span>Phoenix-MWA <small>w. Pretrain</small></span><div class="bar-track"><span class="bar-fill" style="width:94.63%"></span></div><strong>94.63%</strong></div></div><p class="prose">Pretraining improves the overall success rate by <strong>6.47 pp</strong>.</p>
@@ -329,37 +338,37 @@ main h2[id],main h3[id],main h4[id]{scroll-margin-top:110px}
     <tr><th scope="row">OpenVLA</th><td>0.80</td><td>3.50</td><td>23.00</td><td>8.10</td><td>34.80</td><td>15.20</td><td>28.50</td><td>15.60</td></tr>
     <tr><th scope="row">π0</th><td>13.80</td><td>6.00</td><td>58.80</td><td>85.00</td><td>81.40</td><td>79.00</td><td>68.90</td><td>53.60</td></tr>
     <tr><th scope="row">π0-FAST</th><td>65.10</td><td>21.60</td><td>61.00</td><td>73.20</td><td>73.20</td><td>74.40</td><td>68.80</td><td>61.60</td></tr>
-    <tr><th scope="row">RIPT-VLA</th><td>55.20</td><td>31.20</td><td>77.60</td><td>88.40</td><td>91.60</td><td>73.50</td><td>74.20</td><td>68.40</td></tr>
+
     <tr><th scope="row">OpenVLA-OFT</th><td>56.40</td><td>31.90</td><td>79.50</td><td>88.70</td><td>93.30</td><td>75.80</td><td>74.20</td><td>69.60</td></tr>
-    <tr><th scope="row">StarVLA</th><td>52.50</td><td>49.80</td><td>88.50</td><td>95.70</td><td>95.70</td><td>73.00</td><td>76.90</td><td>74.10</td></tr>
+
     <tr><th scope="row">StarVLA-OFT</th><td>47.00</td><td>60.10</td><td>87.00</td><td>96.30</td><td>95.30</td><td>73.10</td><td>79.20</td><td>75.00</td></tr>
-    <tr><th scope="row">VLA-JEPA</th><td>63.30</td><td>67.10</td><td>85.40</td><td>95.60</td><td>93.60</td><td>66.30</td><td>85.10</td><td>79.50</td></tr>
+
     <tr><th scope="row">ABot-M0</th><td>60.40</td><td>67.90</td><td>86.40</td><td>96.20</td><td>91.60</td><td>86.40</td><td>82.60</td><td>80.50</td></tr>
-    <tr><th scope="row">FoMoVLA</th><td>64.00</td><td>62.20</td><td><u>94.00</u></td><td>94.10</td><td>96.20</td><td>82.20</td><td>79.60</td><td>80.50</td></tr>
-    <tr><th scope="row">VLAct</th><td>73.90</td><td>68.40</td><td>81.50</td><td>96.70</td><td>96.70</td><td>86.00</td><td>83.30</td><td>82.60</td></tr>
-    <tr><th scope="row">VLANeXt</th><td><u>90.40</u></td><td>65.70</td><td>81.80</td><td>95.90</td><td>82.50</td><td>94.10</td><td>80.80</td><td>83.90</td></tr>
+
+
+
     <tr><th scope="row">InternVLA-A1.5</th><td>83.10</td><td>55.10</td><td>86.90</td><td>96.40</td><td>98.20</td><td>95.60</td><td>85.20</td><td>84.80</td></tr>
     <tr><th scope="row">π0.5</th><td>75.80</td><td>79.40</td><td>83.30</td><td>95.50</td><td>95.00</td><td>89.60</td><td>87.00</td><td>85.70</td></tr>
-    <tr><th scope="row">ACoT-VLA</th><td>72.60</td><td>82.60</td><td>87.50</td><td>97.70</td><td>96.50</td><td>87.80</td><td>88.10</td><td>86.60</td></tr>
-    <tr><th scope="row">Quantile Head</th><td>71.60</td><td>80.70</td><td>87.60</td><td>96.10</td><td>97.20</td><td>94.80</td><td>87.80</td><td>87.10</td></tr>
-    <tr><th scope="row">QuoVLA</th><td>82.30</td><td>87.60</td><td>88.20</td><td>98.20</td><td>95.90</td><td>90.80</td><td><u>89.30</u></td><td>90.30</td></tr>
-    <tr><th scope="row">Qwen-RobotManip-Context</th><td>89.90</td><td>83.90</td><td>86.50</td><td><u>98.60</u></td><td><strong>99.90</strong></td><td><u>97.90</u></td><td>87.50</td><td>91.40</td></tr>
+
+
+
+    <tr><th scope="row">Qwen-RobotManip-Context</th><td><u>89.90</u></td><td>83.90</td><td>86.50</td><td><u>98.60</u></td><td><strong>99.90</strong></td><td><u>97.90</u></td><td>87.50</td><td>91.40</td></tr>
   </tbody>
   <tbody>
     <tr class="table-group"><th colspan="9" scope="row">WAM</th></tr>
     <tr><th scope="row">Fast-WAM</th><td>16.40</td><td>44.50</td><td>68.90</td><td>78.20</td><td>53.70</td><td>37.70</td><td>60.70</td><td>51.50</td></tr>
     <tr><th scope="row">OpenWAM-α</th><td>33.80</td><td>76.10</td><td>88.00</td><td>97.00</td><td>87.10</td><td>39.80</td><td>77.50</td><td>69.20</td></tr>
-    <tr><th scope="row">4D-WAM</th><td>45.20</td><td>64.30</td><td>90.60</td><td>94.30</td><td>57.70</td><td>69.10</td><td>79.20</td><td>71.00</td></tr>
-    <tr><th scope="row">ST-WAM</th><td>55.40</td><td>60.10</td><td>79.30</td><td>93.00</td><td>74.20</td><td>79.50</td><td>74.30</td><td>72.80</td></tr>
-    <tr><th scope="row">Faster-WAM</th><td>67.90</td><td>49.00</td><td>92.10</td><td>94.30</td><td>57.00</td><td>82.30</td><td>82.70</td><td>75.00</td></tr>
-    <tr><th scope="row">JEPA-WAM</th><td>79.20</td><td>59.20</td><td>68.20</td><td>93.30</td><td>94.60</td><td>83.60</td><td>76.10</td><td>79.20</td></tr>
-    <tr><th scope="row">Being-H0.7</th><td>82.00</td><td>59.00</td><td>82.80</td><td>97.80</td><td>90.00</td><td>93.50</td><td>88.50</td><td>82.10</td></tr>
+
+
+
+
+    <tr><th scope="row">Being-H0.7</th><td>82.00</td><td>59.00</td><td>82.80</td><td>97.80</td><td>90.00</td><td>93.50</td><td><u>88.50</u></td><td>82.10</td></tr>
     <tr><th scope="row">Cosmos-Policy</th><td>75.80</td><td>63.30</td><td>81.70</td><td>96.50</td><td>88.90</td><td>92.70</td><td>82.20</td><td>82.20</td></tr>
-    <tr><th scope="row">Fast-WAM-IDM</th><td>65.40</td><td>86.00</td><td>89.50</td><td>96.30</td><td>74.40</td><td>87.60</td><td>80.70</td><td>82.60</td></tr>
-    <tr><th scope="row">CF-WAM</th><td>66.92</td><td>84.90</td><td>90.50</td><td>98.25</td><td>67.84</td><td>88.94</td><td>81.11</td><td>82.65</td></tr>
+
+
     <tr><th scope="row">ImageWAM</th><td>80.80</td><td>50.30</td><td>91.40</td><td>98.10</td><td>85.50</td><td>93.80</td><td>80.50</td><td>83.10</td></tr>
     <tr><th scope="row">ABot-M0.5</th><td>70.50</td><td>87.40</td><td>88.60</td><td>94.00</td><td>89.70</td><td>75.50</td><td>85.20</td><td>83.40</td></tr>
-    <tr><th scope="row">InternW0-Δ</th><td><strong>90.60</strong></td><td><u>91.10</u></td><td>92.90</td><td>95.80</td><td><u>99.40</u></td><td>94.00</td><td>88.40</td><td><u>92.80</u></td></tr>
+    <tr><th scope="row">InternW0-Δ</th><td><strong>90.60</strong></td><td><u>91.10</u></td><td><u>92.90</u></td><td>95.80</td><td><u>99.40</u></td><td>94.00</td><td>88.40</td><td><u>92.80</u></td></tr>
     <tr class="ours"><th scope="row">Phoenix-MWA (w/o. Pretrain)</th><td>79.36</td><td>90.19</td><td>83.73</td><td>97.72</td><td>87.73</td><td>94.82</td><td>85.90</td><td>88.16</td></tr>
     <tr class="ours"><th scope="row">Phoenix-MWA (w. Pretrain)</th><td>88.24</td><td><strong>94.00</strong></td><td><strong>95.51</strong></td><td><strong>99.91</strong></td><td>98.88</td><td><strong>98.31</strong></td><td><strong>90.23</strong></td><td><strong>94.63</strong></td></tr>
   </tbody>
@@ -425,6 +434,36 @@ main h2[id],main h3[id],main h4[id]{scroll-margin-top:110px}
   </tbody>
 </table>
 </div></div></div></div>
+
+<div id="panel-robotwin" class="benchmark-panel" role="region" aria-label="RoboTwin 2.0 C2R">
+<div class="benchmark-summary"><div><h3 id="section-4-4">IV.4 RoboTwin 2.0 C2R</h3></div><div class="benchmark-score"><strong>72.42<small>%</small></strong></div></div>
+<div class="expanded-details"><h4 class="detail-heading" id="section-4-4-1"><span>IV.4.1 Full comparison</span><span class="summary-meta">Success rate (%)</span></h4><div class="detail-body">
+<div class="table-scroll" tabindex="0" role="region" aria-label="Complete RoboTwin 2.0 Clean2Random results"><table id="robotwin-c2r-comparison" class="report-table">
+<thead><tr><th scope="col">Method</th><th scope="col">Clean2Random</th></tr></thead>
+<tbody>
+<tr class="table-group"><th colspan="2" scope="row">VLA</th></tr>
+<tr><th scope="row">StarVLA</th><td>10.60</td></tr>
+<tr><th scope="row">GR00T-N1.7</th><td>20.70</td></tr>
+<tr><th scope="row">X-VLA</th><td>20.90</td></tr>
+<tr><th scope="row">Spatial Forcing</th><td>26.70</td></tr>
+<tr><th scope="row">ABot-M0</th><td>36.00</td></tr>
+<tr><th scope="row">π0.5</th><td>47.90</td></tr>
+<tr><th scope="row">GigaBrain-0.7</th><td>67.90</td></tr>
+<tr><th scope="row">Qwen-RobotManip-Context</th><td>69.40</td></tr>
+</tbody>
+<tbody>
+<tr class="table-group"><th colspan="2" scope="row">WAM</th></tr>
+<tr><th scope="row">Fast-WAM</th><td>1.90</td></tr>
+<tr><th scope="row">AHA-WAM</th><td>3.20</td></tr>
+<tr><th scope="row">X-WAM</th><td>25.80</td></tr>
+<tr><th scope="row">4D-WAM</th><td>41.80</td></tr>
+<tr><th scope="row">OpenWAM-α</th><td>48.70</td></tr>
+<tr><th scope="row">InternW0-Δ</th><td><u>71.90</u></td></tr>
+<tr class="ours"><th scope="row">Phoenix-MWA (w. Pretrain)</th><td><strong>72.42</strong></td></tr>
+</tbody>
+</table></div>
+
+</div></div></div>
 </div></section>
 <section class="section tint" id="demos"><div class="wrap">
   <div class="section-heading"><div><h2 id="section-5">V. Real-world demonstrations (1× speed)</h2></div><p>Long-horizon manipulation, tactile-guided skills, and policy improvement inside a learned world model. All eight demonstrations use real-time policy inference on an NVIDIA RTX 5090 and are presented at 1× actual execution speed.</p></div>
