@@ -159,40 +159,61 @@ main h2[id],main h3[id],main h4[id]{scroll-margin-top:110px}
 .masthead .organization-brand:focus-visible{outline:2px solid var(--teal);outline-offset:6px;border-radius:2px}
 @media(max-width:680px){.masthead .organization-brand{width:200px;margin-bottom:22px}}
 </style>
+<style id="bibtex-style">
+.citation-box{border:1px solid var(--line);border-radius:8px;background:rgba(120,65,55,.035);overflow:hidden}
+.citation-toolbar{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;color:var(--muted);font-size:13px}
+.citation-toolbar button{border:1px solid var(--line);border-radius:5px;background:var(--paper);padding:5px 14px;font-size:13px}
+.citation-toolbar button:hover{background:rgba(120,65,55,.08)}
+.citation-box pre{margin:0;padding:0 24px 24px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.8;color:var(--ink)}
+.citation-box pre code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:13px;background:none;padding:0;border-radius:0}
+#bibtex-copy-status{display:block;min-height:1.5em;font-size:12px;color:var(--muted);margin-top:6px}
+@media(max-width:600px){.citation-box pre{padding:0 16px 18px}.citation-toolbar{padding:12px 16px}}
+</style>
+<style id="bibtex-footer-alignment">
+footer{position:relative;border-top:0}
+footer::before{content:"";position:absolute;top:0;height:1px;background:var(--line);left:max(32px,calc((100% - var(--width))/2));width:min(calc(100% - 64px),var(--width))}
+@media(max-width:600px){footer::before{left:18px;width:calc(100% - 36px)}}
+</style>
+<style id="compact-sidebar">
+.article-toc{max-height:none;overflow:visible;overscroll-behavior:auto;scrollbar-width:auto;padding-right:0}
+</style>
+<style id="pipeline-review-layout">
+#data-pipeline>.prose{margin-top:22px}
+#data-pipeline>.feature-figure{margin-block:28px}
+.pipeline-platforms{margin-top:28px}
+.pipeline-platform-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:start}
+.pipeline-platform-card{min-width:0}
+.platform-preview{display:block;width:100%;padding:0;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:#fff;cursor:zoom-in}
+.platform-preview img{width:100%;height:auto;aspect-ratio:1.55;object-fit:contain;background:#fff}
+.pipeline-platform-card>span{display:block;margin-top:9px;color:var(--muted);font-size:12px;line-height:1.5}
+@media(max-width:650px){.pipeline-platform-grid{grid-template-columns:1fr;gap:20px}}
+</style>
+<style id="platform-gallery-controls">
+.platform-gallery-nav{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:18px}
+.platform-gallery-nav button{border:1px solid var(--line);border-radius:5px;background:var(--paper);padding:7px 14px;font:inherit;font-size:13px;color:var(--ink)}
+.platform-gallery-nav button:disabled{opacity:.35;cursor:default}
+.platform-gallery-nav span{font-size:12px;color:var(--muted);text-align:center}
+@media(max-width:600px){.platform-gallery-nav{gap:8px}.platform-gallery-nav button{padding:7px 9px}}
+</style>
+<style id="platform-gallery-button-alignment">
+#figure-dialog .platform-gallery-nav{display:flex;justify-content:space-between;align-items:center;width:100%;gap:16px}
+#figure-dialog .platform-gallery-nav button{position:static;float:none;margin:0;inset:auto;transform:none}
+#figure-dialog .platform-gallery-nav button:first-child{margin-right:auto}
+#figure-dialog .platform-gallery-nav button:last-child{margin-left:auto}
+</style>
+<style id="analysis-summary-spacing">.analysis-block>.analysis-summary{margin-top:24px}</style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to article</a>
 <header class="topbar"><div class="wrap nav-inner"><a class="wordmark" href="#top" aria-label="Phoenix home"><span class="brand-dot" aria-hidden="true"></span>Phoenix</a><nav aria-label="Article navigation"><a href="#method">Method</a><a href="#data">Data</a><a href="#results">Results</a><a href="#demos">Demonstrations</a><a href="#analysis">Analysis</a></nav><a class="language-link" href="index_zh.html" lang="zh-CN">Chinese version ↗</a></div></header>
 <aside class="article-toc" aria-label="Table of contents"><p>CONTENTS</p>
-<a class="toc-level-1" href="#section-1">I. Introduction: Learning general capabilities from experience</a>
+<a class="toc-level-1" href="#section-1">I. Introduction</a>
 <a class="toc-level-1" href="#section-2">II. Method</a>
-<a class="toc-level-2" href="#section-2-1">II.1 Phoenix-MWA: Learning perception, prediction, and action together</a>
-<a class="toc-level-2" href="#section-2-2">II.2 Phoenix-ILA: Learning the last centimeter of manipulation</a>
-<a class="toc-level-2" href="#section-2-3">II.3 Phoenix-PhysCanvas: Improving policies inside a world model</a>
 <a class="toc-level-1" href="#section-3">III. Pretraining data</a>
-<a class="toc-level-2" href="#data-distribution-heading">III.1 Pretraining data distribution</a>
-<a class="toc-level-2" href="#data-pipeline-heading">III.2 Pretraining data processing pipeline</a>
-<a class="toc-level-2" href="#data-action-space-heading">III.3 Action space design</a>
 <a class="toc-level-1" href="#section-4">IV. Benchmark results</a>
-<a class="toc-level-2" href="#section-4-1">IV.1 LIBERO-Plus</a>
-<a class="toc-level-3" href="#section-4-1-1">IV.1.1 Comparison across seven distribution shifts</a>
-<a class="toc-level-2" href="#section-4-2">IV.2 LIBERO-Pro</a>
-<a class="toc-level-3" href="#section-4-2-1">IV.2.1 Full comparison</a>
-<a class="toc-level-2" href="#section-4-3">IV.3 RoboCasa-GR1</a>
-<a class="toc-level-3" href="#section-4-3-1">IV.3.1 Full comparison</a>
-<a class="toc-level-2" href="#section-4-4">IV.4 RoboTwin 2.0 C2R</a>
-<a class="toc-level-3" href="#section-4-4-1">IV.4.1 Full comparison</a>
-<a class="toc-level-1" href="#section-5">V. Real-world demonstrations (1× speed)</a>
-<a class="toc-level-2" href="#demo-heading-long-horizon">V.1 Long-Horizon Manipulation</a>
-<a class="toc-level-2" href="#demo-heading-tactile">V.2 Tactile-Guided Manipulation</a>
-<a class="toc-level-2" href="#demo-heading-physcanvas">V.3 World-Model Policy Improvement</a>
+<a class="toc-level-1" href="#section-5">V. Real-world demonstrations</a>
 <a class="toc-level-1" href="#section-6">VI. Analysis</a>
-<a class="toc-level-2" href="#section-6-1">VI.1 What changes in representation, prediction, and contact?</a>
-<a class="toc-level-3" href="#section-6-1-1">VI.1.1 Effective rank: measurements and interpretation</a>
-<a class="toc-level-2" href="#section-6-2">VI.2 More accurate predictions of future video</a>
-<a class="toc-level-2" href="#section-6-3">VI.3 Learning motion and contact together</a>
-<a class="toc-level-2" href="#section-6-4">VI.4 Learning in simulation, transferring to physical tasks</a>
-<div class="toc-resources"><a href="https://github.com/OpenPhoenix-Team/Phoenix-MWA" target="_blank" rel="noopener noreferrer">Code ↗</a><a href="https://huggingface.co/collections/OpenPhoenix/phoenix-mwa" target="_blank" rel="noopener noreferrer">Models ↗</a></div>
+<a class="toc-level-1" href="#section-7">BibTeX</a>
 </aside>
 <main id="main">
 <section class="masthead wrap" id="top" aria-labelledby="title">
@@ -226,8 +247,22 @@ main h2[id],main h3[id],main h4[id]{scroll-margin-top:110px}
   <figure><div class="figure-link"><img loading="lazy" src="assets/pretraining-data-pool-v37.png" width="3840" height="1888" alt="Phoenix pretraining data: composition and effective duration of Robot, Ego, and UMI sources"></div><figcaption><strong>Figure 4.</strong> The pretraining data pool for Phoenix-MWA combines robot, egocentric, and UMI recordings, with 54.41k raw hours and 39.31k effective hours across diverse sources.</figcaption></figure>
 </article>
 <article class="data-subsection" id="data-pipeline" aria-labelledby="data-pipeline-heading"><div class="subsection-heading"><h3 id="data-pipeline-heading">III.2 Pretraining data processing pipeline</h3></div>
-<p class="prose">Processing standardizes formats, selects subsets, filters invalid records, and isolates anomalous labels. We trim redundant stationary segments at episode boundaries and retain windows that satisfy temporal continuity and task-boundary constraints. Ego data receives script-level language annotations; robot data is aligned in coordinates, units, action timing, and valid dimensions. During training, we sample alternative language expressions while preserving task and action semantics. We will open-source the complete data processing and annotation pipelines to make these steps reproducible.</p>
-  <figure class="feature-figure"><div class="figure-link"><img loading="lazy" src="assets/pretraining-data-pipeline-lossless.webp" width="3840" height="1920" alt="Pretraining data pipeline: Ego and UMI annotation, robot coordinate alignment, and language augmentation"></div><figcaption><strong>Figure 5.</strong> Source-specific processing produces samples in a unified representation.</figcaption></figure>
+<p class="prose">A manipulation recording is not yet a training sample: it may contain long idle periods, broken tracks, or instructions that do not match the visible action. Phoenix processes robot demonstrations and first-person human manipulation videos through a shared pipeline for format conversion and quality filtering, followed by source-specific alignment, annotation, and sample construction. A final review checks consistency between video, trajectories, and language. We will open-source the complete data processing and annotation pipelines to make these steps reproducible.</p>
+<figure class="feature-figure"><div class="figure-link"><img loading="lazy" src="assets/pretraining-data-pipeline-lossless.webp" width="3840" height="1920" alt="Pretraining data pipeline: Ego and UMI annotation, robot coordinate alignment, and language augmentation"></div><figcaption><strong>Figure 5.</strong> Phoenix converts heterogeneous demonstrations into aligned training samples through a shared processing pipeline.</figcaption></figure>
+<p class="prose"><strong>Format conversion.</strong> We convert heterogeneous sources to LeRobot V3, standardizing data organization and explicitly recording position units and orientations. Video timestamps are aligned with state acquisition times, whereas frame counts, state sequences, and task boundaries are checked for consistency. This provides a common data format while preserving source-specific signals for subsequent processing.</p>
+<p class="prose"><strong>Quality filtering.</strong> We screen recordings for decoding failures, invalid timestamps, poor visual quality, abnormal motion, and duplicates. Visual and temporal similarity are jointly considered for duplicate detection, while camera-motion compensation helps distinguish local activity from viewpoint changes in Ego videos. For robot demonstrations, stationary detection uses measured states rather than control commands, combining adjacent and cumulative changes to preserve slow movement. Only redundant stationary segments at episode boundaries are trimmed; pauses within a task are retained, and video, states, and annotation timelines remain synchronized.</p>
+<p class="prose"><strong>Data annotation.</strong> For Ego data, we screen available wrist tracks for abrupt changes that may indicate tracking errors. Language annotations capture the overall task, scene context, and time-localized hand actions. These annotations guide window descriptions: only actions with sufficient temporal overlap are included, and their combined coverage must adequately describe the selected window. We split data by original episode before constructing samples to prevent overlapping observations from leaking between training and validation sets.</p>
+<p class="prose">For Robot data, we align end-effector poses through workspace alignment, end-effector alignment and standardizing position units while maintaining synchronization with video. We augment task instructions through semantic paraphrasing, conversational rewriting, and context framing, preserving objects, arm assignments, spatial relationships, action order, and constraints. Each sample pairs an instruction with synchronized observations and state–action sequences drawn entirely from one continuous task interval.</p>
+<p class="prose"><strong>Platforms.</strong> Our platforms make quality filtering, annotation, and final review inspectable rather than relying on filtering scores alone. The quality-filtering platform uses synchronized video, wrist trajectories, and speed curves to determine whether a speed spike reflects real movement or a tracking error, while the data-annotation platform aligns window descriptions with action coverage and hand timelines. Final review prioritizes crop boundaries, speed peaks, near-threshold windows, and simultaneous hand actions, while also checking ordinary retained samples for errors missed by automatic rules.</p>
+<figure class="pipeline-platforms">
+<div class="pipeline-platform-grid">
+<div class="pipeline-platform-card"><button type="button" class="platform-preview" aria-label="Enlarge quality filtering platform"><img loading="lazy" decoding="async" src="assets/pipeline-review/anomaly-platform.png" width="3760" height="2400" alt="Anomaly review interface with video, speed peaks, and candidate tracking events"></button><span>(a) Quality filtering platform</span></div>
+<div class="pipeline-platform-card"><button type="button" class="platform-preview" aria-label="Enlarge data annotation platform"><img loading="lazy" decoding="async" src="assets/pipeline-review/annotation-platform.png" width="2818" height="2104" alt="Annotation review interface comparing video windows, language descriptions, action coverage, and hand timelines"></button><span>(b) Data annotation platform</span></div>
+<div class="pipeline-platform-card"><button type="button" class="platform-preview" aria-label="Enlarge quality review platform"><img loading="lazy" decoding="async" src="assets/pipeline-review/ego-platform.png" width="3760" height="2106" alt="Ego viewer with synchronized video, wrist trajectories, speed curves, and frame controls"></button><span>(c) Quality review platform</span></div>
+</div>
+<figcaption><strong>Figure 6.</strong> Platforms for (a) quality filtering, (b) data annotation, and (c) quality review.</figcaption>
+<button type="button" class="expand-figure" id="expand-platforms">View full-size figure ↗</button>
+</figure>
 </article>
 <article class="data-subsection" id="data-action-space" aria-labelledby="data-action-space-heading"><div class="subsection-heading"><h3 id="data-action-space-heading">III.3 Action space design</h3></div>
 <p class="prose">We use a unified 80-dimensional state and action space.</p>
@@ -329,7 +364,7 @@ main h2[id],main h3[id],main h4[id]{scroll-margin-top:110px}
   <div id="panel-plus" class="benchmark-panel" role="region" aria-label="LIBERO-Plus">
 <div class="benchmark-summary"><div><h3 id="section-4-1">IV.1 LIBERO-Plus</h3></div><div class="benchmark-score"><strong>94.63<small>%</small></strong></div></div>
     <div class="bar-chart" aria-label="LIBERO-Plus success-rate comparison"><div class="bar-row"><span>Phoenix-MWA <small>w/o. Pretrain</small></span><div class="bar-track"><span class="bar-fill baseline" style="width:88.16%"></span></div><strong>88.16%</strong></div><div class="bar-row"><span>Phoenix-MWA <small>w. Pretrain</small></span><div class="bar-track"><span class="bar-fill" style="width:94.63%"></span></div><strong>94.63%</strong></div></div><p class="prose">Pretraining improves the overall success rate by <strong>6.47 pp</strong>.</p>
-    <div class="expanded-details"><h4 class="detail-heading" id="section-4-1-1"><span>IV.1.1 Comparison across seven distribution shifts</span><span class="summary-meta">Success rate (%)</span></h4><div class="detail-body"><div class="table-scroll" tabindex="0" role="region" aria-label="Complete LIBERO-Plus results"><table id="libero-plus-comparison" class="report-table">
+    <div class="expanded-details"><h4 class="detail-heading" id="section-4-1-1"><span>Comparison across seven distribution shifts</span><span class="summary-meta">Success rate (%)</span></h4><div class="detail-body"><div class="table-scroll" tabindex="0" role="region" aria-label="Complete LIBERO-Plus results"><table id="libero-plus-comparison" class="report-table">
   <thead>
     <tr><th scope="col">Method</th><th scope="col">Camera</th><th scope="col">Robot</th><th scope="col">Language</th><th scope="col">Light</th><th scope="col">Background</th><th scope="col">Noise</th><th scope="col">Layout</th><th scope="col">Total ↑</th></tr>
   </thead>
@@ -375,7 +410,7 @@ main h2[id],main h3[id],main h4[id]{scroll-margin-top:110px}
 </table>
 </div></div></div>
   </div>
-  <div id="panel-pro" class="benchmark-panel" role="region" aria-label="LIBERO-Pro"><div class="benchmark-summary"><div><h3 id="section-4-2">IV.2 LIBERO-Pro</h3></div><div class="benchmark-score"><strong>66.48<small>%</small></strong></div></div><div class="expanded-details"><h4 class="detail-heading" id="section-4-2-1"><span>IV.2.1 Full comparison</span><span class="summary-meta">Success rate (%)</span></h4><div class="detail-body"><div class="table-scroll" tabindex="0" role="region" aria-label="Complete LIBERO-Pro results"><table id="libero-pro-comparison" class="report-table">
+  <div id="panel-pro" class="benchmark-panel" role="region" aria-label="LIBERO-Pro"><div class="benchmark-summary"><div><h3 id="section-4-2">IV.2 LIBERO-Pro</h3></div><div class="benchmark-score"><strong>66.48<small>%</small></strong></div></div><div class="expanded-details"><h4 class="detail-heading" id="section-4-2-1"><span>Full comparison</span><span class="summary-meta">Success rate (%)</span></h4><div class="detail-body"><div class="table-scroll" tabindex="0" role="region" aria-label="Complete LIBERO-Pro results"><table id="libero-pro-comparison" class="report-table">
   <thead>
     <tr><th scope="col">Method</th><th scope="col">Obj.</th><th scope="col">Pos.</th><th scope="col">Sem.</th><th scope="col">Task</th><th scope="col">Avg.</th></tr>
   </thead>
@@ -404,7 +439,7 @@ main h2[id],main h3[id],main h4[id]{scroll-margin-top:110px}
   </tbody>
 </table>
 </div></div></div></div>
-  <div id="panel-robocasa" class="benchmark-panel" role="region" aria-label="RoboCasa-GR1"><div class="benchmark-summary"><div><h3 id="section-4-3">IV.3 RoboCasa-GR1</h3></div><div class="benchmark-score"><strong>82.67<small>%</small></strong></div></div><div class="expanded-details"><h4 class="detail-heading" id="section-4-3-1"><span>IV.3.1 Full comparison</span><span class="summary-meta">Success rate (%)</span></h4><div class="detail-body"><div class="table-scroll" tabindex="0" role="region" aria-label="Complete RoboCasa-GR1 results"><table id="robocasa-gr1-comparison" class="report-table">
+  <div id="panel-robocasa" class="benchmark-panel" role="region" aria-label="RoboCasa-GR1"><div class="benchmark-summary"><div><h3 id="section-4-3">IV.3 RoboCasa-GR1</h3></div><div class="benchmark-score"><strong>82.67<small>%</small></strong></div></div><div class="expanded-details"><h4 class="detail-heading" id="section-4-3-1"><span>Full comparison</span><span class="summary-meta">Success rate (%)</span></h4><div class="detail-body"><div class="table-scroll" tabindex="0" role="region" aria-label="Complete RoboCasa-GR1 results"><table id="robocasa-gr1-comparison" class="report-table">
   <thead>
     <tr><th scope="col">Method</th><th scope="col">Art.</th><th scope="col">P&amp;P</th><th scope="col">Avg.</th></tr>
   </thead>
@@ -437,7 +472,7 @@ main h2[id],main h3[id],main h4[id]{scroll-margin-top:110px}
 
 <div id="panel-robotwin" class="benchmark-panel" role="region" aria-label="RoboTwin 2.0 C2R">
 <div class="benchmark-summary"><div><h3 id="section-4-4">IV.4 RoboTwin 2.0 C2R</h3></div><div class="benchmark-score"><strong>72.42<small>%</small></strong></div></div>
-<div class="expanded-details"><h4 class="detail-heading" id="section-4-4-1"><span>IV.4.1 Full comparison</span><span class="summary-meta">Success rate (%)</span></h4><div class="detail-body">
+<div class="expanded-details"><h4 class="detail-heading" id="section-4-4-1"><span>Full comparison</span><span class="summary-meta">Success rate (%)</span></h4><div class="detail-body">
 <div class="table-scroll" tabindex="0" role="region" aria-label="Complete RoboTwin 2.0 Clean2Random results"><table id="robotwin-c2r-comparison" class="report-table">
 <thead><tr><th scope="col">Method</th><th scope="col">Clean2Random</th></tr></thead>
 <tbody>
@@ -483,7 +518,7 @@ main h2[id],main h3[id],main h4[id]{scroll-margin-top:110px}
   </article>
 
   <article class="demo-group" id="demo-tactile" aria-labelledby="demo-heading-tactile">
-    <div class="demo-group-heading"><h3 id="demo-heading-tactile">V.2 Tactile-Guided Manipulation</h3><p>Cucumber peeling and plate wiping emphasize tactile interaction, sustained tool contact, and surface-following control.</p></div>
+    <div class="demo-group-heading"><span class="module-code">Phoenix-ILA</span><h3 id="demo-heading-tactile">V.2 Tactile-Guided Manipulation</h3><p>Cucumber peeling and plate wiping emphasize tactile interaction, sustained tool contact, and surface-following control.</p></div>
     <div class="tablist demo-tabs" role="tablist" aria-label="Tactile-guided manipulation tasks">
       <button type="button" role="tab" id="demo-tab-cucumber" aria-controls="demo-panel-tactile" aria-selected="true" tabindex="0" data-video="4">Cucumber peeling</button>
       <button type="button" role="tab" id="demo-tab-plate" aria-controls="demo-panel-tactile" aria-selected="false" tabindex="-1" data-video="5">Plate wiping</button>
@@ -513,7 +548,7 @@ main h2[id],main h3[id],main h4[id]{scroll-margin-top:110px}
 </div></section>
 <section class="section" id="analysis"><div class="wrap">
   <div class="section-heading"><div><h2 id="section-6">VI. Analysis</h2></div><p>We examine how pretraining changes representations and video prediction, and how the broader system supports precise skills and policy post-training.</p></div>
-  <article class="analysis-block"><div class="subsection-heading"><h3 id="section-6-1">VI.1 What changes in representation, prediction, and contact?</h3></div><p class="prose">To assess whether pretraining yields a more balanced visual feature spectrum, we sample 10,000 frames each from the pretraining validation set and LIBERO-Plus, using identical frames for all three encoders. Singular value decomposition of the centered CLS and Patch Mean feature matrices gives the effective rank, measuring how evenly feature variation is distributed across principal directions.</p><figure><div class="figure-link"><img loading="lazy" src="assets/pptx_tnr_20261015/effective_rank_tnr.png" width="2880" height="1132" alt="Effective rank of DINOv3, DINOv3 (VGGT-Ω), and Phoenix Encoder across two data domains"></div><figcaption><strong>Figure 6.</strong> Phoenix Encoder recovers effective rank relative to the VGGT-Ω initialization in both domains; the original DINOv3 model still has the highest effective rank.</figcaption></figure><div class="expanded-details"><h4 class="detail-heading" id="section-6-1-1">VI.1.1 Effective rank: measurements and interpretation</h4><div class="detail-body"><div class="table-scroll" tabindex="0" role="region" aria-label="Effective-rank results"><table class="report-table">
+  <article class="analysis-block"><div class="subsection-heading"><h3 id="section-6-1">VI.1 What changes in representation, prediction, and contact?</h3></div><p class="prose">To assess whether pretraining yields a more balanced visual feature spectrum, we sample 10,000 frames each from the pretraining validation set and LIBERO-Plus, using identical frames for all three encoders. Singular value decomposition of the centered CLS and Patch Mean feature matrices gives the effective rank, measuring how evenly feature variation is distributed across principal directions.</p><figure><div class="figure-link"><img loading="lazy" src="assets/pptx_tnr_20261015/effective_rank_tnr.png" width="2880" height="1132" alt="Effective rank of DINOv3, DINOv3 (VGGT-Ω), and Phoenix Encoder across two data domains"></div><figcaption><strong>Figure 7.</strong> Phoenix Encoder recovers effective rank relative to the VGGT-Ω initialization in both domains; the original DINOv3 model still has the highest effective rank.</figcaption></figure><div class="expanded-details"><h4 class="detail-heading" id="section-6-1-1">VI.1.1 Effective rank: measurements and interpretation</h4><div class="detail-body"><div class="table-scroll" tabindex="0" role="region" aria-label="Effective-rank results"><table class="report-table">
 <thead>
 <tr>
 <th scope="col">Model</th>
@@ -586,7 +621,7 @@ main h2[id],main h3[id],main h4[id]{scroll-margin-top:110px}
 </tr>
 </tbody>
 </table>
-</div><div class="finding-strip"><p>Compared with FastWAM, the pretrained model achieves <strong>a 2.56 dB increase in PSNR</strong> and <strong>a 36.84% reduction in LPIPS</strong>.</p><span>Pixel fidelity, perceptual similarity, and semantic consistency all improve.</span></div><p class="prose">Higher is better for ↑ metrics; lower is better for ↓ metrics. DINO-GT and CLIP-GT are cosine similarities multiplied by 100.</p></article>
+</div><p class="prose analysis-summary">Pretraining improves both visual fidelity and semantic consistency. Compared with FastWAM, pretrained Phoenix-MWA increases PSNR by 2.56 dB and reduces LPIPS by 36.84%, while also improving SSIM, DINO-GT, and CLIP-GT.</p></article>
   <article class="analysis-block"><div class="subsection-heading"><h3 id="section-6-3">VI.3 Learning motion and contact together</h3></div><p class="prose">On peeling and plate-wiping tasks, we compare direct action generation with interaction-latent generation. F<sub>ext</sub> L1 measures deviation from the expert reference for a resultant-force proxy derived from tactile deformation.</p><div class="table-scroll" tabindex="0" role="region" aria-label="Contact-rich task results"><table class="report-table">
 <thead>
 <tr>
@@ -621,7 +656,7 @@ main h2[id],main h3[id],main h4[id]{scroll-margin-top:110px}
 </tr>
 </tbody>
 </table>
-</div><div class="finding-strip"><p>With interaction latents, peeling success increases from <strong>20% → 40%</strong>, while wiping success increases from <strong>75% → 90%</strong>.</p><span>Contact error also decreases on both tasks.</span></div><a class="text-link demo-jump" href="#demos" data-demo="4">Cucumber peeling demo ↗</a><a class="text-link demo-jump" href="#demos" data-demo="5">Plate wiping demo ↗</a></article>
+</div><p class="prose analysis-summary">Compared with direct action generation, interaction-latent generation increases <a href="#demos" data-demo="4">peeling</a> success from 20% to 40% and <a href="#demos" data-demo="5">wiping</a> success from 75% to 90%. The corresponding force-proxy errors decrease from 1.85 to 1.22 and from 1.62 to 1.38, respectively, indicating improved agreement with expert contact patterns alongside higher task success.</p></article>
   <article class="analysis-block"><div class="subsection-heading"><h3 id="section-6-4">VI.4 Learning in simulation, transferring to physical tasks</h3></div><p class="prose">After 30k steps of supervised fine-tuning (SFT), we perform GRPO post-training inside PhysCanvas and evaluate physical execution under different object positions and lighting conditions. For each task, we report success rates under three environmental conditions.</p><div class="table-scroll" tabindex="0" role="region" aria-label="World-model reinforcement-learning results"><table class="report-table">
 <thead>
 <tr>
@@ -658,7 +693,20 @@ main h2[id],main h3[id],main h4[id]{scroll-margin-top:110px}
 </tr>
 </tbody>
 </table>
-</div><div class="split-stats"><div><span>Test-tube task · mean success rate</span><strong>58.33% <span>→</span> 75.00%</strong></div><div><span>Block task · mean success rate</span><strong>80.00% <span>→</span> 86.67%</strong></div></div></article>
+</div><p class="prose analysis-summary">Following 30k steps of supervised fine-tuning, GRPO post-training in PhysCanvas improves mean real-world success across three evaluation conditions from 58.33% to 75.00% on test-tube insertion and from 80.00% to 86.67% on block manipulation. These results suggest that policy refinement in the learned simulator can transfer to improved physical execution.</p></article>
+</div></section>
+<section class="section" id="bibtex"><div class="wrap">
+<div class="section-heading"><div><h2 id="section-7">BibTeX</h2></div></div>
+<div class="citation-box"><div class="citation-toolbar"><span>BibTeX</span><button type="button" id="copy-bibtex" aria-label="Copy BibTeX citation">Copy</button></div>
+<pre tabindex="0" aria-label="BibTeX citation"><code id="bibtex-code">@misc{openphoenix2026phoenix,
+    title  = {Phoenix: Scaling Robotic Manipulation through World Modeling and Physical Interaction Learning},
+    author = {{OpenPhoenix Team} and {Anyverse Dynamics}},
+    year   = {2026},
+    month  = {October},
+    url    = {https://openphoenix-team.github.io/Phoenix-pages},
+    note   = {Blog post}
+}</code></pre></div>
+<span id="bibtex-copy-status" role="status" aria-live="polite"></span>
 </div></section>
 </main>
 <footer><div class="wrap footer-inner"><a class="wordmark" href="#top">Phoenix</a><span>Phoenix · World modeling and physical interaction learning</span><a href="#top">Back to top ↑</a></div></footer>
@@ -764,7 +812,7 @@ main h2[id],main h3[id],main h4[id]{scroll-margin-top:110px}
 <script>
 (() => {
 const dialog=document.getElementById('figure-dialog');
-document.querySelectorAll('figure img').forEach(img=>{
+document.querySelectorAll('figure:not(.pipeline-platforms) img').forEach(img=>{
 const button=document.createElement('button'); button.type='button'; button.className='expand-figure'; button.textContent='View full-size figure ↗';
 img.closest('figure').append(button);
 button.addEventListener('click',()=>{let full=dialog.querySelector('img');if(!full){full=document.createElement('img');dialog.insertBefore(full,dialog.querySelector('p'));}full.src=img.src;full.alt=img.alt;const caption=img.closest('figure').querySelector('figcaption');dialog.querySelector('p').replaceChildren(...[...caption.childNodes].map(node=>node.cloneNode(true)));dialog.showModal();});
@@ -773,6 +821,56 @@ document.getElementById('close-figure').onclick=()=>dialog.close();
 dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close();});
 const links=[...document.querySelectorAll('.article-toc > a')];
 if('IntersectionObserver' in window){const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting)links.forEach(link=>{if(link.hash==='#'+entry.target.id)link.setAttribute('aria-current','location');else link.removeAttribute('aria-current');});});},{rootMargin:'-10% 0px -70% 0px'});links.forEach(link=>observer.observe(document.querySelector(link.hash)));}
+})();
+</script>
+<script>
+document.getElementById('copy-bibtex').addEventListener('click', async function(){
+  const code=document.getElementById('bibtex-code');
+  const status=document.getElementById('bibtex-copy-status');
+  try {
+    await navigator.clipboard.writeText(code.textContent);
+    this.textContent='Copied';status.textContent='Citation copied.';
+    setTimeout(()=>{this.textContent='Copy';status.textContent='';},2000);
+  } catch(error) {
+    const range=document.createRange();range.selectNodeContents(code);
+    const selection=window.getSelection();selection.removeAllRanges();selection.addRange(range);
+    status.textContent='Citation selected. Press Ctrl+C (or Command+C) to copy.';
+  }
+});
+</script>
+<script id="platform-gallery-script">
+(() => {
+  const dialog=document.getElementById('figure-dialog');
+  const previews=[...document.querySelectorAll('.platform-preview')];
+  const nav=document.createElement('div');
+  nav.className='platform-gallery-nav';nav.hidden=true;
+  nav.innerHTML='<button type="button" aria-label="Previous platform image">← Previous</button><button type="button" aria-label="Next platform image">Next →</button>';
+  dialog.append(nav);
+  const previous=nav.querySelector('button:first-child');
+  const next=nav.querySelector('button:last-child');
+  let index=0;
+  function display(at){
+    index=at;
+    const button=previews[index],img=button.querySelector('img');
+    let full=dialog.querySelector('img');
+    if(!full){full=document.createElement('img');dialog.insertBefore(full,dialog.querySelector('p'));}
+    full.src=img.src;full.alt=img.alt;
+    const caption=button.closest('figure').querySelector('figcaption');
+    dialog.querySelector('p').replaceChildren(...[...caption.childNodes].map(node=>node.cloneNode(true)));
+    previous.disabled=index===0;next.disabled=index===previews.length-1;
+    nav.hidden=false;
+    if(!dialog.open)dialog.showModal();
+  }
+  previews.forEach((button,i)=>button.addEventListener('click',()=>display(i)));
+  document.getElementById('expand-platforms').addEventListener('click',()=>display(0));
+  previous.addEventListener('click',()=>{if(index>0)display(index-1);});
+  next.addEventListener('click',()=>{if(index<previews.length-1)display(index+1);});
+  dialog.addEventListener('keydown',event=>{
+    if(nav.hidden)return;
+    if(event.key==='ArrowLeft'&&index>0){event.preventDefault();display(index-1);}
+    if(event.key==='ArrowRight'&&index<previews.length-1){event.preventDefault();display(index+1);}
+  });
+  dialog.addEventListener('close',()=>{nav.hidden=true;});
 })();
 </script>
 </body></html>
