@@ -692,9 +692,9 @@ footer::before{content:"";position:absolute;top:0;height:1px;background:var(--li
 </div></div></div>
 
 <div id="panel-bench2dex" class="benchmark-panel" role="region" aria-labelledby="section-5-5">
-<div class="benchmark-summary"><div><h3 id="section-5-5">V.5 Bench2Dex</h3></div></div>
+<div class="benchmark-summary"><div><h3 id="section-5-5">V.5 Bench2Dex</h3></div><div class="benchmark-score"><strong>45.6<small>%</small></strong></div></div>
 <p class="prose benchmark-analysis">Bench2Dex covers <strong>12 robot-arm and dexterous-hand combinations</strong> and <strong>26 task-embodiment settings</strong>. It evaluates manipulation generalization in multi-task, multi-embodiment settings through geometric changes, such as object poses and table height, and observation changes, such as backgrounds, lighting, distractors, and camera poses. Phoenix-MWA achieves success rates of <strong>38.5%</strong>, <strong>44.1%</strong>, and <strong>45.6%</strong> in the equivariance (Equi.), invariance (Inv.), and combined (Full) evaluations, respectively, delivering the best results in all three conditions. Its average success rate across the four evaluation channels is <strong>45.6%</strong>, outperforming the strongest baseline by <strong>17.3 percentage points</strong>. These results demonstrate Phoenix-MWA's generalization across embodiments and tasks, as well as its robustness to changes in geometry and visual conditions.</p>
-<h4 class="detail-heading" id="section-5-5-1">Mean across all 26 tasks</h4>
+<h4 class="detail-heading" id="section-5-5-1"><span>Mean across all 26 tasks</span><span class="summary-meta">Success rate (%)</span></h4>
 <div class="table-scroll" tabindex="0" role="region" aria-labelledby="section-5-5-1">
 <table id="bench2dex-mean-comparison" class="report-table" aria-labelledby="section-5-5-1">
 <thead><tr><th scope="col">Metric</th><th scope="col">ACT</th><th scope="col">DP</th><th scope="col">π₀.₅</th><th scope="col">GR00T N1.5</th><th scope="col" class="bench2dex-ours">Phoenix-MWA (w. Pretrain)</th></tr></thead>
