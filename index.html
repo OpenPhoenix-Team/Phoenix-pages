@@ -202,16 +202,21 @@ footer::before{content:"";position:absolute;top:0;height:1px;background:var(--li
 #figure-dialog .platform-gallery-nav button:last-child{margin-left:auto}
 </style>
 <style id="analysis-summary-spacing">.analysis-block>.analysis-summary{margin-top:24px}</style>
+<style id="demo-speed-label-style">#demos h2 .demo-speed-label{font-weight:700;color:var(--teal)}</style>
+<style id="demo-body-typography">
+#demos .demo-group-heading p{font-size:18px;line-height:1.85}
+@media(max-width:680px){#demos .demo-group-heading p{font-size:17px;line-height:1.8}}
+</style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to article</a>
-<header class="topbar"><div class="wrap nav-inner"><a class="wordmark" href="#top" aria-label="Phoenix home"><span class="brand-dot" aria-hidden="true"></span>Phoenix</a><nav aria-label="Article navigation"><a href="#method">Method</a><a href="#data">Data</a><a href="#results">Results</a><a href="#demos">Demonstrations</a><a href="#analysis">Analysis</a></nav><a class="language-link" href="index_zh.html" lang="zh-CN">Chinese version ↗</a></div></header>
+<header class="topbar"><div class="wrap nav-inner"><a class="wordmark" href="#top" aria-label="Phoenix home"><span class="brand-dot" aria-hidden="true"></span>Phoenix</a><nav aria-label="Article navigation"><a href="#demos">Demonstrations</a><a href="#method">Method</a><a href="#data">Data</a><a href="#results">Results</a><a href="#analysis">Analysis</a></nav><a class="language-link" href="index_zh.html" lang="zh-CN">Chinese version ↗</a></div></header>
 <aside class="article-toc" aria-label="Table of contents"><p>CONTENTS</p>
 <a class="toc-level-1" href="#section-1">I. Introduction</a>
-<a class="toc-level-1" href="#section-2">II. Method</a>
-<a class="toc-level-1" href="#section-3">III. Pretraining data</a>
-<a class="toc-level-1" href="#section-4">IV. Benchmark results</a>
-<a class="toc-level-1" href="#section-5">V. Real-world demonstrations</a>
+<a class="toc-level-1" href="#section-2">II. Real-world demonstrations</a>
+<a class="toc-level-1" href="#section-3">III. Method</a>
+<a class="toc-level-1" href="#section-4">IV. Pretraining data</a>
+<a class="toc-level-1" href="#section-5">V. Benchmark results</a>
 <a class="toc-level-1" href="#section-6">VI. Analysis</a>
 <a class="toc-level-1" href="#section-7">BibTeX</a>
 </aside>
@@ -232,21 +237,67 @@ footer::before{content:"";position:absolute;top:0;height:1px;background:var(--li
 <p><strong>Phoenix unifies pretraining for general capabilities, post-training for task-specific skills, and reinforcement learning for improved execution, charting a path from large-scale data to precise physical interaction.</strong> We will open-source the complete data processing and annotation pipelines, together with the pretraining and post-training code and model weights.</p>
 </div></div>
 </section>
+<section class="section tint" id="demos"><div class="wrap">
+  <div class="section-heading"><div><h2 id="section-2">II. Real-world demonstrations <strong class="demo-speed-label">(1× speed)</strong></h2></div><p>We demonstrate Phoenix on real-world tasks across three settings: long-horizon manipulation requiring sustained coordination across multiple stages; contact-rich manipulation involving continuous contact regulation along object surfaces; and precise manipulation demanding accurate positioning, alignment, and fine-grained motion under tight spatial constraints. All eight demonstrations use real-time policy inference on an NVIDIA RTX 5090 and are shown at <strong>1× speed</strong>.</p></div>
+
+
+  <article class="demo-group" id="demo-long-horizon" aria-labelledby="demo-heading-long-horizon">
+    <div class="demo-group-heading"><h3 id="demo-heading-long-horizon">II.1 Long-Horizon Manipulation</h3><p>Everyday manipulation often requires a robot to complete several dependent steps while tracking changes in objects and the scene. We select multi-stage tasks to examine whether Phoenix can maintain task progress, coordinate successive actions, and carry intermediate outcomes through to completion.</p></div>
+    <div class="tablist demo-tabs" role="tablist" aria-label="Long-horizon manipulation tasks">
+      <button type="button" role="tab" id="demo-tab-breakfast" aria-controls="demo-panel-long-horizon" aria-selected="true" tabindex="0" data-video="7">Breakfast-object manipulation</button>
+      <button type="button" role="tab" id="demo-tab-pouch" aria-controls="demo-panel-long-horizon" aria-selected="false" tabindex="-1" data-video="6">Pencil-pouch manipulation</button>
+    </div>
+    <div id="demo-panel-long-horizon" role="tabpanel" aria-labelledby="demo-tab-breakfast">
+      <div class="video-frame"><video class="demo-video" width="1920" height="560" controls playsinline preload="none" poster="assets/web_posters/breakfast.jpg" src="demo/breakfast273_30k_rtc_three_views.mp4" aria-label="Breakfast-object manipulation: real-time RTX 5090 inference, original-speed footage">Your browser does not support embedded video. <a href="demo/breakfast273_30k_rtc_three_views.mp4">Open video</a></video></div>
+      <div class="video-toolbar"><div><h3 class="video-title">Breakfast-object manipulation</h3></div><div class="video-actions"><label for="playback-rate-long-horizon">Speed</label><select id="playback-rate-long-horizon" class="playback-rate" aria-label="Long-horizon video playback speed"><option value="0.5">0.5×</option><option value="1" selected>1× (real time)</option><option value="1.5">1.5×</option><option value="2">2×</option></select><a class="video-original" href="demo/breakfast273_30k_rtc_three_views.mp4" target="_blank" rel="noopener">Original video ↗</a></div></div>
+      <p class="video-error" role="alert" hidden>This video could not be loaded. Try opening the original video.</p>
+    </div>
+  </article>
+
+  <article class="demo-group" id="demo-tactile" aria-labelledby="demo-heading-tactile">
+    <div class="demo-group-heading"><span class="module-code">Phoenix-ILA</span><h3 id="demo-heading-tactile">II.2 Contact-Rich Manipulation</h3><p>Cucumber peeling and plate wiping require sustained tool–surface contact, where visually similar motions can produce very different contact outcomes. We choose these tasks to examine whether a policy can coordinate movement with contact as the tool follows an object’s surface. Phoenix-ILA addresses this challenge by jointly encoding motion and tactile evolution in interaction latents, allowing the policy to learn contact-aware motion patterns rather than action trajectories alone.</p></div>
+    <div class="tablist demo-tabs" role="tablist" aria-label="Tactile-guided manipulation tasks">
+      <button type="button" role="tab" id="demo-tab-cucumber" aria-controls="demo-panel-tactile" aria-selected="true" tabindex="0" data-video="4">Cucumber peeling</button>
+      <button type="button" role="tab" id="demo-tab-plate" aria-controls="demo-panel-tactile" aria-selected="false" tabindex="-1" data-video="5">Plate wiping</button>
+    </div>
+    <div id="demo-panel-tactile" role="tabpanel" aria-labelledby="demo-tab-cucumber">
+      <div class="video-frame"><video class="demo-video" width="1920" height="560" controls playsinline preload="none" poster="assets/web_posters/cucumber.jpg" src="demo/huanggua_three_views_background_blur_v3.mp4" aria-label="Cucumber peeling: real-time RTX 5090 inference, original-speed footage">Your browser does not support embedded video. <a href="demo/huanggua_three_views_background_blur_v3.mp4">Open video</a></video></div>
+      <div class="video-toolbar"><div><h3 class="video-title">Cucumber peeling</h3></div><div class="video-actions"><label for="playback-rate-tactile">Speed</label><select id="playback-rate-tactile" class="playback-rate" aria-label="Tactile video playback speed"><option value="0.5">0.5×</option><option value="1" selected>1× (real time)</option><option value="1.5">1.5×</option><option value="2">2×</option></select><a class="video-original" href="demo/huanggua_three_views_background_blur_v3.mp4" target="_blank" rel="noopener">Original video ↗</a></div></div>
+      <p class="video-error" role="alert" hidden>This video could not be loaded. Try opening the original video.</p>
+    </div>
+  </article>
+
+  <article class="demo-group" id="demo-physcanvas" aria-labelledby="demo-heading-physcanvas">
+    <div class="demo-group-heading"><span class="module-code">Phoenix-PhysCanvas</span><h3 id="demo-heading-physcanvas">II.3 Precise Manipulation</h3><p>Precise manipulation requires accurate alignment and small corrective movements, as minor positioning errors can lead to missed contact or unsuccessful insertion. These tasks expose a challenge for demonstration-based learning: nominal trajectories may provide limited guidance for correcting deviations during execution. Phoenix-PhysCanvas addresses this challenge through reinforcement learning in a learned world model, where policies can explore alternative actions and use outcome-based feedback to refine fine-grained execution before deployment on the real robot.</p></div>
+    <div class="tablist demo-tabs" role="tablist" aria-label="PhysCanvas policy-improvement tasks">
+      <button type="button" role="tab" id="demo-tab-tube" aria-controls="demo-panel-physcanvas" aria-selected="true" tabindex="0" data-video="0">Test-tube insertion</button>
+      <button type="button" role="tab" id="demo-tab-blocks" aria-controls="demo-panel-physcanvas" aria-selected="false" tabindex="-1" data-video="1">Block manipulation</button>
+      <button type="button" role="tab" id="demo-tab-bottle" aria-controls="demo-panel-physcanvas" aria-selected="false" tabindex="-1" data-video="2">Bottle-cap twisting</button>
+      <button type="button" role="tab" id="demo-tab-cube" aria-controls="demo-panel-physcanvas" aria-selected="false" tabindex="-1" data-video="3">Cube manipulation</button>
+    </div>
+    <div id="demo-panel-physcanvas" role="tabpanel" aria-labelledby="demo-tab-tube">
+      <div class="video-frame"><video class="demo-video" width="1920" height="560" controls playsinline preload="none" poster="assets/web_posters/tube.jpg" src="demo/shiguan_bimanual_step015000_rtc_three_views.mp4" aria-label="Test-tube insertion: real-time RTX 5090 inference, original-speed footage">Your browser does not support embedded video. <a href="demo/shiguan_bimanual_step015000_rtc_three_views.mp4">Open video</a></video></div>
+      <div class="video-toolbar"><div><h3 class="video-title">Test-tube insertion</h3></div><div class="video-actions"><label for="playback-rate-physcanvas">Speed</label><select id="playback-rate-physcanvas" class="playback-rate" aria-label="PhysCanvas video playback speed"><option value="0.5">0.5×</option><option value="1" selected>1× (real time)</option><option value="1.5">1.5×</option><option value="2">2×</option></select><a class="video-original" href="demo/shiguan_bimanual_step015000_rtc_three_views.mp4" target="_blank" rel="noopener">Original video ↗</a></div></div>
+      <p class="video-error" role="alert" hidden>This video could not be loaded. Try opening the original video.</p>
+    </div>
+  </article>
+  <noscript><ul><li><a href="demo/jimu_step015000_rtc_three_views.mp4">Blocks</a></li><li><a href="demo/bottle_02_step015000_rtc_three_views.mp4">Bottle cap</a></li><li><a href="demo/mofang_step015000_rtc_three_views.mp4">Cube</a></li><li><a href="demo/huanggua_three_views_background_blur_v3.mp4">Cucumber peeling</a></li><li><a href="demo/plate_rtc_three_views_background_blur_v3.mp4">Plate wiping</a></li><li><a href="demo/breakfast273_30k_rtc_three_views.mp4">Breakfast-object manipulation</a></li><li><a href="demo/pouch2459_50k_rollout000004_left_base_right_titlebar.mp4">Pencil pouch</a></li></ul></noscript>
+</div></section>
 <section class="section" id="method"><div class="wrap">
-  <div class="section-heading"><div><h2 id="section-2">II. Method</h2></div></div>
-  <article class="method-block" id="method-mwa"><div class="subsection-heading"><h3 id="section-2-1">II.1 Phoenix-MWA: Learning perception, prediction, and action together</h3></div><p class="prose">Built on DINOv3, the Phoenix Encoder uses feature alignment and masked prediction to combine geometric priors from VGGT with temporal knowledge from V-JEPA. A causal-semantic VAE compresses the resulting high-dimensional visual features into a compact latent space, using causal temporal encoding to preserve semantic and spatial structure while reducing redundancy and preventing leakage from future observations. Phoenix-MWA jointly predicts future states and actions in visual-dynamics and semantic latent spaces, connecting the evolution of the environment with manipulation behavior.</p>
+  <div class="section-heading"><div><h2 id="section-3">III. Method</h2></div></div>
+  <article class="method-block" id="method-mwa"><div class="subsection-heading"><h3 id="section-3-1">III.1 Phoenix-MWA: Learning perception, prediction, and action together</h3></div><p class="prose">Built on DINOv3, the Phoenix Encoder uses feature alignment and masked prediction to combine geometric priors from VGGT with temporal knowledge from V-JEPA. A causal-semantic VAE compresses the resulting high-dimensional visual features into a compact latent space, using causal temporal encoding to preserve semantic and spatial structure while reducing redundancy and preventing leakage from future observations. Phoenix-MWA jointly predicts future states and actions in visual-dynamics and semantic latent spaces, connecting the evolution of the environment with manipulation behavior.</p>
   <figure class="feature-figure"><div class="figure-link"><img loading="lazy" src="assets/phoenix-mwa-20261018.png" width="3194" height="3200" alt="Phoenix architecture: dual-teacher distillation, a causal-semantic VAE, and world-action modeling"></div><figcaption><strong>Figure 1.</strong> Phoenix-MWA combines a dual-teacher encoder and a causal-semantic VAE for joint world-action modeling.</figcaption></figure>
-</article><article class="method-block" id="method-ila"><div class="subsection-heading"><h3 id="section-2-2">II.2 Phoenix-ILA: Learning the last centimeter of manipulation</h3></div><p class="prose">Phoenix-ILA learns decodable interaction latents for contact-rich manipulation, jointly capturing motion and contact evolution. Conditioned on multi-view visual observations, an interaction encoder maps synchronized motion and tactile sequences into a compact latent representation. A time-conditioned decoder reconstructs motion, tactile deformation, and force proxies at queried times, preserving the temporal coordination between movement and contact over time. Policies learn to generate these interaction latents through conditional flow matching, and the shared decoder converts them into executable action sequences for precise physical interaction.</p><figure><div class="figure-link"><img loading="lazy" src="assets/phoenix-ila-v36.png" width="3200" height="967" alt="Phoenix-ILA: a joint interaction representation of actions, tactile deformation, and force proxies"></div><figcaption><strong>Figure 2.</strong> Phoenix-ILA learns interaction latents through joint reconstruction of motion, tactile deformation, and force proxies.</figcaption></figure></article>
-<article class="method-block" id="method-physcanvas"><div class="subsection-heading"><h3 id="section-2-3">II.3 Phoenix-PhysCanvas: Improving policies inside a world model</h3></div><p class="prose">Phoenix-PhysCanvas provides an interactive world-model simulator for policy refinement. It predicts visual and tactile feedback conditioned on robot actions, allowing Phoenix-MWA to act on the resulting observations in a closed loop. A reward model evaluates simulated interactions to guide reinforcement-learning post-training, refining manipulation skills before deployment in the physical world.</p><figure><div class="figure-link"><img loading="lazy" src="assets/phoenix-physcanvas-v36.png" width="3200" height="824" alt="The interaction loop between PhysCanvas and MWA for reinforcement-learning post-training"></div><figcaption><strong>Figure 3.</strong> Phoenix-PhysCanvas simulates action-conditioned visual and tactile feedback to enable closed-loop reinforcement learning for Phoenix-MWA.</figcaption></figure></article>
+</article><article class="method-block" id="method-ila"><div class="subsection-heading"><h3 id="section-3-2">III.2 Phoenix-ILA: Learning the last centimeter of manipulation</h3></div><p class="prose">Phoenix-ILA learns decodable interaction latents for contact-rich manipulation, jointly capturing motion and contact evolution. Conditioned on multi-view visual observations, an interaction encoder maps synchronized motion and tactile sequences into a compact latent representation. A time-conditioned decoder reconstructs motion, tactile deformation, and force proxies at queried times, preserving the temporal coordination between movement and contact over time. Policies learn to generate these interaction latents through conditional flow matching, and the shared decoder converts them into executable action sequences for precise physical interaction.</p><figure><div class="figure-link"><img loading="lazy" src="assets/phoenix-ila-v36.png" width="3200" height="967" alt="Phoenix-ILA: a joint interaction representation of actions, tactile deformation, and force proxies"></div><figcaption><strong>Figure 2.</strong> Phoenix-ILA learns interaction latents through joint reconstruction of motion, tactile deformation, and force proxies.</figcaption></figure></article>
+<article class="method-block" id="method-physcanvas"><div class="subsection-heading"><h3 id="section-3-3">III.3 Phoenix-PhysCanvas: Improving policies inside a world model</h3></div><p class="prose">Phoenix-PhysCanvas provides an interactive world-model simulator for policy refinement. It predicts visual and tactile feedback conditioned on robot actions, allowing Phoenix-MWA to act on the resulting observations in a closed loop. A reward model evaluates simulated interactions to guide reinforcement-learning post-training, refining manipulation skills before deployment in the physical world.</p><figure><div class="figure-link"><img loading="lazy" src="assets/phoenix-physcanvas-v36.png" width="3200" height="824" alt="The interaction loop between PhysCanvas and MWA for reinforcement-learning post-training"></div><figcaption><strong>Figure 3.</strong> Phoenix-PhysCanvas simulates action-conditioned visual and tactile feedback to enable closed-loop reinforcement learning for Phoenix-MWA.</figcaption></figure></article>
 </div></section>
 <section class="section tint" id="data"><div class="wrap">
-  <div class="section-heading"><div><h2 id="section-3">III. Pretraining data</h2></div></div>
-<article class="data-subsection" id="data-distribution" aria-labelledby="data-distribution-heading"><div class="subsection-heading"><h3 id="data-distribution-heading">III.1 Pretraining data distribution</h3></div>
+  <div class="section-heading"><div><h2 id="section-4">IV. Pretraining data</h2></div></div>
+<article class="data-subsection" id="data-distribution" aria-labelledby="data-distribution-heading"><div class="subsection-heading"><h3 id="data-distribution-heading">IV.1 Pretraining data distribution</h3></div>
 <p class="prose">To facilitate reproducibility, <strong>Phoenix-MWA</strong> uses open-source datasets for pretraining. This diverse pretraining pool spans robot demonstrations, egocentric human videos, and UMI recordings. The collection contains 54,413 hours of raw video, totaling approximately 3.38 billion frames, with 39,306 hours retained after processing. Robot data accounts for 31.09% of the effective duration, while embodiment-free data contributes 68.91%, comprising egocentric videos (63.58%) and UMI recordings (5.33%). This combination brings together robot interaction experience and broader human manipulation observations for large-scale pretraining.</p>
 
   <figure><div class="figure-link"><img loading="lazy" src="assets/pretraining-data-pool-v37.png" width="3840" height="1888" alt="Phoenix pretraining data: composition and effective duration of Robot, Ego, and UMI sources"></div><figcaption><strong>Figure 4.</strong> The pretraining data pool for Phoenix-MWA combines robot, egocentric, and UMI recordings, with 54.41k raw hours and 39.31k effective hours across diverse sources.</figcaption></figure>
 </article>
-<article class="data-subsection" id="data-pipeline" aria-labelledby="data-pipeline-heading"><div class="subsection-heading"><h3 id="data-pipeline-heading">III.2 Pretraining data processing pipeline</h3></div>
+<article class="data-subsection" id="data-pipeline" aria-labelledby="data-pipeline-heading"><div class="subsection-heading"><h3 id="data-pipeline-heading">IV.2 Pretraining data processing pipeline</h3></div>
 <p class="prose">A manipulation recording is not yet a training sample: it may contain long idle periods, broken tracks, or instructions that do not match the visible action. Phoenix processes robot demonstrations and first-person human manipulation videos through a shared pipeline for format conversion and quality filtering, followed by source-specific alignment, annotation, and sample construction. A final review checks consistency between video, trajectories, and language. We will open-source the complete data processing and annotation pipelines to make these steps reproducible.</p>
 <figure class="feature-figure"><div class="figure-link"><img loading="lazy" src="assets/pretraining-data-pipeline-lossless.webp" width="3840" height="1920" alt="Pretraining data pipeline: Ego and UMI annotation, robot coordinate alignment, and language augmentation"></div><figcaption><strong>Figure 5.</strong> Phoenix converts heterogeneous demonstrations into aligned training samples through a shared processing pipeline.</figcaption></figure>
 <p class="prose"><strong>Format conversion.</strong> We convert heterogeneous sources to LeRobot V3, standardizing data organization and explicitly recording position units and orientations. Video timestamps are aligned with state acquisition times, whereas frame counts, state sequences, and task boundaries are checked for consistency. This provides a common data format while preserving source-specific signals for subsequent processing.</p>
@@ -264,7 +315,7 @@ footer::before{content:"";position:absolute;top:0;height:1px;background:var(--li
 <button type="button" class="expand-figure" id="expand-platforms">View full-size figure ↗</button>
 </figure>
 </article>
-<article class="data-subsection" id="data-action-space" aria-labelledby="data-action-space-heading"><div class="subsection-heading"><h3 id="data-action-space-heading">III.3 Action space design</h3></div>
+<article class="data-subsection" id="data-action-space" aria-labelledby="data-action-space-heading"><div class="subsection-heading"><h3 id="data-action-space-heading">IV.3 Action space design</h3></div>
 <figure class="action-space-figure">
 <div class="figure-link"><img loading="lazy" decoding="async" src="assets/phoenix-80d-two-lines-tnr-tight.png" width="2800" height="543" alt="Unified 80-dimensional layout: Left spans indices 0 to 40 and Right spans 40 to 80, with labeled arm joints, EEF XYZ, EEF rotation, gripper, dexterous hand, torso, lift, head, mobile base, and reserved segments."></div>
 <figcaption><strong>Figure 7.</strong> Unified 80-dimensional state and action layout.</figcaption>
@@ -273,11 +324,11 @@ footer::before{content:"";position:absolute;top:0;height:1px;background:var(--li
 </article>
 </div></section>
 <section class="section" id="results"><div class="wrap">
-  <div class="section-heading"><div><h2 id="section-4">IV. Benchmark results</h2></div><p>We report success rates on LIBERO-Plus, LIBERO-Pro, RoboCasa-GR1, and RoboTwin 2.0 Clean2Random. Each benchmark uses its corresponding post-training and evaluation configuration.</p></div>
+  <div class="section-heading"><div><h2 id="section-5">V. Benchmark results</h2></div><p>We report success rates on LIBERO-Plus, LIBERO-Pro, RoboCasa-GR1, and RoboTwin 2.0 Clean2Random. Each benchmark uses its corresponding post-training and evaluation configuration.</p></div>
   <div id="panel-plus" class="benchmark-panel" role="region" aria-label="LIBERO-Plus">
-<div class="benchmark-summary"><div><h3 id="section-4-1">IV.1 LIBERO-Plus</h3></div><div class="benchmark-score"><strong>94.63<small>%</small></strong></div></div>
+<div class="benchmark-summary"><div><h3 id="section-5-1">V.1 LIBERO-Plus</h3></div><div class="benchmark-score"><strong>94.63<small>%</small></strong></div></div>
     <div class="bar-chart" aria-label="LIBERO-Plus success-rate comparison"><div class="bar-row"><span>Phoenix-MWA <small>w/o. Pretrain</small></span><div class="bar-track"><span class="bar-fill baseline" style="width:88.16%"></span></div><strong>88.16%</strong></div><div class="bar-row"><span>Phoenix-MWA <small>w. Pretrain</small></span><div class="bar-track"><span class="bar-fill" style="width:94.63%"></span></div><strong>94.63%</strong></div></div><p class="prose">Pretraining improves the overall success rate by <strong>6.47 pp</strong>.</p>
-    <div class="expanded-details"><h4 class="detail-heading" id="section-4-1-1"><span>Comparison across seven distribution shifts</span><span class="summary-meta">Success rate (%)</span></h4><div class="detail-body"><div class="table-scroll" tabindex="0" role="region" aria-label="Complete LIBERO-Plus results"><table id="libero-plus-comparison" class="report-table">
+    <div class="expanded-details"><h4 class="detail-heading" id="section-5-1-1"><span>Comparison across seven distribution shifts</span><span class="summary-meta">Success rate (%)</span></h4><div class="detail-body"><div class="table-scroll" tabindex="0" role="region" aria-label="Complete LIBERO-Plus results"><table id="libero-plus-comparison" class="report-table">
   <thead>
     <tr><th scope="col">Method</th><th scope="col">Camera</th><th scope="col">Robot</th><th scope="col">Language</th><th scope="col">Light</th><th scope="col">Background</th><th scope="col">Noise</th><th scope="col">Layout</th><th scope="col">Total ↑</th></tr>
   </thead>
@@ -323,7 +374,7 @@ footer::before{content:"";position:absolute;top:0;height:1px;background:var(--li
 </table>
 </div></div></div>
   </div>
-  <div id="panel-pro" class="benchmark-panel" role="region" aria-label="LIBERO-Pro"><div class="benchmark-summary"><div><h3 id="section-4-2">IV.2 LIBERO-Pro</h3></div><div class="benchmark-score"><strong>66.48<small>%</small></strong></div></div><div class="expanded-details"><h4 class="detail-heading" id="section-4-2-1"><span>Full comparison</span><span class="summary-meta">Success rate (%)</span></h4><div class="detail-body"><div class="table-scroll" tabindex="0" role="region" aria-label="Complete LIBERO-Pro results"><table id="libero-pro-comparison" class="report-table">
+  <div id="panel-pro" class="benchmark-panel" role="region" aria-label="LIBERO-Pro"><div class="benchmark-summary"><div><h3 id="section-5-2">V.2 LIBERO-Pro</h3></div><div class="benchmark-score"><strong>66.48<small>%</small></strong></div></div><div class="expanded-details"><h4 class="detail-heading" id="section-5-2-1"><span>Full comparison</span><span class="summary-meta">Success rate (%)</span></h4><div class="detail-body"><div class="table-scroll" tabindex="0" role="region" aria-label="Complete LIBERO-Pro results"><table id="libero-pro-comparison" class="report-table">
   <thead>
     <tr><th scope="col">Method</th><th scope="col">Obj.</th><th scope="col">Pos.</th><th scope="col">Sem.</th><th scope="col">Task</th><th scope="col">Avg.</th></tr>
   </thead>
@@ -352,7 +403,7 @@ footer::before{content:"";position:absolute;top:0;height:1px;background:var(--li
   </tbody>
 </table>
 </div></div></div></div>
-  <div id="panel-robocasa" class="benchmark-panel" role="region" aria-label="RoboCasa-GR1"><div class="benchmark-summary"><div><h3 id="section-4-3">IV.3 RoboCasa-GR1</h3></div><div class="benchmark-score"><strong>82.67<small>%</small></strong></div></div><div class="expanded-details"><h4 class="detail-heading" id="section-4-3-1"><span>Full comparison</span><span class="summary-meta">Success rate (%)</span></h4><div class="detail-body"><div class="table-scroll" tabindex="0" role="region" aria-label="Complete RoboCasa-GR1 results"><table id="robocasa-gr1-comparison" class="report-table">
+  <div id="panel-robocasa" class="benchmark-panel" role="region" aria-label="RoboCasa-GR1"><div class="benchmark-summary"><div><h3 id="section-5-3">V.3 RoboCasa-GR1</h3></div><div class="benchmark-score"><strong>82.67<small>%</small></strong></div></div><div class="expanded-details"><h4 class="detail-heading" id="section-5-3-1"><span>Full comparison</span><span class="summary-meta">Success rate (%)</span></h4><div class="detail-body"><div class="table-scroll" tabindex="0" role="region" aria-label="Complete RoboCasa-GR1 results"><table id="robocasa-gr1-comparison" class="report-table">
   <thead>
     <tr><th scope="col">Method</th><th scope="col">Art.</th><th scope="col">P&amp;P</th><th scope="col">Avg.</th></tr>
   </thead>
@@ -384,8 +435,8 @@ footer::before{content:"";position:absolute;top:0;height:1px;background:var(--li
 </div></div></div></div>
 
 <div id="panel-robotwin" class="benchmark-panel" role="region" aria-label="RoboTwin 2.0 C2R">
-<div class="benchmark-summary"><div><h3 id="section-4-4">IV.4 RoboTwin 2.0 C2R</h3></div><div class="benchmark-score"><strong>72.42<small>%</small></strong></div></div>
-<div class="expanded-details"><h4 class="detail-heading" id="section-4-4-1"><span>Full comparison</span><span class="summary-meta">Success rate (%)</span></h4><div class="detail-body">
+<div class="benchmark-summary"><div><h3 id="section-5-4">V.4 RoboTwin 2.0 C2R</h3></div><div class="benchmark-score"><strong>72.42<small>%</small></strong></div></div>
+<div class="expanded-details"><h4 class="detail-heading" id="section-5-4-1"><span>Full comparison</span><span class="summary-meta">Success rate (%)</span></h4><div class="detail-body">
 <div class="table-scroll" tabindex="0" role="region" aria-label="Complete RoboTwin 2.0 Clean2Random results"><table id="robotwin-c2r-comparison" class="report-table">
 <thead><tr><th scope="col">Method</th><th scope="col">Clean2Random</th></tr></thead>
 <tbody>
@@ -413,89 +464,10 @@ footer::before{content:"";position:absolute;top:0;height:1px;background:var(--li
 
 </div></div></div>
 </div></section>
-<section class="section tint" id="demos"><div class="wrap">
-  <div class="section-heading"><div><h2 id="section-5">V. Real-world demonstrations (1× speed)</h2></div><p>Long-horizon manipulation, tactile-guided skills, and policy improvement inside a learned world model. All eight demonstrations use real-time policy inference on an NVIDIA RTX 5090 and are presented at 1× actual execution speed.</p></div>
 
-
-  <article class="demo-group" id="demo-long-horizon" aria-labelledby="demo-heading-long-horizon">
-    <div class="demo-group-heading"><h3 id="demo-heading-long-horizon">V.1 Long-Horizon Manipulation</h3><p>Multi-stage everyday tasks that require sustained coordination and sequential object manipulation.</p></div>
-    <div class="tablist demo-tabs" role="tablist" aria-label="Long-horizon manipulation tasks">
-      <button type="button" role="tab" id="demo-tab-breakfast" aria-controls="demo-panel-long-horizon" aria-selected="true" tabindex="0" data-video="7">Breakfast-object manipulation</button>
-      <button type="button" role="tab" id="demo-tab-pouch" aria-controls="demo-panel-long-horizon" aria-selected="false" tabindex="-1" data-video="6">Pencil-pouch manipulation</button>
-    </div>
-    <div id="demo-panel-long-horizon" role="tabpanel" aria-labelledby="demo-tab-breakfast">
-      <div class="video-frame"><video class="demo-video" width="1920" height="560" controls playsinline preload="none" poster="assets/web_posters/breakfast.jpg" src="demo/breakfast273_30k_rtc_three_views.mp4" aria-label="Breakfast-object manipulation: real-time RTX 5090 inference, original-speed footage">Your browser does not support embedded video. <a href="demo/breakfast273_30k_rtc_three_views.mp4">Open video</a></video></div>
-      <div class="video-toolbar"><div><h3 class="video-title">Breakfast-object manipulation</h3></div><div class="video-actions"><label for="playback-rate-long-horizon">Speed</label><select id="playback-rate-long-horizon" class="playback-rate" aria-label="Long-horizon video playback speed"><option value="0.5">0.5×</option><option value="1" selected>1× (real time)</option><option value="1.5">1.5×</option><option value="2">2×</option></select><a class="video-original" href="demo/breakfast273_30k_rtc_three_views.mp4" target="_blank" rel="noopener">Original video ↗</a></div></div>
-      <p class="video-error" role="alert" hidden>This video could not be loaded. Try opening the original video.</p>
-    </div>
-  </article>
-
-  <article class="demo-group" id="demo-tactile" aria-labelledby="demo-heading-tactile">
-    <div class="demo-group-heading"><span class="module-code">Phoenix-ILA</span><h3 id="demo-heading-tactile">V.2 Tactile-Guided Manipulation</h3><p>Cucumber peeling and plate wiping emphasize tactile interaction, sustained tool contact, and surface-following control.</p></div>
-    <div class="tablist demo-tabs" role="tablist" aria-label="Tactile-guided manipulation tasks">
-      <button type="button" role="tab" id="demo-tab-cucumber" aria-controls="demo-panel-tactile" aria-selected="true" tabindex="0" data-video="4">Cucumber peeling</button>
-      <button type="button" role="tab" id="demo-tab-plate" aria-controls="demo-panel-tactile" aria-selected="false" tabindex="-1" data-video="5">Plate wiping</button>
-    </div>
-    <div id="demo-panel-tactile" role="tabpanel" aria-labelledby="demo-tab-cucumber">
-      <div class="video-frame"><video class="demo-video" width="1920" height="560" controls playsinline preload="none" poster="assets/web_posters/cucumber.jpg" src="demo/huanggua_three_views_background_blur_v3.mp4" aria-label="Cucumber peeling: real-time RTX 5090 inference, original-speed footage">Your browser does not support embedded video. <a href="demo/huanggua_three_views_background_blur_v3.mp4">Open video</a></video></div>
-      <div class="video-toolbar"><div><h3 class="video-title">Cucumber peeling</h3></div><div class="video-actions"><label for="playback-rate-tactile">Speed</label><select id="playback-rate-tactile" class="playback-rate" aria-label="Tactile video playback speed"><option value="0.5">0.5×</option><option value="1" selected>1× (real time)</option><option value="1.5">1.5×</option><option value="2">2×</option></select><a class="video-original" href="demo/huanggua_three_views_background_blur_v3.mp4" target="_blank" rel="noopener">Original video ↗</a></div></div>
-      <p class="video-error" role="alert" hidden>This video could not be loaded. Try opening the original video.</p>
-    </div>
-  </article>
-
-  <article class="demo-group" id="demo-physcanvas" aria-labelledby="demo-heading-physcanvas">
-    <div class="demo-group-heading"><span class="module-code">Phoenix-PhysCanvas</span><h3 id="demo-heading-physcanvas">V.3 World-Model Policy Improvement</h3><p>PhysCanvas predicts future visual and tactile observations from actions. MWA uses these observations to generate subsequent actions, forming an interactive simulation loop. Scene, state, and modality consistency constraints support reinforcement-learning post-training inside the learned world model.</p></div>
-    <div class="tablist demo-tabs" role="tablist" aria-label="PhysCanvas policy-improvement tasks">
-      <button type="button" role="tab" id="demo-tab-tube" aria-controls="demo-panel-physcanvas" aria-selected="true" tabindex="0" data-video="0">Test-tube insertion</button>
-      <button type="button" role="tab" id="demo-tab-blocks" aria-controls="demo-panel-physcanvas" aria-selected="false" tabindex="-1" data-video="1">Block manipulation</button>
-      <button type="button" role="tab" id="demo-tab-bottle" aria-controls="demo-panel-physcanvas" aria-selected="false" tabindex="-1" data-video="2">Bottle-cap twisting</button>
-      <button type="button" role="tab" id="demo-tab-cube" aria-controls="demo-panel-physcanvas" aria-selected="false" tabindex="-1" data-video="3">Cube manipulation</button>
-    </div>
-    <div id="demo-panel-physcanvas" role="tabpanel" aria-labelledby="demo-tab-tube">
-      <div class="video-frame"><video class="demo-video" width="1920" height="560" controls playsinline preload="none" poster="assets/web_posters/tube.jpg" src="demo/shiguan_bimanual_step015000_rtc_three_views.mp4" aria-label="Test-tube insertion: real-time RTX 5090 inference, original-speed footage">Your browser does not support embedded video. <a href="demo/shiguan_bimanual_step015000_rtc_three_views.mp4">Open video</a></video></div>
-      <div class="video-toolbar"><div><h3 class="video-title">Test-tube insertion</h3></div><div class="video-actions"><label for="playback-rate-physcanvas">Speed</label><select id="playback-rate-physcanvas" class="playback-rate" aria-label="PhysCanvas video playback speed"><option value="0.5">0.5×</option><option value="1" selected>1× (real time)</option><option value="1.5">1.5×</option><option value="2">2×</option></select><a class="video-original" href="demo/shiguan_bimanual_step015000_rtc_three_views.mp4" target="_blank" rel="noopener">Original video ↗</a></div></div>
-      <p class="video-error" role="alert" hidden>This video could not be loaded. Try opening the original video.</p>
-    </div>
-  </article>
-  <noscript><ul><li><a href="demo/jimu_step015000_rtc_three_views.mp4">Blocks</a></li><li><a href="demo/bottle_02_step015000_rtc_three_views.mp4">Bottle cap</a></li><li><a href="demo/mofang_step015000_rtc_three_views.mp4">Cube</a></li><li><a href="demo/huanggua_three_views_background_blur_v3.mp4">Cucumber peeling</a></li><li><a href="demo/plate_rtc_three_views_background_blur_v3.mp4">Plate wiping</a></li><li><a href="demo/breakfast273_30k_rtc_three_views.mp4">Breakfast-object manipulation</a></li><li><a href="demo/pouch2459_50k_rollout000004_left_base_right_titlebar.mp4">Pencil pouch</a></li></ul></noscript>
-</div></section>
 <section class="section" id="analysis"><div class="wrap">
   <div class="section-heading"><div><h2 id="section-6">VI. Analysis</h2></div><p>We examine how pretraining changes representations and video prediction, and how the broader system supports precise skills and policy post-training.</p></div>
-  <article class="analysis-block"><div class="subsection-heading"><h3 id="section-6-1">VI.1 What changes in representation, prediction, and contact?</h3></div><p class="prose">To assess whether pretraining yields a more balanced visual feature spectrum, we sample 10,000 frames each from the pretraining validation set and LIBERO-Plus, using identical frames for all three encoders. Singular value decomposition of the centered CLS and Patch Mean feature matrices gives the effective rank, measuring how evenly feature variation is distributed across principal directions.</p><figure><div class="figure-link"><img loading="lazy" src="assets/pptx_tnr_20261015/effective_rank_tnr.png" width="2880" height="1132" alt="Effective rank of DINOv3, DINOv3 (VGGT-Ω), and Phoenix Encoder across two data domains"></div><figcaption><strong>Figure 8.</strong> Phoenix Encoder recovers effective rank relative to the VGGT-Ω initialization in both domains; the original DINOv3 model still has the highest effective rank.</figcaption></figure><div class="expanded-details"><h4 class="detail-heading" id="section-6-1-1">VI.1.1 Effective rank: measurements and interpretation</h4><div class="detail-body"><div class="table-scroll" tabindex="0" role="region" aria-label="Effective-rank results"><table class="report-table">
-<thead>
-<tr>
-<th scope="col">Model</th>
-<th scope="col">Pretraining Validation Set<br>CLS</th>
-<th scope="col">Pretraining Validation Set<br>Patch Mean</th>
-<th scope="col">LIBERO-Plus<br>CLS</th>
-<th scope="col">LIBERO-Plus<br>Patch Mean</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>DINOv3</td>
-<td>714.80</td>
-<td>608.17</td>
-<td>605.73</td>
-<td>505.93</td>
-</tr>
-<tr>
-<td>DINOv3 (VGGT-Ω)</td>
-<td>603.69</td>
-<td>526.75</td>
-<td>470.49</td>
-<td>413.01</td>
-</tr>
-<tr class="ours">
-<td>Phoenix Encoder (Ours)</td>
-<td>638.80</td>
-<td>568.13</td>
-<td>481.96</td>
-<td>440.06</td>
-</tr>
-</tbody>
-</table>
-</div><p>Relative to DINOv3 (VGGT-Ω), Phoenix Encoder increases CLS / Patch Mean effective rank by 5.81% / 7.86% on the pretraining validation set and 2.44% / 6.55% on LIBERO-Plus. A lower rank may reflect task specialization or potential dimensional collapse. A higher rank indicates more evenly distributed variation, but does not by itself establish better control performance.</p></div></div></article>
+  <article class="analysis-block"><div class="subsection-heading"><h3 id="section-6-1">VI.1 What changes in representation, prediction, and contact?</h3></div><p class="prose">To assess whether pretraining yields a more balanced visual feature spectrum, we sample 10,000 frames each from the pretraining validation set and LIBERO-Plus, using identical frames for all three encoders. Singular value decomposition of the centered CLS and Patch Mean feature matrices gives the effective rank, measuring how evenly feature variation is distributed across principal directions.</p><figure><div class="figure-link"><img loading="lazy" src="assets/pptx_tnr_20261015/effective_rank_tnr.png" width="2880" height="1132" alt="Effective rank of DINOv3, DINOv3 (VGGT-Ω), and Phoenix Encoder across two data domains"></div><figcaption><strong>Figure 8.</strong> Phoenix Encoder recovers effective rank relative to the VGGT-Ω initialization in both domains; the original DINOv3 model still has the highest effective rank.</figcaption></figure><p class="prose analysis-summary">Relative to DINOv3 (VGGT-Ω), Phoenix Encoder increases CLS / Patch Mean effective rank by 5.81% / 7.86% on the pretraining validation set and 2.44% / 6.55% on LIBERO-Plus. A lower rank may reflect task specialization or potential dimensional collapse. A higher rank indicates more evenly distributed variation, but does not by itself establish better control performance.</p></article>
   <article class="analysis-block"><div class="subsection-heading"><h3 id="section-6-2">VI.2 More accurate predictions of future video</h3></div><p class="prose">All three models are post-trained on LIBERO for 20k steps and evaluated on the same 200 predetermined complete windows from LIBERO-Plus. Each window contributes only its eight future frames. We average equally across the main and wrist views and across windows.</p><div class="table-scroll" tabindex="0" role="region" aria-label="Video prediction quality"><table class="report-table">
 <thead>
 <tr>
