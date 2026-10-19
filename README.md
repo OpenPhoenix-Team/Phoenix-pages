@@ -1,13 +1,13 @@
 # Phoenix
 
 Static project website for Phoenix, including the technical overview, benchmark
-tables, figures, and eight real-world robot demonstrations.
+tables, figures, eight real-world robot demonstrations, and eight video-prediction comparisons.
 
 ## Pages
 
 - `index.html`: current English homepage.
 - `index_en.html`: the same English page at its explicit language URL.
-- `index_zh.html`: existing Chinese report, available from the language link.
+- `index_zh.html`: existing Chinese report retained at its explicit URL.
 
 The latest editorial updates apply to the English page. The Chinese report is
 retained as a separate version.
