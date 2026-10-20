@@ -327,6 +327,12 @@ footer::before{content:"";position:absolute;top:0;height:1px;background:var(--li
     width: auto;
     color: #4f4d49;
   }
+  .masthead .organization-brands .drl-brand {
+    width: 96px;
+  }
+  .masthead .drl-brand img {
+    mix-blend-mode: multiply;
+  }
   .masthead .openphoenix-symbol {
     position: relative;
     display: block;
@@ -367,7 +373,7 @@ footer::before{content:"";position:absolute;top:0;height:1px;background:var(--li
   }
   @media (max-width: 640px) {
     .masthead .organization-brands {
-      gap: 20px 28px;
+      gap: 20px;
       margin-bottom: 22px;
     }
     .masthead .openphoenix-symbol {
@@ -377,6 +383,9 @@ footer::before{content:"";position:absolute;top:0;height:1px;background:var(--li
     }
     .masthead .openphoenix-name {
       font-size: 25px;
+    }
+    .masthead .organization-brands .drl-brand {
+      width: 78px;
     }
   }
 </style>
@@ -445,6 +454,7 @@ footer::before{content:"";position:absolute;top:0;height:1px;background:var(--li
       <span class="openphoenix-symbol" aria-hidden="true"><img src="assets/openphoenix-team-logo.webp" width="200" height="200" alt=""></span>
       <span class="openphoenix-wordmark" aria-hidden="true"><span class="openphoenix-name">OpenPhoenix</span><span class="openphoenix-team">TEAM</span></span>
     </a>
+    <span class="organization-brand drl-brand"><img src="assets/drl-casia-logo.webp" width="778" height="724" alt="DRL CASIA"></span>
   </div>
   <h1 id="title"><span class="title-phoenix">Phoenix<span class="title-colon">:</span></span> <span class="title-description">Scaling Robotic Manipulation through Visual and Interaction Representations</span></h1>
 
