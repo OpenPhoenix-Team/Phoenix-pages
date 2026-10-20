@@ -23,10 +23,17 @@ so the site works under the `/Phoenix-pages/` project path.
 
 ## Media
 
-Videos are the existing web-optimized H.264/MP4 copies with fast-start metadata.
-Their resolution, frame rate, frame count, and duration match the source videos;
-encoding is lossy. Playback defaults to 1x actual execution speed.
-Figures and posters are copied from the current report without re-encoding.
+Real-world demonstrations prefer high-quality AV1/WebM where supported, with the
+existing H.264/MP4 files retained as browser fallbacks and original-video downloads.
+AV1 copies preserve the 1920 x 560 resolution, 30 fps, frame count, and duration;
+they use conservative lossy encoding (libaom-av1, CRF 16). Playback defaults to 1x.
+The eight video-prediction comparison clips and all JPEG posters are unchanged.
+
+PNG figures and logos use lossless WebP at their original dimensions, verified
+pixel-for-pixel against the PNG originals. Existing WebP images are unchanged.
+Video loading remains on demand (`preload="none"`), and figures remain lazy-loaded.
+The original MP4 fallbacks mean repository size is larger than the preferred
+media payload downloaded by a compatible browser.
 
 Code and model links point to the OpenPhoenix GitHub and Hugging Face projects.
 Source reports, backups, training data, and checkpoints are not published here.
