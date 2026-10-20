@@ -291,6 +291,7 @@ footer::before{content:"";position:absolute;top:0;height:1px;background:var(--li
 #bench2dex-task-comparison tbody+tbody tr:first-child>*{border-top:1px solid #b9afa4}
 #bench2dex-task-comparison tfoot>*{border-top:2px solid #b9afa4}
 #bench2dex-task-comparison tfoot th{text-align:left;padding-left:10px}
+#bench2dex-task-comparison tfoot tr:hover{background:#f2e4d8}
 #bench2dex-mean-comparison tbody tr:nth-child(5)>*{border-top:2px solid var(--line)}
 @media print{#bench2dex-task-comparison{min-width:0}}
 </style>
@@ -390,17 +391,50 @@ footer::before{content:"";position:absolute;top:0;height:1px;background:var(--li
 .prediction-examples .prediction-toolbar .prediction-shift{color:inherit;font-weight:500}
 .prediction-examples .prediction-toolbar .prediction-view{display:none}
 </style>
+<style id="bench2dex-rowgroup-hover">
+/* Each tbody owns one embodiment and all of its task rows. */
+#bench2dex-task-comparison tbody:hover > tr > th[scope="rowgroup"]{
+  background:#f2e4d8;
+}
+#bench2dex-task-comparison tbody:has(> tr > th[scope="rowgroup"]:hover) > tr{
+  background:#f2e4d8;
+}
+</style>
+<style id="sidebar-subsection-navigation">
+/* Expand subsections in place beneath their parent, not across the article. */
+.article-toc .toc-group{position:relative}
+.article-toc .toc-group>.toc-level-1{
+ position:relative;width:100%;padding:5px 24px 5px 14px;
+ white-space:normal;overflow-wrap:anywhere;line-height:1.45;
+}
+.toc-chevron{position:absolute;right:8px;top:50%;transform:translateY(-50%) rotate(90deg);font-size:18px;font-weight:400;opacity:.65}
+.article-toc .toc-group.is-open>.toc-level-1{color:var(--teal);border-color:var(--teal)}
+.article-toc .toc-group.is-open .toc-chevron{transform:translateY(-50%) rotate(-90deg)}
+.article-toc .toc-submenu{position:static;width:100%;padding:3px 0 5px 14px}
+.article-toc .toc-submenu[hidden]{display:none}
+.article-toc .toc-submenu,.article-toc .toc-submenu nav{box-sizing:border-box;max-width:100%;min-width:0}
+.article-toc .toc-submenu nav{display:block;padding:0;border-left:1px solid var(--line)}
+.article-toc .toc-submenu a{display:block;box-sizing:border-box;width:100%;max-width:100%;min-width:0;white-space:normal;overflow-wrap:anywhere;word-break:normal}
+.article-toc .toc-submenu a{
+ padding:7px 10px;border-left:2px solid transparent;margin-left:-1px;
+ font-size:12px;line-height:1.45;color:var(--muted);font-weight:400;
+}
+.article-toc .toc-submenu a:hover,.article-toc .toc-submenu a:focus-visible{
+ background:#f2e4d8;color:var(--teal);border-color:var(--teal);
+}
+.article-toc a:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+</style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to article</a>
 <header class="topbar"><div class="wrap nav-inner"><a class="wordmark" href="#top" aria-label="Phoenix home"><span class="brand-dot" aria-hidden="true"></span>Phoenix</a><nav aria-label="Article navigation"><a href="#demos">Demonstrations</a><a href="#method">Method</a><a href="#data">Data</a><a href="#results">Results</a><a href="#analysis">Analysis</a></nav></div></header>
 <aside class="article-toc" aria-label="Table of contents"><p>CONTENTS</p>
 <a class="toc-level-1" href="#section-1">I. Introduction</a>
-<a class="toc-level-1" href="#section-2">II. Real-world demonstrations</a>
-<a class="toc-level-1" href="#section-3">III. Method</a>
-<a class="toc-level-1" href="#section-4">IV. Pretraining data</a>
-<a class="toc-level-1" href="#section-5">V. Benchmark results</a>
-<a class="toc-level-1" href="#section-6">VI. Analysis</a>
+<div class="toc-group"><a class="toc-level-1" href="#section-2" aria-expanded="false" aria-controls="toc-subsections-2">II. Real-world demonstrations<span class="toc-chevron" aria-hidden="true">›</span></a><div class="toc-submenu" id="toc-subsections-2" hidden><nav aria-label="II. Real-world demonstrations subsections"><a href="#demo-heading-long-horizon">II.1 Long-Horizon Manipulation</a><a href="#demo-heading-tactile">II.2 Contact-Rich Manipulation</a><a href="#demo-heading-physcanvas">II.3 Precise Manipulation</a></nav></div></div>
+<div class="toc-group"><a class="toc-level-1" href="#section-3" aria-expanded="false" aria-controls="toc-subsections-3">III. Method<span class="toc-chevron" aria-hidden="true">›</span></a><div class="toc-submenu" id="toc-subsections-3" hidden><nav aria-label="III. Method subsections"><a href="#section-3-1">III.1 Phoenix-MWA</a><a href="#section-3-2">III.2 Phoenix-ILA</a><a href="#section-3-3">III.3 Phoenix-PhysCanvas</a></nav></div></div>
+<div class="toc-group"><a class="toc-level-1" href="#section-4" aria-expanded="false" aria-controls="toc-subsections-4">IV. Pretraining data<span class="toc-chevron" aria-hidden="true">›</span></a><div class="toc-submenu" id="toc-subsections-4" hidden><nav aria-label="IV. Pretraining data subsections"><a href="#data-distribution-heading">IV.1 Pretraining data distribution</a><a href="#data-pipeline-heading">IV.2 Pretraining data processing pipeline</a><a href="#data-action-space-heading">IV.3 Action space design</a></nav></div></div>
+<div class="toc-group"><a class="toc-level-1" href="#section-5" aria-expanded="false" aria-controls="toc-subsections-5">V. Benchmark results<span class="toc-chevron" aria-hidden="true">›</span></a><div class="toc-submenu" id="toc-subsections-5" hidden><nav aria-label="V. Benchmark results subsections"><a href="#section-5-1">V.1 LIBERO-Plus</a><a href="#section-5-2">V.2 LIBERO-Pro</a><a href="#section-5-3">V.3 RoboCasa-GR1</a><a href="#section-5-4">V.4 RoboTwin 2.0 C2R</a><a href="#section-5-5">V.5 Bench2Dex</a></nav></div></div>
+<div class="toc-group"><a class="toc-level-1" href="#section-6" aria-expanded="false" aria-controls="toc-subsections-6">VI. Analysis<span class="toc-chevron" aria-hidden="true">›</span></a><div class="toc-submenu" id="toc-subsections-6" hidden><nav aria-label="VI. Analysis subsections"><a href="#section-6-1">VI.1 Dual-teacher distillation</a><a href="#section-6-2">VI.2 Representation &amp; pretraining</a><a href="#section-6-3">VI.3 Interaction latents</a><a href="#section-6-4">VI.4 World model policy refinement</a></nav></div></div>
 <a class="toc-level-1" href="#section-7">BibTeX</a>
 </aside>
 <main id="main">
@@ -419,7 +453,7 @@ footer::before{content:"";position:absolute;top:0;height:1px;background:var(--li
 <section id="overview" class="overview wrap" aria-label="Overview of Phoenix world-action modeling">
   <div class="intro-grid"><h2 id="section-1">I. Introduction: Generalization and precise interaction</h2><div class="abstract-copy"><p>The goal of <strong>Phoenix</strong> is to learn general robotic manipulation capabilities from large-scale experience and translate them into precise interaction skills in the physical world. To this end, we develop a unified system spanning data collection and processing, pretraining, post-training, and reinforcement learning. This system provides the basis for investigating how scaling data and compute can improve manipulation generalization in open environments and establish a transferable foundation for fine-grained interaction.</p>
 
-<p><strong>Phoenix-MWA</strong> is the foundation model of this system. It leverages dual-teacher distillation to combine geometric priors with temporal knowledge and a causal-semantic VAE to construct a compact visual latent space. Conditioned on observations and language instructions, the model jointly generates future visual states and actions, connecting the prediction of environmental dynamics with the learning of manipulation behavior. To facilitate reproducibility, Phoenix-MWA uses open-source datasets for pretraining. Its multi-source pretraining pool contains approximately <strong>54,400 raw hours</strong>, approximately <strong>39,300 effective hours</strong>, and roughly <strong>3.38 billion raw frames</strong>. Under the corresponding task-specific post-training configurations, the model achieves success rates of <strong>94.63% on LIBERO-Plus</strong>, <strong>66.48% on LIBERO-Pro</strong>, <strong>82.67% on RoboCasa-GR1</strong>, and <strong>72.42% on RoboTwin 2.0 Clean2Random (C2R)</strong>.</p>
+<p><strong>Phoenix-MWA</strong> is the foundation model of this system. It leverages dual-teacher distillation to combine geometric priors with temporal knowledge and a causal-semantic VAE to construct a compact visual latent space. Conditioned on observations and language instructions, the model jointly generates future visual states and actions, connecting the prediction of environmental dynamics with the learning of manipulation behavior. To facilitate reproducibility, Phoenix-MWA uses open-source datasets for pretraining. Its multi-source pretraining pool contains approximately <strong>54,400 raw hours</strong>, approximately <strong>39,300 effective hours</strong>, and roughly <strong>3.38 billion raw frames</strong>. Under the corresponding task-specific post-training configurations, the model achieves success rates of <strong>94.63% on LIBERO-Plus</strong>, <strong>66.48% on LIBERO-Pro</strong>, <strong>82.67% on RoboCasa-GR1</strong>, <strong>72.42% on RoboTwin 2.0 Clean2Random (C2R)</strong>, and <strong>45.6% on Bench2Dex</strong>.</p>
 
 <p>Moving from general manipulation to precise interaction, <strong>Phoenix-ILA</strong> focuses on the <em>last centimeter</em> of manipulation. It combines position, force, and touch into latent interaction units, using a small amount of post-training data to learn task-specific contact and control patterns. <strong>Phoenix-PhysCanvas</strong> takes a step further: an action-conditioned visual and tactile world-model simulator predicts how actions change the environment and its contact state, providing an interactive environment for policy reinforcement learning.</p>
 
@@ -517,7 +551,7 @@ footer::before{content:"";position:absolute;top:0;height:1px;background:var(--li
 </article><article class="method-block" id="method-ila">
 <div class="subsection-heading"><h3 id="section-3-2">III.2 Phoenix-ILA: From Motor Actions to Contact-Aware Interaction</h3></div>
 <p class="prose">Phoenix-ILA extends this policy with interaction latents that jointly capture motion and contact evolution. Replacing motor-action targets embeds contact directly in the action representation. Training first learns this representation, then adapts Phoenix-MWA to generate it.</p>
-<figure><div class="figure-link"><img loading="lazy" src="assets/phoenix-ila-v36.webp" width="3200" height="967" alt="Phoenix-ILA: a joint interaction representation of actions, tactile deformation, and force proxies"></div><figcaption><strong>Figure 2.</strong> Phoenix-ILA learns interaction latents through joint reconstruction of motion, tactile deformation, and force proxies.</figcaption></figure>
+<figure><div class="figure-link"><img loading="lazy" src="assets/phoenix-ila-20261020.webp" width="3600" height="1238" alt="Phoenix-ILA: a joint interaction representation of actions, tactile deformation, and force proxies"></div><figcaption><strong>Figure 2.</strong> Phoenix-ILA learns interaction latents through joint reconstruction of motion, tactile deformation, and force proxies.</figcaption></figure>
 <p class="prose">First, an interaction encoder jointly encodes synchronized motion and tactile sequences under multi-view visual conditioning. Modality-specific tokens exchange information through joint self-attention and attend to visual features before temporal compression. A time-conditioned decoder reconstructs actions, three-dimensional tactile deformation fields, and force proxies at queried timestamps. Joint reconstruction constrains motion, local contact structure, and force application; force-proxy supervision covers both the prediction head and spatially aggregated tactile reconstructions. The decoder receives no separate visual input, so reconstruction information must pass through the interaction latents.</p>
 <p class="prose">Second, we freeze the interaction codec and encode demonstration chunks offline as normalized latent targets. We adapt Phoenix-MWA’s action branch, input/output projections, and temporal positional encoding, retaining conditional flow matching to generate interaction latents from Gaussian noise. Conditioning combines visual and dynamic context with language, proprioception, and tactile history. The visual encoder and video branch also stay frozen; only the action branch and its projections are updated.</p>
 <p class="prose">At inference, Phoenix-ILA generates interaction latents from available observations without future tactile measurements. After denormalization, the decoder maps them to joint-target sequences on the control-time grid. This retains Phoenix-MWA’s action interface and short-prefix execution and replanning loop, while generating motion through a representation trained to preserve contact evolution.</p>
@@ -1120,7 +1154,7 @@ button.addEventListener('click',()=>{let full=dialog.querySelector('img');if(!fu
 });
 document.getElementById('close-figure').onclick=()=>dialog.close();
 dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close();});
-const links=[...document.querySelectorAll('.article-toc > a')];
+const links=[...document.querySelectorAll('.article-toc > a, .article-toc > .toc-group > a')];
 if('IntersectionObserver' in window){const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting)links.forEach(link=>{if(link.hash==='#'+entry.target.id)link.setAttribute('aria-current','location');else link.removeAttribute('aria-current');});});},{rootMargin:'-10% 0px -70% 0px'});links.forEach(link=>observer.observe(document.querySelector(link.hash)));}
 })();
 </script>
@@ -1175,4 +1209,58 @@ document.getElementById('copy-bibtex').addEventListener('click', async function(
 })();
 </script>
 <script src="assets/prediction-examples.js?v=robotwin4"></script>
+<script id="sidebar-subsection-interactions">
+(() => {
+ const groups=[...document.querySelectorAll('.article-toc .toc-group')];
+ let active=null, pinned=null, closeTimer;
+ function close(group){
+   if(!group)return;
+   if(pinned===group)pinned=null;
+   group.classList.remove('is-open');
+   group.querySelector('.toc-level-1').setAttribute('aria-expanded','false');
+   group.querySelector('.toc-submenu').hidden=true;
+   if(active===group)active=null;
+ }
+ function open(group){
+   clearTimeout(closeTimer);
+   if(active!==group)close(active);
+   active=group;
+   const menu=group.querySelector('.toc-submenu');
+   menu.style.setProperty('--submenu-top','0px');
+   menu.hidden=false;
+   group.classList.add('is-open');
+   group.querySelector('.toc-level-1').setAttribute('aria-expanded','true');
+
+ }
+ groups.forEach(group=>{
+   const trigger=group.querySelector('.toc-level-1');
+   group.addEventListener('pointerenter',()=>open(group));
+   group.addEventListener('pointerleave',()=>{
+     clearTimeout(closeTimer);
+     closeTimer=setTimeout(()=>{if(pinned!==group&&!group.contains(document.activeElement))close(group);},180);
+   });
+   group.addEventListener('focusin',()=>open(group));
+   group.addEventListener('focusout',()=>{
+     setTimeout(()=>{if(pinned!==group&&!group.contains(document.activeElement)&&!group.matches(':hover'))close(group);},0);
+   });
+   trigger.addEventListener('keydown',event=>{
+     if(event.key==='ArrowRight'||event.key==='ArrowDown'){
+       event.preventDefault();open(group);group.querySelector('.toc-submenu a').focus();
+     }
+   });
+   group.addEventListener('keydown',event=>{
+     if(event.key==='Escape'){event.preventDefault();trigger.focus();close(group);}
+   });
+   group.querySelectorAll('.toc-submenu a').forEach(link=>link.addEventListener('click',()=>{
+     clearTimeout(closeTimer);open(group);pinned=group;
+     document.querySelectorAll('.toc-submenu a[aria-current]').forEach(a=>a.removeAttribute('aria-current'));
+     link.setAttribute('aria-current','location');
+   }));
+ });
+ window.addEventListener('resize',()=>{if(active)open(active);});
+ document.addEventListener('pointerdown',event=>{
+   if(active&&active!==pinned&&!active.contains(event.target))close(active);
+ });
+})();
+</script>
 </body></html>
