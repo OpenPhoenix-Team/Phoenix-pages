@@ -26,6 +26,33 @@
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
 @media print{.topbar,.hero-actions,.tablist,.video-actions,footer,.demo-jump{display:none}.wrap{width:100%;max-width:none}.section{padding:26px 0}.masthead{padding-top:0}body,.tint{background:white}[role="tabpanel"][hidden]{display:block!important}details>.detail-body{display:block!important}figure,table{break-inside:avoid}h2,h3{break-after:avoid}.table-scroll{overflow:visible}.report-table{font-size:9px}.report-table th,.report-table td{padding:5px}.video-frame{display:none}}
 </style>
+<style id="contributions-style">
+#contributions .contribution-leads {
+  margin-bottom: 30px;
+  padding: 18px 0;
+  border-block: 1px solid var(--line);
+}
+#contributions .contribution-leads strong {
+  display: block;
+  color: var(--teal);
+  font-size: 15px;
+  margin-bottom: 5px;
+}
+#contributions .contribution-leads p { font-size: 19px; }
+.contribution-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 32px 48px;
+}
+.contribution-group h3 { font-size: 21px; margin-bottom: 16px; }
+.contribution-group dl { margin: 0; }
+.contribution-row { padding: 10px 0; border-top: 1px solid var(--line); }
+.contribution-row dt { font-size: 13px; color: var(--muted); }
+.contribution-row dd { margin: 3px 0 0; font-size: 16px; line-height: 1.65; }
+@media (max-width: 680px) {
+  .contribution-grid { grid-template-columns: 1fr; gap: 28px; }
+}
+</style>
 </head>
 <body>
 <a class="skip" href="#main">跳至正文</a>
@@ -430,6 +457,93 @@
 </table>
 </div><div class="split-stats"><div><span>试管任务 · 平均成功率</span><strong>58.33% <span>→</span> 75.00%</strong></div><div><span>积木任务 · 平均成功率</span><strong>80.00% <span>→</span> 86.67%</strong></div></div><div class="expanded-details"><h4 class="detail-heading">结果边界与局限性</h4><div class="detail-body"><p>后训练收益在不同环境条件下并不均衡。试管任务的总体标准差由 8.50 pp 增至 16.33 pp；积木任务由 0.00 pp 增至 2.36 pp。世界模型与奖励模型的适配，以及仿真场景对现实变化的覆盖仍需进一步研究。透明物体也可能对光照、背景和操作精度更敏感。</p></div></div></article>
 </div></section>
+<section class="section" id="contributions" aria-labelledby="contributions-heading">
+  <div class="wrap">
+    <div class="section-heading"><div><h2 id="contributions-heading">Contribution</h2></div></div>
+    <div class="contribution-leads">
+      <strong>Project Lead</strong>
+      <p>Yupeng Zheng, Zhongpu Xia</p>
+    </div>
+    <div class="contribution-grid">
+      <div class="contribution-group">
+        <h3>Data</h3>
+        <dl>
+          <div class="contribution-row">
+            <dt>Ego Data Processing</dt>
+            <dd>Linbo Wang</dd>
+          </div>
+          <div class="contribution-row">
+            <dt>Robot Data Processing</dt>
+            <dd>Chaoyue Li, Yupeng Zheng, Songen Gu, Yuhang Zheng</dd>
+          </div>
+          <div class="contribution-row">
+            <dt>Self Data Collection</dt>
+            <dd>Yuhang Zheng, Shuai Tian, Xiaotong Su</dd>
+          </div>
+          <div class="contribution-row">
+            <dt>Data Platform</dt>
+            <dd>Jing Li, Youhao Hu, Bo Li, Qiupeng Gu</dd>
+          </div>
+        </dl>
+      </div>
+      <div class="contribution-group">
+        <h3>Model</h3>
+        <dl>
+          <div class="contribution-row">
+            <dt>Encoder</dt>
+            <dd>Linbo Wang</dd>
+          </div>
+          <div class="contribution-row">
+            <dt>CS-VAE</dt>
+            <dd>Yupeng Zheng</dd>
+          </div>
+          <div class="contribution-row">
+            <dt>WAM Pre-training</dt>
+            <dd>Chaoyue Li, Yupeng Zheng</dd>
+          </div>
+          <div class="contribution-row">
+            <dt>WAM Post-training</dt>
+            <dd>Xiang Li</dd>
+          </div>
+          <div class="contribution-row">
+            <dt>RTC</dt>
+            <dd>Linbo Wang, Xiaozhen Xu, Zhiyong Zhao</dd>
+          </div>
+          <div class="contribution-row">
+            <dt>Tactile</dt>
+            <dd>Yuhang Zheng, Yujie Zang, Yuche Liu</dd>
+          </div>
+          <div class="contribution-row">
+            <dt>World Model RL</dt>
+            <dd>Yichen Zhang, Zebin Xing</dd>
+          </div>
+        </dl>
+      </div>
+      <div class="contribution-group">
+        <h3>Eval &amp; Deploy</h3>
+        <dl>
+          <div class="contribution-row">
+            <dt>Evaluation</dt>
+            <dd>Xiaotong Su, Xiang Li</dd>
+          </div>
+          <div class="contribution-row">
+            <dt>Deployment</dt>
+            <dd>Linbo Wang, Yichen Zhang</dd>
+          </div>
+        </dl>
+      </div>
+      <div class="contribution-group">
+        <h3>Writing &amp; Page</h3>
+        <dl>
+          <div class="contribution-row">
+            <dt>Writing</dt>
+            <dd>Yupeng Zheng, Chaoyue Li</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
 </main>
 <footer><div class="wrap footer-inner"><a class="wordmark" href="#top">Phoenix</a><span>预训练数据、机器人任务性能与视频预测 · 技术报告</span><a href="#top">回到顶部 ↑</a></div></footer>
 <script type="application/json" id="video-data">[{"id": "tube", "title": "插试管", "note": "双臂协同与精细插入", "src": "demo/shiguan_bimanual_step015000_rtc_three_views.mp4", "poster": "assets/web_posters/tube.jpg", "duration": 25.067, "size": 52533109, "width": 1920, "height": 560, "av1": "demo/shiguan_bimanual_step015000_rtc_three_views.webm", "av1Size": 38382329}, {"id": "blocks", "title": "拆放积木", "note": "物体操作与双臂配合", "src": "demo/jimu_step015000_rtc_three_views.mp4", "poster": "assets/web_posters/blocks.jpg", "duration": 18.967, "size": 34952422, "width": 1920, "height": 560, "av1": "demo/jimu_step015000_rtc_three_views.webm", "av1Size": 21789351}, {"id": "bottle", "title": "拧瓶盖", "note": "抓取、旋转与接触协同", "src": "demo/bottle_02_step015000_rtc_three_views.mp4", "poster": "assets/web_posters/bottle.jpg", "duration": 21.0, "size": 38464499, "width": 1920, "height": 560, "av1": "demo/bottle_02_step015000_rtc_three_views.webm", "av1Size": 25601186}, {"id": "cube", "title": "魔方操作", "note": "连续操作与姿态调整", "src": "demo/mofang_step015000_rtc_three_views.mp4", "poster": "assets/web_posters/cube.jpg", "duration": 23.0, "size": 41400322, "width": 1920, "height": 560, "av1": "demo/mofang_step015000_rtc_three_views.webm", "av1Size": 30857932}, {"id": "cucumber", "title": "削黄瓜", "note": "持续工具接触", "src": "demo/huanggua_three_views_background_blur_v3.mp4", "poster": "assets/web_posters/cucumber.jpg", "duration": 83.8, "size": 32112362, "width": 1920, "height": 560, "av1": "demo/huanggua_three_views_background_blur_v3.webm", "av1Size": 25586496}, {"id": "plate", "title": "擦盘子", "note": "贴面运动与接触控制", "src": "demo/plate_rtc_three_views_background_blur_v3.mp4", "poster": "assets/web_posters/plate.jpg", "duration": 28.6, "size": 8131418, "width": 1920, "height": 560, "av1": "demo/plate_rtc_three_views_background_blur_v3.webm", "av1Size": 5312928}, {"id": "pouch", "title": "笔袋任务", "note": "日常物体操作", "src": "demo/pouch2459_50k_rollout000004_left_base_right_titlebar.mp4", "poster": "assets/web_posters/pouch.jpg", "duration": 33.7, "size": 14509920, "width": 1920, "height": 560, "av1": "demo/pouch2459_50k_rollout000004_left_base_right_titlebar.webm", "av1Size": 9254937}, {"id": "breakfast", "title": "早餐物品操作", "note": "日常场景操作", "src": "demo/breakfast273_30k_rtc_three_views.mp4", "poster": "assets/web_posters/breakfast.jpg", "duration": 53.1, "size": 71695754, "width": 1920, "height": 560, "av1": "demo/breakfast273_30k_rtc_three_views.webm", "av1Size": 36030040}]</script><script>'use strict';
