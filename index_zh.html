@@ -93,6 +93,7 @@
   #contributions .contribution-leads { gap: 4px; }
 }
 </style>
+<style>.hero-metrics>div:nth-child(n+4){border-top:1px solid var(--line)}.hero-metrics>div:nth-child(3n+1){border-left:0}</style>
 </head>
 <body>
 <a class="skip" href="#main">跳至正文</a>
@@ -100,35 +101,41 @@
 <main id="main">
 <section class="masthead wrap" id="top" aria-labelledby="title">
   <p class="eyebrow">机器人操作学习 · 技术报告 · 2026.10.13</p>
-  <h1 id="title">Phoenix</h1><p class="headline">从规模化预训练，到真实世界的精细交互</p>
-  <p class="hero-copy">贯通数据、预训练、后训练与强化学习，<br class="desktop-break">让通用操作能力转化为具体场景中的精细技能。</p>
-  <div class="hero-actions"><a class="button primary" href="#demos">观看真机演示</a><a class="button" href="#method">探索模型方法</a><a class="text-link" href="https://github.com/Anyverse-Dynamics/Phoenix-MWA" target="_blank" rel="noopener noreferrer">代码 ↗</a><a class="text-link" href="https://huggingface.co/collections/OpenPhoenix/phoenix-mwa" target="_blank" rel="noopener noreferrer">权重 ↗</a></div>
-  <div class="hero-metrics" aria-label="基准成功率"><div><strong>94.63<span>%</span></strong><span>LIBERO-Plus</span></div><div><strong>66.48<span>%</span></strong><span>LIBERO-Pro</span></div><div><strong>82.67<span>%</span></strong><span>RoboCasa-GR1</span></div></div>
+  <h1 id="title">Phoenix</h1><p class="headline">从操作视频预训练到真机接触控制</p>
+  <p class="hero-copy">Phoenix-MWA 联合预测视觉状态与动作，Phoenix-ILA 学习接触技能，Phoenix-PhysCanvas 支持世界模型中的强化学习。</p>
+  <div class="hero-actions"><a class="button primary" href="#demos">观看真机演示</a><a class="button" href="#method">探索模型方法</a><a class="text-link" href="https://github.com/OpenPhoenix-Team/Phoenix-MWA" target="_blank" rel="noopener noreferrer">代码 ↗</a><a class="text-link" href="https://huggingface.co/collections/OpenPhoenix/phoenix-mwa" target="_blank" rel="noopener noreferrer">权重 ↗</a></div>
+  <div class="hero-metrics" aria-label="基准成功率"><div><strong>94.63<span>%</span></strong><span>LIBERO-Plus</span></div><div><strong>66.48<span>%</span></strong><span>LIBERO-Pro</span></div><div><strong>82.67<span>%</span></strong><span>RoboCasa-GR1</span></div><div><strong>72.42<span>%</span></strong><span>RoboTwin 2.0 C2R</span></div><div><strong>45.6<span>%</span></strong><span>Bench2Dex</span></div><div><strong>26.11<span>%</span></strong><span>RoboDojo-RealWorld</span></div></div>
   <p class="metric-note">Phoenix-MWA，在各基准对应的后训练配置下评估。</p>
 </section>
 <section class="overview wrap" aria-label="Phoenix 世界动作模型总览">
   <div class="figure-heading"><span>PHOENIX-MWA</span></div>
-  <div class="intro-grid"><h2>通用能力，<br>从经验中生长。</h2><div class="abstract-copy"><p>让机器人从大规模经验中获得通用能力，并将其转化为真实世界中的精细技能，是 <strong>Phoenix</strong> 的核心目标。我们构建了一套贯通数据采集与处理、预训练、后训练及强化学习的机器人操作学习系统，探索如何让数据与计算规模的增长持续提升开放场景下的操作泛化能力，为精细交互提供可迁移的能力基础。</p>
+  <div class="intro-grid"><h2>从操作记录中学习</h2><div class="abstract-copy"><p><strong>Phoenix</strong> 研究机器人如何从大量操作记录中学习，并将这些经验用于抓取、擦拭和插入等任务。这项工作由无界动力与中科院自动化所强化学习团队联合开展，包括一个预训练世界动作模型，以及两种后训练方法：从示范中学习接触技能、在世界模型中通过交互改进策略。</p>
 
-<p><strong>Phoenix-MWA</strong> 是这一系统的核心基座。它通过多教师蒸馏融合几何先验与时序知识，利用因果语义 VAE 构建紧凑的视觉潜空间，并在观测与语言指令的条件下联合生成未来视觉状态与动作，将环境动态预测与操作行为学习联系起来。我们构建了原始时长约 <strong>5.44 万小时</strong>、有效时长约 <strong>3.93 万小时</strong>、包含约 <strong>33.8 亿原始帧</strong>的多来源数据池，为规模化学习提供支撑。在相应任务的后训练配置下，模型在 <strong>LIBERO-Plus、LIBERO-Pro 和 RoboCasa-GR1</strong> 上分别取得 <strong>94.63%、66.48% 和 82.67%</strong> 的成功率。</p>
+<p><strong>Phoenix-MWA</strong> 根据当前图像、机器人状态和语言指令，联合预测未来视觉状态与动作。Phoenix Encoder 从几何和时序教师中蒸馏特征，CS-VAE 将特征压缩为适合生成的潜变量。数据池包含机器人示范、第一人称视频和 UMI 记录，共约 <strong>5.44 万小时原始视频</strong>、<strong>3.93 万小时有效数据</strong>和 <strong>33.8 亿原始帧</strong>。</p>
 
-<p>从通用操作走向精细交互，<strong>Phoenix-ILA</strong> 聚焦操作的“最后一厘米”：将位置、力觉与触觉融合为潜在交互单元，通过少量后训练数据学习具体任务中的接触与控制规律。<strong>Phoenix-PhysCanvas</strong> 则进一步构建以动作为条件的视觉与触觉世界模型仿真器，预测动作带来的环境变化与接触后果，为策略提供可交互的强化学习环境。</p>
+<p>在各基准对应的后训练配置下，Phoenix-MWA 在 <strong>LIBERO-Plus、LIBERO-Pro、RoboCasa-GR1 和 Bench2Dex</strong> 上分别取得 <strong>94.63%、66.48%、82.67% 和 45.6%</strong> 的成功率，在所报告的比较中排名第一；在 <strong>RoboTwin 2.0 C2R</strong> 和 <strong>RoboDojo-RealWorld</strong> 上分别取得 <strong>72.42%</strong> 和 <strong>26.11%</strong>。具体设置与对比方法见实验部分。</p>
 
-<p>通过预训练积累通用能力、后训练形成具体技能、强化学习持续优化执行，Phoenix 建立了从数据到交互的完整学习路径。我们将开源数据采集与处理、预训练及后训练代码，支持社区共同探索机器人操作能力的规模扩展与高效迁移。</p>
+<p><strong>Phoenix-ILA</strong> 从同步的运动与触觉示范中学习交互潜变量，用于削皮、擦拭等接触密集任务。<strong>Phoenix-PhysCanvas</strong> 根据动作预测视觉与触觉反馈，让策略在仿真中比较不同动作的结果，并通过强化学习更新。后训练后的策略再回到真机上评估。</p>
 </div></div>
 </section>
 <section class="section" id="method"><div class="wrap">
-  <div class="section-heading"><div><p class="eyebrow">01 / Method</p><h2>感知、预测与动作，<br>在同一个系统中学习。</h2></div><p>从视觉表征到世界动作建模，再到接触技能与闭环策略优化。</p></div>
-  <div class="principles"><article><span class="index">01</span><h3>Phoenix Encoder</h3><p>以 DINOv3 为骨干，通过特征对齐和遮挡预测，融合 VGGT 几何先验与 V-JEPA 时序知识。</p></article><article><span class="index">02</span><h3>Causal-Semantic VAE</h3><p>压缩高维视觉特征，以因果时序编码保留语义与空间结构，减少冗余并避免未来信息泄漏。</p></article><article><span class="index">03</span><h3>Phoenix-MWA</h3><p>在视觉动态与语义潜空间中联合预测未来状态和动作，将环境演化与操作行为联系起来。</p></article></div>
+  <div class="section-heading"><div><p class="eyebrow">01 / Method</p><h2>模型与后训练方法</h2></div><p>先学习和压缩视觉表征，再联合生成未来状态与动作；后训练分别使用接触示范和世界模型交互。</p></div>
+  <div class="principles"><article><span class="index">01</span><h3>Phoenix Encoder</h3><p>以 DINOv3 ViT-L/16 为骨干，通过双教师蒸馏学习 VGGT-Ω 的几何知识和 V-JEPA 的时序知识。</p></article><article><span class="index">02</span><h3>Causal-Semantic VAE</h3><p>压缩高维视觉特征，以因果时序编码保留语义与空间结构，减少冗余并避免未来信息泄漏。</p></article><article><span class="index">03</span><h3>Phoenix-MWA</h3><p>在视觉动态与语义潜空间中联合预测未来状态和动作，将环境演化与操作行为联系起来。</p></article></div>
   <figure class="feature-figure"><div class="figure-link"><img loading="lazy" src="assets/main.webp" width="3200" height="3207" alt="Phoenix 总体架构：双教师蒸馏视觉编码器、因果语义 VAE 与世界动作模型"></div><figcaption>Phoenix 总体架构：双教师蒸馏视觉编码器、因果语义 VAE 与世界动作联合建模。</figcaption></figure>
-  <article class="method-block"><div class="subsection-heading"><span class="module-code">PHOENIX-ILA</span><h3>学习操作的“最后一厘米”</h3></div><p class="prose">在视觉历史条件下，联合编码动作与触觉，通过运动轨迹、局部接触形态和施力强度的重建约束，学习可解码的交互潜变量。固定交互编解码器及基模的视觉、视频分支，以条件流匹配训练动作分支，使策略学习接触密集任务中的控制规律。</p><figure><div class="figure-link"><img loading="lazy" src="assets/Phoenix-ILA_a.webp" width="4631" height="1321" alt="Phoenix-ILA：动作、触觉形变与力代理量的联合交互表征"></div><figcaption>运动与接触信息共同构成潜在交互单元。</figcaption></figure></article>
-  <article class="method-block"><div class="subsection-heading"><span class="module-code">PHOENIX-PHYSCANVAS</span><h3>在世界模型中闭环改进策略</h3></div><p class="prose">PhysCanvas 根据动作推演未来视觉与触觉观测，MWA 再根据新观测生成动作，形成可交互的仿真闭环。通过场景、状态与模态一致性约束维持预测的一致性，并在其中进行强化学习后训练。</p><figure><div class="figure-link"><img loading="lazy" src="assets/Phoenix_v2.webp" width="2906" height="695" alt="PhysCanvas 与 MWA 交互并开展强化学习后训练的闭环"></div><figcaption>动作驱动世界推演，未来观测驱动下一步决策。</figcaption></figure></article>
+  <div class="expanded-details"><h4 class="detail-heading">视觉特征与联合动作生成</h4><div class="detail-body">
+<p>Phoenix Encoder 以 DINOv3 ViT-L/16 为骨干，加入时空适配器。固定的 VGGT-Ω 教师通过多层特征、深度预测和相邻帧关系提供几何监督，无需额外真实深度标注；V-JEPA 教师观察完整视频，学生在跨帧一致遮挡的区域预测教师特征。两类蒸馏任务交替进行，后续使用学生权重的指数移动平均（EMA）版本提取特征。</p>
+<p>CS-VAE 通过空间 Transformer 和两级因果时序模块压缩通道与时间，将 <strong>9 帧特征压缩为三个时间位置</strong>，保留空间网格。第一个潜变量只编码当前帧，后续位置使用此前信息。解码器重建标准化特征，MSE 与余弦损失约束重建，KL 正则约束潜变量分布。</p>
+<p>Phoenix-MWA 接收当前多视角 RGB、机器人状态、语言指令与本体身份。训练将同一时段的 <strong>9 帧观测与 32 个动作</strong>配对。Phoenix Encoder–CS-VAE 与 Wan VAE 的潜变量沿通道拼接后进入视频专家，动作序列进入动作专家，二者通过 MoT 中带掩码的联合注意力连接。语言、状态与本体提示提供生成条件。</p>
+<p>推理时，动作按训练统计量反归一化并映射到控制接口。机器人执行短动作前缀后重新观测与规划。RTC 和异步执行让后续动作的准备与当前动作的执行重叠，减少动作段之间的等待。</p>
+</div></div>
+  <article class="method-block"><div class="subsection-heading"><span class="module-code">PHOENIX-ILA</span><h3>从示范中学习接触技能</h3></div><p class="prose">削皮与擦拭需要工具持续贴合表面，仅沿着视觉上合理的轨迹移动，仍可能失去接触。Phoenix-ILA 用交互潜变量替换直接动作目标，将运动与触觉变化共同纳入后训练。</p><p class="prose">第一阶段，Interaction Encoder 分别编码运动和触觉，通过自注意力交换信息，再用交叉注意力读取多视角视觉特征，最后进行时序压缩。带时间条件的解码器在查询时刻重建运动、三维触觉形变场和受力代理。解码器不单独读取视觉输入，重建所需信息必须经过交互潜变量。</p><p class="prose">第二阶段，固定交互编解码器，将示范片段编码为归一化潜变量目标。通过条件流匹配更新动作分支、输入输出投影和时序位置编码，视觉编码器与视频分支保持固定。推理使用当前观测和历史触觉，不需要未来触觉测量；生成的潜变量被解码为关节目标，机器人执行短前缀后重新观测与规划。</p><figure><div class="figure-link"><img loading="lazy" src="assets/Phoenix-ILA_a.webp" width="4631" height="1321" alt="Phoenix-ILA：动作、触觉形变与力代理量的联合交互表征"></div><figcaption>Interaction Encoder 融合运动、触觉与视觉条件；解码器在查询时刻重建运动、触觉形变和受力代理。</figcaption></figure></article>
+  <article class="method-block"><div class="subsection-heading"><span class="module-code">PHOENIX-PHYSCANVAS</span><h3>在世界模型中闭环改进策略</h3></div><p class="prose">固定示范不一定覆盖不同接近方式或物体位置偏差。Phoenix-PhysCanvas 为 Phoenix-MWA 提供交互式后训练环境，让策略尝试动作、观察结果，再根据任务奖励更新。</p><p class="prose">模型从真实机器人轨迹学习，将时间对齐的多视角 RGB、触觉图像和触觉位移组织到统一空间画布。机器人运动提供与相机对齐的几何条件，预训练视频模型通过条件流匹配预测后续多模态观测，视觉编解码器保持固定。</p><p class="prose">强化学习从真实初始观测出发，策略输出动作，PhysCanvas 返回新的视觉与触觉反馈。从相同初始条件采样多条 rollout，用奖励模型评价任务完成情况，再通过组内相对优势进行 GRPO 更新。最终收益在物理机器人上检验。</p><figure><div class="figure-link"><img loading="lazy" src="assets/Phoenix_v2.webp" width="2906" height="695" alt="PhysCanvas 与 MWA 交互并开展强化学习后训练的闭环"></div><figcaption>策略输出动作，PhysCanvas 预测后续视觉与触觉观测，奖励模型为 GRPO 更新提供任务评分。</figcaption></figure></article>
 </div></section>
 <section class="section tint" id="data"><div class="wrap">
-  <div class="section-heading"><div><p class="eyebrow">02 / Pretraining Data</p><h2>多来源经验，<br>统一的学习接口。</h2></div><p>整合 Robot、Ego 与 UMI 数据，将异构记录转化为时序、语言和动作对齐的训练样本。</p></div>
+  <div class="section-heading"><div><p class="eyebrow">02 / Pretraining Data</p><h2>预训练数据处理</h2></div><p>对 Robot、Ego 和 UMI 记录进行格式转换、质量筛选、时序标注和坐标对齐，使语言、观测与动作对应同一段操作。</p></div>
   <div class="data-metrics"><div><span>原始来源</span><strong>54,413.23<small>小时</small></strong></div><div><span>有效数据</span><strong>39,306.25<small>小时</small></strong></div><div><span>原始帧数</span><strong>33.8<small>亿帧</small></strong></div></div>
   <figure><div class="figure-link"><img loading="lazy" src="assets/pptx_tnr_20261015/pretraining_data_pool_tnr.webp" width="2880" height="1628" alt="Phoenix 预训练数据池：机器人、第一人称视频和 UMI 数据的组成与有效时长"></div><figcaption>有效数据：Robot 12,220.75 小时，Ego 24,991.35 小时，UMI 2,094.15 小时。</figcaption></figure>
-  <p class="prose">我们进行格式统一、子集筛选、无效记录过滤和异常标签隔离，裁剪冗余静止边缘，保留满足时序连续性与任务边界约束的训练窗口。为 Ego 数据补充脚本级语言标注；对机器人数据进行坐标、单位、动作时序与有效维度对齐。在保持任务和动作语义一致的前提下，训练时采样不同语言表达。</p>
+  <p class="prose">数据先转为 LeRobot V3，明确位置单位和朝向定义，再检查视频时间戳、状态序列和任务边界。质量筛选检查解码失败、异常时间戳、视觉质量、异常运动和重复记录。机器人静止检测依据实测状态，同时检查相邻变化与累计变化，保留慢速运动；只裁剪任务两端的冗余静止片段，保留任务内部的必要停顿。</p><p class="prose">第一人称数据的脚本级标注记录整体任务、场景及局部手部动作的时间范围，使窗口描述保留动作顺序和双手分工。机器人数据在工作空间与末端执行器两层进行坐标对齐；语言增强保留物体、手臂分工、空间关系和先后约束。先按原始 episode 划分训练与验证，再构建窗口，避免重叠观测泄漏。</p>
   <figure class="feature-figure"><div class="figure-link"><img loading="lazy" src="assets/pptx_tnr_20261015/pretraining_data_pipeline_tnr.webp" width="2880" height="1440" alt="预训练数据处理流程：Ego 与 UMI 标注，以及机器人坐标对齐和语言增强"></div><figcaption>按来源处理，按统一表示构建样本。</figcaption></figure>
   <div class="expanded-details"><h4 class="detail-heading"><span>80 维统一状态与动作空间</span><span class="summary-meta">接口定义</span></h4><div class="detail-body"><p>固定语义槽位覆盖左右臂、末端执行器与夹爪，并保留灵巧手、躯干和底盘通道。单臂数据映射至右臂槽位；缺失或无效维度填零，通过逐时间步、逐维掩码排除其损失。</p><div class="table-scroll" tabindex="0" role="region" aria-label="80 维动作空间定义"><table class="report-table">
 <thead>
@@ -223,8 +230,8 @@
 </div><p>状态使用末端绝对位姿及连续 6D 旋转表示。动作使用关节、夹爪绝对目标，以及参考坐标系下的平移增量和末端局部坐标系下的旋转向量。维数表示接口容量，不代表每条样本均有完整监督。</p></div></div>
 </div></section>
 <section class="section" id="results"><div class="wrap">
-  <div class="section-heading"><div><p class="eyebrow">03 / Benchmarks</p><h2>面向变化的环境，<br>评估操作泛化。</h2></div><p>在 LIBERO-Plus、LIBERO-Pro 与 RoboCasa-GR1 上报告成功率。不同基准采用各自对应的后训练与评估配置。</p></div>
-  <div class="benchmark-links" aria-label="基准跳转"><a href="#panel-plus">LIBERO-Plus</a><a href="#panel-pro">LIBERO-Pro</a><a href="#panel-robocasa">RoboCasa-GR1</a></div>
+  <div class="section-heading"><div><p class="eyebrow">03 / Benchmarks</p><h2>六项操作基准</h2></div><p>报告 LIBERO-Plus、LIBERO-Pro、RoboCasa-GR1、RoboTwin 2.0 C2R、Bench2Dex 和 RoboDojo-RealWorld 六项结果。各基准采用对应的后训练与评估设置。</p></div>
+  <div class="benchmark-links" aria-label="基准跳转"><a href="#panel-plus">LIBERO-Plus</a><a href="#panel-pro">LIBERO-Pro</a><a href="#panel-robocasa">RoboCasa-GR1</a><a href="#panel-robotwin">RoboTwin 2.0 C2R</a><a href="#panel-bench2dex">Bench2Dex</a><a href="#panel-robodojo-realworld">RoboDojo-RealWorld</a></div>
   <div id="panel-plus" class="benchmark-panel" role="region" aria-label="LIBERO-Plus">
     <div class="benchmark-summary"><div><p class="eyebrow">Seven Distribution Shifts</p><h3>LIBERO-Plus</h3><p>相机、初始状态、语言、光照、背景、噪声与布局扰动。</p></div><div class="benchmark-score"><strong>94.63<small>%</small></strong><span>Phoenix-MWA · w. Pretrain</span></div></div>
     <div class="bar-chart" aria-label="LIBERO-Plus 成功率对比"><div class="bar-row"><span>Phoenix-MWA <small>w/o. Pretrain</small></span><div class="bar-track"><span class="bar-fill baseline" style="width:88.16%"></span></div><strong>88.16%</strong></div><div class="bar-row"><span>Phoenix-MWA <small>w. Pretrain</small></span><div class="bar-track"><span class="bar-fill" style="width:94.63%"></span></div><strong>94.63%</strong></div></div><p class="result-callout">预训练后，总成功率提高 <strong>6.47 pp</strong>。</p>
@@ -334,9 +341,143 @@
 </table>
 </div></div></div></div>
   <p class="caption">数据来自技术报告第 4 节；总分提升不代表每项扰动均有提升。完整表保留原报告的分组、加粗和下划线标记。</p>
+
+<div id="panel-robotwin" class="benchmark-panel" role="region" aria-label="RoboTwin 2.0 C2R">
+<div class="benchmark-summary"><div><h3 id="section-5-4">RoboTwin 2.0 C2R</h3></div><div class="benchmark-score"><strong>72.42<small>%</small></strong></div></div>
+<div class="expanded-details"><h4 class="detail-heading" id="section-5-4-1"><span>完整对比</span><span class="summary-meta">成功率（%）</span></h4><div class="detail-body">
+<div class="table-scroll" tabindex="0" role="region" aria-label="Complete RoboTwin 2.0 Clean2Random results"><table id="robotwin-c2r-comparison" class="report-table">
+<thead><tr><th scope="col">Method</th><th scope="col">Clean2Random</th></tr></thead>
+<tbody>
+<tr class="table-group"><th colspan="2" scope="row">VLA</th></tr>
+<tr><th scope="row">StarVLA</th><td>10.60</td></tr>
+<tr><th scope="row">GR00T-N1.7</th><td>20.70</td></tr>
+<tr><th scope="row">X-VLA</th><td>20.90</td></tr>
+<tr><th scope="row">Spatial Forcing</th><td>26.70</td></tr>
+<tr><th scope="row">ABot-M0</th><td>36.00</td></tr>
+<tr><th scope="row">π0.5</th><td>47.90</td></tr>
+<tr><th scope="row">GigaBrain-0.7</th><td>67.90</td></tr>
+<tr><th scope="row">Qwen-RobotManip-Context</th><td>69.40</td></tr>
+</tbody>
+<tbody>
+<tr class="table-group"><th colspan="2" scope="row">WAM</th></tr>
+<tr><th scope="row">Fast-WAM</th><td>1.90</td></tr>
+<tr><th scope="row">AHA-WAM</th><td>3.20</td></tr>
+<tr><th scope="row">X-WAM</th><td>25.80</td></tr>
+<tr><th scope="row">4D-WAM</th><td>41.80</td></tr>
+<tr><th scope="row">OpenWAM-α</th><td>48.70</td></tr>
+<tr><th scope="row">InternW0-Δ</th><td><u>71.90</u></td></tr>
+<tr class="ours"><th scope="row">Phoenix-MWA (w. Pretrain)</th><td><strong>72.42</strong></td></tr>
+</tbody>
+</table></div>
+
+</div></div></div>
+
+<div id="panel-bench2dex" class="benchmark-panel" role="region" aria-labelledby="section-5-5">
+<div class="benchmark-summary"><div><h3 id="section-5-5">Bench2Dex</h3></div><div class="benchmark-score"><strong>45.6<small>%</small></strong></div></div>
+<p class="prose benchmark-analysis">Bench2Dex 覆盖 <strong>12 种机械臂与灵巧手组合</strong>、<strong>26 项任务与本体设置</strong>，测试物体位姿、桌面高度、背景、光照、干扰物和相机位姿变化。Phoenix-MWA 在等变性（Equi.）、不变性（Inv.）和联合（Full）评估中的成功率分别为 <strong>38.5%、44.1% 和 45.6%</strong>。四个评估通道的平均成功率为 <strong>45.6%</strong>，比所比较的最强基线高 <strong>17.3 个百分点</strong>。</p>
+<h4 class="detail-heading" id="section-5-5-1"><span>26 项任务平均结果</span><span class="summary-meta">成功率（%）</span></h4>
+<div class="table-scroll" tabindex="0" role="region" aria-labelledby="section-5-5-1">
+<table id="bench2dex-mean-comparison" class="report-table" aria-labelledby="section-5-5-1">
+<thead><tr><th scope="col">Metric</th><th scope="col">ACT</th><th scope="col">DP</th><th scope="col">π₀.₅</th><th scope="col">GR00T N1.5</th><th scope="col" class="bench2dex-ours">Phoenix-MWA (w. Pretrain)</th></tr></thead>
+<tbody>
+<tr><th scope="row">None</th><td>29.5%</td><td>12.9%</td><td>35.5%</td><td>48.5%</td><td class="bench2dex-ours"><strong>54.2%</strong></td></tr>
+<tr><th scope="row">Equi.</th><td>15.4%</td><td>6.3%</td><td>21.2%</td><td>18.8%</td><td class="bench2dex-ours"><strong>38.5%</strong></td></tr>
+<tr><th scope="row">Inv.</th><td>14.0%</td><td>5.2%</td><td>26.7%</td><td>26.0%</td><td class="bench2dex-ours"><strong>44.1%</strong></td></tr>
+<tr><th scope="row">Full</th><td>13.0%</td><td>3.8%</td><td>25.5%</td><td>19.8%</td><td class="bench2dex-ours"><strong>45.6%</strong></td></tr>
+<tr><th scope="row">SR</th><td>18.0%</td><td>7.1%</td><td>27.2%</td><td>28.3%</td><td class="bench2dex-ours"><strong>45.6%</strong></td></tr>
+<tr><th scope="row">LSCR</th><td>36.5%</td><td>23.0%</td><td>44.2%</td><td>47.3%</td><td class="bench2dex-ours"><strong>65.6%</strong></td></tr>
+</tbody>
+</table></div>
+
+<div class="bench2dex-detail">
+<h4 class="detail-heading" id="section-5-5-2">各任务 SR 与 LSCR</h4>
+<div class="table-scroll" tabindex="0" role="region" aria-labelledby="section-5-5-2">
+<table id="bench2dex-task-comparison" class="report-table" aria-labelledby="section-5-5-2">
+<colgroup><col class="bench2dex-task-column"><col class="bench2dex-embodiment-column"></colgroup>
+<colgroup span="2"></colgroup><colgroup span="2"></colgroup><colgroup span="2"></colgroup><colgroup span="2"></colgroup><colgroup span="2"></colgroup>
+<thead>
+<tr><th scope="col" rowspan="2">Task</th><th scope="col" rowspan="2">Embodiment</th><th scope="colgroup" colspan="2">ACT</th><th scope="colgroup" colspan="2">DP</th><th scope="colgroup" colspan="2">π₀.₅</th><th scope="colgroup" colspan="2">GR00T N1.5</th><th scope="colgroup" colspan="2" class="bench2dex-ours">Phoenix-MWA<br>(w. Pretrain)</th></tr>
+<tr><th scope="col">SR</th><th scope="col">LSCR</th><th scope="col">SR</th><th scope="col">LSCR</th><th scope="col">SR</th><th scope="col">LSCR</th><th scope="col">SR</th><th scope="col">LSCR</th><th scope="col" class="bench2dex-ours">SR</th><th scope="col" class="bench2dex-ours">LSCR</th></tr>
+</thead>
+<tbody>
+<tr><th scope="row">Baking Tray Prep</th><th scope="rowgroup" rowspan="3">IIWA7 + Sharpa</th><td>6.0%</td><td>11.6%</td><td>2.0%</td><td>7.9%</td><td>27.5%</td><td>38.4%</td><td>10.0%</td><td>29.3%</td><td class="bench2dex-ours"><strong>30.0%</strong></td><td class="bench2dex-ours"><strong>61.8%</strong></td></tr>
+<tr><th scope="row">Canned Food Tray Arrangement</th><td>9.5%</td><td>34.6%</td><td>0.0%</td><td>14.8%</td><td>12.0%</td><td>38.8%</td><td>12.5%</td><td>37.3%</td><td class="bench2dex-ours"><strong>13.5%</strong></td><td class="bench2dex-ours"><strong>52.6%</strong></td></tr>
+<tr><th scope="row">Jigsaw Puzzle Assembly</th><td>0.0%</td><td>12.5%</td><td>0.0%</td><td>6.3%</td><td>0.0%</td><td>8.4%</td><td><strong>5.0%</strong></td><td><strong>30.3%</strong></td><td class="bench2dex-ours">0.0%</td><td class="bench2dex-ours">27.6%</td></tr>
+</tbody>
+<tbody>
+<tr><th scope="row">Gaming Desk Setup</th><th scope="rowgroup">JAKA ZU7 + DexHand021</th><td>31.0%</td><td>46.0%</td><td>9.0%</td><td>30.7%</td><td>33.5%</td><td>49.3%</td><td><strong>59.5%</strong></td><td>72.2%</td><td class="bench2dex-ours">52.0%</td><td class="bench2dex-ours"><strong>73.0%</strong></td></tr>
+</tbody>
+<tbody>
+<tr><th scope="row">Medicine Shoebox Pack</th><th scope="rowgroup" rowspan="2">Panda + Orca</th><td>7.5%</td><td>21.5%</td><td>0.0%</td><td>9.3%</td><td>21.5%</td><td>39.8%</td><td>13.0%</td><td>26.2%</td><td class="bench2dex-ours"><strong>49.5%</strong></td><td class="bench2dex-ours"><strong>65.5%</strong></td></tr>
+<tr><th scope="row">Tool Box Loading</th><td>20.0%</td><td>37.5%</td><td>16.5%</td><td>39.8%</td><td><strong>72.0%</strong></td><td><strong>86.0%</strong></td><td>40.0%</td><td>51.0%</td><td class="bench2dex-ours">68.5%</td><td class="bench2dex-ours">84.2%</td></tr>
+</tbody>
+<tbody>
+<tr><th scope="row">Sports Ball Cup Sort</th><th scope="rowgroup">Panda + Allegro</th><td>2.0%</td><td>2.5%</td><td>0.5%</td><td>4.4%</td><td>21.5%</td><td>33.6%</td><td>9.0%</td><td>21.5%</td><td class="bench2dex-ours"><strong>23.0%</strong></td><td class="bench2dex-ours"><strong>43.1%</strong></td></tr>
+</tbody>
+<tbody>
+<tr><th scope="row">Faucet Cup Water Fill</th><th scope="rowgroup" rowspan="2">RM65 + Revo2</th><td>7.5%</td><td>35.4%</td><td>4.0%</td><td>14.0%</td><td>15.5%</td><td>40.5%</td><td>33.0%</td><td>55.0%</td><td class="bench2dex-ours"><strong>35.5%</strong></td><td class="bench2dex-ours"><strong>66.5%</strong></td></tr>
+<tr><th scope="row">Stationery Category Sorting</th><td>1.5%</td><td>23.1%</td><td>2.0%</td><td>18.5%</td><td>0.0%</td><td>2.3%</td><td>3.0%</td><td>16.9%</td><td class="bench2dex-ours"><strong>24.5%</strong></td><td class="bench2dex-ours"><strong>55.5%</strong></td></tr>
+</tbody>
+<tbody>
+<tr><th scope="row">Bimanual Piano Melody</th><th scope="rowgroup" rowspan="2">xArm7 + Ability</th><td>4.0%</td><td>4.5%</td><td>0.5%</td><td>0.5%</td><td>7.5%</td><td>16.0%</td><td><strong>23.0%</strong></td><td><strong>23.5%</strong></td><td class="bench2dex-ours">4.0%</td><td class="bench2dex-ours">6.2%</td></tr>
+<tr><th scope="row">Wine Glass Plate Balance</th><td>26.0%</td><td>72.0%</td><td>3.5%</td><td>39.8%</td><td>35.0%</td><td>76.2%</td><td>28.5%</td><td>72.5%</td><td class="bench2dex-ours"><strong>40.0%</strong></td><td class="bench2dex-ours"><strong>81.8%</strong></td></tr>
+</tbody>
+<tbody>
+<tr><th scope="row">Cleaner Box Loading</th><th scope="rowgroup" rowspan="3">xArm7 + LEAP</th><td>33.0%</td><td>76.2%</td><td>9.0%</td><td>32.8%</td><td>55.0%</td><td>88.5%</td><td>47.0%</td><td>82.3%</td><td class="bench2dex-ours"><strong>72.5%</strong></td><td class="bench2dex-ours"><strong>95.8%</strong></td></tr>
+<tr><th scope="row">Shoebox Accessory Pack</th><td>30.0%</td><td>56.3%</td><td>9.5%</td><td>35.2%</td><td>51.0%</td><td>68.3%</td><td>40.5%</td><td>60.3%</td><td class="bench2dex-ours"><strong>64.5%</strong></td><td class="bench2dex-ours"><strong>79.8%</strong></td></tr>
+<tr><th scope="row">Toilet Lid Cleaner Pour</th><td>34.0%</td><td>50.3%</td><td>8.5%</td><td>23.5%</td><td>45.5%</td><td>53.3%</td><td>45.0%</td><td>63.3%</td><td class="bench2dex-ours"><strong>74.5%</strong></td><td class="bench2dex-ours"><strong>84.2%</strong></td></tr>
+</tbody>
+<tbody>
+<tr><th scope="row">Breadbasket Fast-Food Loading</th><th scope="rowgroup" rowspan="3">UR5 + RH5DG2</th><td>10.5%</td><td>15.8%</td><td>4.5%</td><td>7.3%</td><td>12.5%</td><td>15.6%</td><td>9.0%</td><td>13.5%</td><td class="bench2dex-ours"><strong>65.5%</strong></td><td class="bench2dex-ours"><strong>71.9%</strong></td></tr>
+<tr><th scope="row">Citrus Plate Loading</th><td>51.5%</td><td>69.9%</td><td>22.5%</td><td>44.4%</td><td>56.5%</td><td>67.3%</td><td>59.0%</td><td>73.1%</td><td class="bench2dex-ours"><strong>92.5%</strong></td><td class="bench2dex-ours"><strong>96.1%</strong></td></tr>
+<tr><th scope="row">Fridge Wine Interhand Pour</th><td>11.0%</td><td>48.5%</td><td>2.5%</td><td>41.8%</td><td>8.5%</td><td>36.1%</td><td>21.0%</td><td>58.6%</td><td class="bench2dex-ours"><strong>64.5%</strong></td><td class="bench2dex-ours"><strong>82.1%</strong></td></tr>
+</tbody>
+<tbody>
+<tr><th scope="row">Fruit Bowl Loading</th><th scope="rowgroup" rowspan="3">UR5 + RH56DFX</th><td>37.0%</td><td>62.0%</td><td>18.0%</td><td>47.8%</td><td>38.5%</td><td>71.6%</td><td>32.5%</td><td>68.1%</td><td class="bench2dex-ours"><strong>60.0%</strong></td><td class="bench2dex-ours"><strong>82.4%</strong></td></tr>
+<tr><th scope="row">Screwdriver Box &amp; Hammer</th><td>24.5%</td><td>56.2%</td><td>20.5%</td><td>49.0%</td><td>33.0%</td><td>57.5%</td><td>48.0%</td><td>73.7%</td><td class="bench2dex-ours"><strong>64.0%</strong></td><td class="bench2dex-ours"><strong>85.9%</strong></td></tr>
+<tr><th scope="row">Trash Disposal</th><td>18.5%</td><td>30.3%</td><td>14.0%</td><td>21.5%</td><td>41.0%</td><td>53.7%</td><td>34.5%</td><td>47.8%</td><td class="bench2dex-ours"><strong>44.5%</strong></td><td class="bench2dex-ours"><strong>64.8%</strong></td></tr>
+</tbody>
+<tbody>
+<tr><th scope="row">Fridge Fruit Shelf Sorting</th><th scope="rowgroup" rowspan="2">UR5 + Shadow</th><td>0.5%</td><td>2.6%</td><td>0.0%</td><td>15.1%</td><td>6.0%</td><td>29.6%</td><td>1.0%</td><td>19.6%</td><td class="bench2dex-ours"><strong>30.0%</strong></td><td class="bench2dex-ours"><strong>49.8%</strong></td></tr>
+<tr><th scope="row">Soup Serving</th><td>1.0%</td><td>11.5%</td><td>0.0%</td><td>3.1%</td><td>0.0%</td><td>14.0%</td><td><strong>3.0%</strong></td><td>13.9%</td><td class="bench2dex-ours"><strong>3.0%</strong></td><td class="bench2dex-ours"><strong>18.8%</strong></td></tr>
+</tbody>
+<tbody>
+<tr><th scope="row">Frypan Stand &amp; Pour</th><th scope="rowgroup" rowspan="2">UR5 + Schunk</th><td>19.0%</td><td>51.2%</td><td>14.5%</td><td>30.0%</td><td>15.0%</td><td>33.3%</td><td>54.5%</td><td>72.3%</td><td class="bench2dex-ours"><strong>60.0%</strong></td><td class="bench2dex-ours"><strong>85.8%</strong></td></tr>
+<tr><th scope="row">Microwave Bowl Loading</th><td>62.5%</td><td>74.9%</td><td>21.0%</td><td>48.6%</td><td>70.0%</td><td>78.4%</td><td>70.5%</td><td>82.0%</td><td class="bench2dex-ours"><strong>90.5%</strong></td><td class="bench2dex-ours"><strong>94.1%</strong></td></tr>
+</tbody>
+<tbody>
+<tr><th scope="row">Ball Box Loading</th><th scope="rowgroup" rowspan="2">UR5 + Wuji</th><td>8.5%</td><td>10.4%</td><td>0.0%</td><td>7.1%</td><td>14.0%</td><td>19.4%</td><td><strong>23.0%</strong></td><td><strong>37.1%</strong></td><td class="bench2dex-ours">9.5%</td><td class="bench2dex-ours">19.9%</td></tr>
+<tr><th scope="row">Condiment Box Loading</th><td>10.5%</td><td>31.8%</td><td>1.0%</td><td>4.2%</td><td>15.0%</td><td>33.2%</td><td>10.5%</td><td>27.7%</td><td class="bench2dex-ours"><strong>49.5%</strong></td><td class="bench2dex-ours"><strong>76.7%</strong></td></tr>
+</tbody>
+<tfoot><tr><th scope="row" colspan="2">Task mean (26 tasks)</th><td>18.0%</td><td>36.5%</td><td>7.1%</td><td>23.0%</td><td>27.2%</td><td>44.2%</td><td>28.3%</td><td>47.3%</td><td class="bench2dex-ours"><strong>45.6%</strong></td><td class="bench2dex-ours"><strong>65.6%</strong></td></tr></tfoot>
+</table></div>
+</div>
+
+</div>
+
+<div id="panel-robodojo-realworld" class="benchmark-panel" role="region" aria-labelledby="section-5-6">
+<div class="benchmark-summary"><div><h3 id="section-5-6">RoboDojo-RealWorld</h3></div><div class="benchmark-score"><strong>26.11<small>%</small></strong></div></div>
+<div class="expanded-details"><h4 class="detail-heading"><span>完整对比</span><span class="summary-meta">成功率（%）</span></h4><div class="detail-body">
+<div class="table-scroll" tabindex="0" role="region" aria-label="RoboDojo-RealWorld success rates"><table id="robodojo-realworld-comparison" class="report-table">
+<thead><tr><th scope="col">Method</th><th scope="col">ARX X5</th><th scope="col">Piper</th><th scope="col">Piper X</th><th scope="col">Average</th></tr></thead>
+<tbody><tr class="table-group"><th colspan="5" scope="row">VLA</th></tr>
+<tr><th scope="row">DM0</th><td>0.00%</td><td>0.00%</td><td>0.00%</td><td>0.00%</td></tr>
+<tr><th scope="row">Spirit v1.5</th><td>0.00%</td><td>1.70%</td><td>0.00%</td><td>0.60%</td></tr>
+<tr><th scope="row">StarVLA</th><td>0.00%</td><td>5.00%</td><td>0.00%</td><td>1.70%</td></tr>
+<tr><th scope="row">π0</th><td>0.00%</td><td>5.00%</td><td>0.00%</td><td>1.70%</td></tr>
+<tr><th scope="row">GR00T-N1.7</th><td>1.70%</td><td>3.30%</td><td>0.00%</td><td>1.70%</td></tr>
+<tr><th scope="row">X-VLA</th><td>1.70%</td><td>8.30%</td><td>0.00%</td><td>3.30%</td></tr>
+<tr><th scope="row">Xiaomi-Robotics-0</th><td>8.30%</td><td>3.30%</td><td>0.00%</td><td>3.90%</td></tr>
+<tr><th scope="row">GalaxeaVLA (G0)</th><td>0.00%</td><td>13.30%</td><td>0.00%</td><td>4.40%</td></tr>
+<tr><th scope="row">InternVLA-A1</th><td>3.30%</td><td>18.30%</td><td>0.00%</td><td>7.20%</td></tr>
+<tr><th scope="row">π0.5</th><td>13.30%</td><td>21.70%</td><td>3.30%</td><td>12.80%</td></tr>
+</tbody><tbody><tr class="table-group"><th colspan="5" scope="row">WAM</th></tr>
+<tr><th scope="row">OpenWAM-α</th><td><strong>23.30%</strong></td><td><u>36.70%</u></td><td><u>13.30%</u></td><td><u>24.40%</u></td></tr>
+<tr class="ours"><th scope="row">Phoenix-MWA (w. Pretrain)</th><td><u>16.67%</u></td><td><strong>48.33%</strong></td><td><strong>13.33%</strong></td><td><strong>26.11%</strong></td></tr>
+</tbody></table></div></div></div></div>
 </div></section>
 <section class="section tint" id="demos"><div class="wrap">
-  <div class="section-heading"><div><p class="eyebrow">04 / Real-World Manipulation</p><h2>让能力落在<br>每一次真实交互上。</h2></div><p>从双臂物体操作到精细接触任务。以下为真机演示片段，统计成绩见对应实验。</p></div>
+  <div class="section-heading"><div><p class="eyebrow">04 / Real-World Manipulation</p><h2>真机操作演示</h2></div><p>八段原速演示涵盖多步骤操作、持续接触和精细对齐。RTC 与异步执行让模型在机器人运动时准备后续动作，衔接相邻动作段。统计成绩见对应实验。</p></div>
   <div class="tablist demo-tabs" role="tablist" aria-label="真机演示任务"><button type="button" role="tab" id="demo-tab-tube" aria-controls="demo-panel" aria-selected="true" tabindex="0" data-video="0">插试管</button>
 <button type="button" role="tab" id="demo-tab-blocks" aria-controls="demo-panel" aria-selected="false" tabindex="-1" data-video="1">拆放积木</button>
 <button type="button" role="tab" id="demo-tab-bottle" aria-controls="demo-panel" aria-selected="false" tabindex="-1" data-video="2">拧瓶盖</button>
@@ -349,7 +490,7 @@
   <noscript><ul><li><a href="demo/jimu_step015000_rtc_three_views.mp4">积木</a></li><li><a href="demo/bottle_02_step015000_rtc_three_views.mp4">瓶盖</a></li><li><a href="demo/mofang_step015000_rtc_three_views.mp4">魔方</a></li><li><a href="demo/huanggua_three_views_background_blur_v3.mp4">削黄瓜</a></li><li><a href="demo/plate_rtc_three_views_background_blur_v3.mp4">擦盘子</a></li><li><a href="demo/pouch2459_50k_rollout000004_left_base_right_titlebar.mp4">笔袋</a></li><li><a href="demo/breakfast273_30k_rtc_three_views.mp4">早餐物品操作</a></li></ul></noscript>
 </div></section>
 <section class="section" id="analysis"><div class="wrap">
-  <div class="section-heading"><div><p class="eyebrow">05 / Analysis</p><h2>从表征空间，<br>到预测与接触行为。</h2></div><p>分析预训练如何改变表征、改善视频预测，并支持精细技能与策略后训练。</p></div>
+  <div class="section-heading"><div><p class="eyebrow">05 / Analysis</p><h2>实验分析</h2></div><p>分别检查视觉表征、未来视频预测、接触后训练和世界模型强化学习的实验结果。</p></div>
   <article class="analysis-block"><div class="subsection-heading"><span class="module-code">05.1 / REPRESENTATION</span><h3>更均衡的视觉特征谱</h3></div><p class="prose">从预训练验证集与 LIBERO-Plus 各抽取 10,000 帧，三个编码器共享相同采样帧。通过对中心化 CLS 和 Patch Mean 特征矩阵进行奇异值分解，计算 Effective Rank，衡量特征变化在主方向上的分布均衡程度。</p><figure><div class="figure-link"><img loading="lazy" src="assets/pptx_tnr_20261015/effective_rank_tnr.webp" width="2880" height="1132" alt="DINOv3、DINOv3 (VGGT-Ω) 与 Phoenix Encoder 在两个数据域上的有效秩对比"></div><figcaption>相较 VGGT-Ω 初始化模型，Phoenix Encoder 在两个数据域上的有效秩均有所回升；DINOv3 原始模型的有效秩仍然最高。</figcaption></figure><div class="expanded-details"><h4 class="detail-heading">完整有效秩数值与解释</h4><div class="detail-body"><div class="table-scroll" tabindex="0" role="region" aria-label="有效秩结果表"><table class="report-table">
 <thead>
 <tr>
@@ -384,7 +525,7 @@
 </tr>
 </tbody>
 </table>
-</div><p>相较 DINOv3 (VGGT-Ω)，Phoenix Encoder 的 CLS / Patch Mean 有效秩在预训练验证集分别提高 5.81% / 7.86%，在 LIBERO-Plus 分别提高 2.44% / 6.55%。较低有效秩可能反映任务专门化或潜在维度坍缩；较高有效秩表示变化分布更均衡，不能单独等同于更高的控制性能。</p></div></div></article>
+</div><p>相较 DINOv3 (VGGT-Ω)，Phoenix Encoder 的 CLS / Patch Mean 有效秩在预训练验证集分别提高 5.81% / 7.86%，在 LIBERO-Plus 分别提高 2.44% / 6.55%。这表示特征变化分布在更多相对均衡的方向上，是关于表征结构的证据，不能直接等同于操作成功率提升。</p></div></div></article>
   <article class="analysis-block"><div class="subsection-heading"><span class="module-code">05.2 / FUTURE PREDICTION</span><h3>更准确的未来视频预测</h3></div><p class="prose">三组统一在 LIBERO 后训练 20k steps，对 LIBERO-Plus 中预先固定的 200 个共同完整窗口评分。每个窗口只评估 8 个未来帧，主视角、腕部视角与窗口之间等权平均。</p><div class="table-scroll" tabindex="0" role="region" aria-label="视频生成质量结果表"><table class="report-table">
 <thead>
 <tr>
@@ -424,7 +565,7 @@
 </tbody>
 </table>
 </div><div class="finding-strip"><p>相比 FastWAM，预训练模型的 <strong>PSNR 提高 2.56 dB</strong>，<strong>LPIPS 降低 36.84%</strong>。</p><span>像素保真度、感知相似性与语义一致性共同改善。</span></div><p class="caption">↑ 越高越好，↓ 越低越好。DINO-GT 与 CLIP-GT 为余弦相似度 × 100。</p></article>
-  <article class="analysis-block"><div class="subsection-heading"><span class="module-code">05.3 / CONTACT-RICH SKILLS</span><h3>把运动与接触一起学会</h3></div><p class="prose">在削皮、擦拭盘子任务上，比较直接动作生成与交互潜变量生成。F<sub>ext</sub> L1 衡量由触觉形变导出的合力代理与专家参考的偏差。</p><div class="table-scroll" tabindex="0" role="region" aria-label="接触密集任务结果表"><table class="report-table">
+  <article class="analysis-block"><div class="subsection-heading"><span class="module-code">05.3 / CONTACT-RICH SKILLS</span><h3>交互潜变量的接触任务结果</h3></div><p class="prose">在削皮、擦拭盘子任务上，比较直接动作生成与交互潜变量生成。F<sub>ext</sub> L1 衡量由触觉形变导出的合力代理与专家参考的偏差。</p><div class="table-scroll" tabindex="0" role="region" aria-label="接触密集任务结果表"><table class="report-table">
 <thead>
 <tr>
 <th scope="col">方法</th>
@@ -459,7 +600,7 @@
 </tbody>
 </table>
 </div><div class="finding-strip"><p>采用交互潜变量后，削皮成功率 <strong>20% → 40%</strong>，擦拭成功率 <strong>75% → 90%</strong>。</p><span>两项任务的接触误差同时降低。</span></div><a class="text-link demo-jump" href="#demos" data-demo="4">削黄瓜演示 ↗</a><a class="text-link demo-jump" href="#demos" data-demo="5">擦盘子演示 ↗</a></article>
-  <article class="analysis-block"><div class="subsection-heading"><span class="module-code">05.4 / WORLD-MODEL RL</span><h3>仿真世界中的学习，迁移到真实任务</h3></div><p class="prose">SFT 30k steps 后，在 PhysCanvas 中进行 GRPO 后训练，再在不同物体位置与光照条件下评估真机表现。每个任务报告三组环境条件下的成功率。</p><div class="table-scroll" tabindex="0" role="region" aria-label="世界模型强化学习结果表"><table class="report-table">
+  <article class="analysis-block"><div class="subsection-heading"><span class="module-code">05.4 / WORLD-MODEL RL</span><h3>PhysCanvas GRPO 后的真机结果</h3></div><p class="prose">SFT 30k steps 后，在 PhysCanvas 中进行 GRPO 后训练，再在不同物体位置与光照条件下评估真机表现。每个任务报告三组环境条件下的成功率。</p><div class="table-scroll" tabindex="0" role="region" aria-label="世界模型强化学习结果表"><table class="report-table">
 <thead>
 <tr>
 <th scope="col">Task</th>
@@ -495,7 +636,7 @@
 </tr>
 </tbody>
 </table>
-</div><div class="split-stats"><div><span>试管任务 · 平均成功率</span><strong>58.33% <span>→</span> 75.00%</strong></div><div><span>积木任务 · 平均成功率</span><strong>80.00% <span>→</span> 86.67%</strong></div></div><div class="expanded-details"><h4 class="detail-heading">结果边界与局限性</h4><div class="detail-body"><p>后训练收益在不同环境条件下并不均衡。试管任务的总体标准差由 8.50 pp 增至 16.33 pp；积木任务由 0.00 pp 增至 2.36 pp。世界模型与奖励模型的适配，以及仿真场景对现实变化的覆盖仍需进一步研究。透明物体也可能对光照、背景和操作精度更敏感。</p></div></div></article>
+</div><div class="split-stats"><div><span>试管任务 · 平均成功率</span><strong>58.33% <span>→</span> 75.00%</strong></div><div><span>积木任务 · 平均成功率</span><strong>80.00% <span>→</span> 86.67%</strong></div></div><div class="expanded-details"><h4 class="detail-heading">结果边界与局限性</h4><div class="detail-body"><p>试管任务的平均成功率从 58.33% 提升至 75.00%，积木任务从 80.00% 提升至 86.67%，分别增加 16.67 和 6.67 个百分点。两项任务在三种条件下均有改善，但收益幅度不同：试管任务的总体标准差由 8.50 pp 增至 16.33 pp，积木任务由 0.00 pp 增至 2.36 pp。当前实验只覆盖两项任务，更广泛的迁移能力与稳定性仍需检验。</p></div></div></article>
 </div></section>
 <section class="section" id="contributions" aria-labelledby="contributions-heading">
   <div class="wrap">
