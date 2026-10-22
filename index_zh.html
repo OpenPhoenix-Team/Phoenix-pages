@@ -27,31 +27,70 @@
 @media print{.topbar,.hero-actions,.tablist,.video-actions,footer,.demo-jump{display:none}.wrap{width:100%;max-width:none}.section{padding:26px 0}.masthead{padding-top:0}body,.tint{background:white}[role="tabpanel"][hidden]{display:block!important}details>.detail-body{display:block!important}figure,table{break-inside:avoid}h2,h3{break-after:avoid}.table-scroll{overflow:visible}.report-table{font-size:9px}.report-table th,.report-table td{padding:5px}.video-frame{display:none}}
 </style>
 <style id="contributions-style">
-#contributions .contribution-contact { margin: 0 0 28px; font-size: 15px; overflow-wrap: anywhere; }
 #contributions .contribution-leads {
-  margin-bottom: 30px;
-  padding: 18px 0;
-  border-block: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: 190px minmax(0, 1fr);
+  gap: 12px 28px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
 }
 #contributions .contribution-leads strong {
-  display: block;
   color: var(--teal);
   font-size: 15px;
-  margin-bottom: 5px;
+  line-height: 1.75;
 }
-#contributions .contribution-leads p { font-size: 19px; }
-.contribution-grid {
+#contributions .contribution-leads p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.75;
+}
+#contributions .contribution-contact {
+  margin: 20px 0 36px;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+#contributions .contribution-grid { display: grid; gap: 0; }
+#contributions .contribution-group {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 32px 48px;
+  grid-template-columns: 190px minmax(0, 1fr);
+  gap: 12px 28px;
+  padding: 26px 0;
+  border-top: 1px solid var(--line);
 }
-.contribution-group h3 { font-size: 21px; margin-bottom: 16px; }
-.contribution-group dl { margin: 0; }
-.contribution-row { padding: 10px 0; border-top: 1px solid var(--line); }
-.contribution-row dt { font-size: 13px; color: var(--muted); }
-.contribution-row dd { margin: 3px 0 0; font-size: 16px; line-height: 1.65; }
+#contributions .contribution-group h3 {
+  margin: 0;
+  font-size: 19px;
+  line-height: 1.5;
+}
+#contributions .contribution-group dl { margin: 0; min-width: 0; }
+#contributions .contribution-row {
+  display: grid;
+  grid-template-columns: 155px minmax(0, 1fr);
+  gap: 8px 20px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+#contributions .contribution-row:first-child { padding-top: 0; }
+#contributions .contribution-row:last-child { padding-bottom: 0; border-bottom: 0; }
+#contributions .contribution-row dt { font-size: 13px; color: var(--muted); line-height: 1.8; }
+#contributions .contribution-row dd,
+#contributions .contribution-group > p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.75;
+}
+#contributions a { text-underline-offset: 3px; }
+@media (max-width: 900px) {
+  #contributions .contribution-leads,
+  #contributions .contribution-group { grid-template-columns: 160px minmax(0, 1fr); gap: 12px 22px; }
+  #contributions .contribution-row { grid-template-columns: 130px minmax(0, 1fr); gap: 6px 16px; }
+}
 @media (max-width: 680px) {
-  .contribution-grid { grid-template-columns: 1fr; gap: 28px; }
+  #contributions .contribution-leads,
+  #contributions .contribution-group { grid-template-columns: 1fr; gap: 12px; }
+  #contributions .contribution-group { padding: 24px 0; }
+  #contributions .contribution-row { grid-template-columns: 1fr; gap: 4px; }
+  #contributions .contribution-leads { gap: 4px; }
 }
 </style>
 </head>
@@ -521,7 +560,7 @@
           </div>
           <div class="contribution-row">
             <dt>RTC</dt>
-            <dd>Linbo Wang, Xiaozhen Xu, Zhiyong Zhao</dd>
+            <dd>Linbo Wang, Xiaozhen Xu</dd>
           </div>
           <div class="contribution-row">
             <dt>Tactile</dt>
@@ -535,7 +574,7 @@
       </div>
       <div class="contribution-group">
         <h3>Training Infrastructure</h3>
-        <p class="contribution-row">Zhiyong Zhao, Xiaohang Chen</p>
+        <p>Zhiyong Zhao, Xiaohang Chen</p>
       </div>
       <div class="contribution-group">
         <h3>Eval &amp; Deploy</h3>
