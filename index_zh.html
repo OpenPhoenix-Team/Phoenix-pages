@@ -94,10 +94,21 @@
 }
 </style>
 <style>.hero-metrics>div:nth-child(n+4){border-top:1px solid var(--line)}.hero-metrics>div:nth-child(3n+1){border-left:0}</style>
+<style id="community-style">
+#community .community-layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:48px;align-items:center}
+#community .community-copy h3{margin:0 0 18px;font-size:24px;line-height:1.4}
+#community .community-copy p{font-size:16px;line-height:1.8}
+#community .community-copy .community-validity{margin-top:20px;font-size:13px;color:var(--muted)}
+#community figure{margin:0;width:100%;max-width:320px}
+#community .community-qr{display:block;background:#fff;border:1px solid var(--line)}
+#community .community-qr img{display:block;width:100%;height:auto}
+#community figcaption{margin-top:12px;font-size:12px;line-height:1.6;color:var(--muted)}
+@media(max-width:680px){#community .community-layout{grid-template-columns:1fr;gap:24px}#community figure{justify-self:center}}
+</style>
 </head>
 <body>
 <a class="skip" href="#main">跳至正文</a>
-<header class="topbar"><div class="wrap nav-inner"><a class="wordmark" href="#top" aria-label="Phoenix 首页"><span class="brand-dot" aria-hidden="true"></span>Phoenix</a><nav aria-label="章节导航"><a href="#method">方法</a><a href="#data">数据</a><a href="#results">实验</a><a href="#demos">真机演示</a><a href="#analysis">分析</a></nav></div></header>
+<header class="topbar"><div class="wrap nav-inner"><a class="wordmark" href="#top" aria-label="Phoenix 首页"><span class="brand-dot" aria-hidden="true"></span>Phoenix</a><nav aria-label="章节导航"><a href="#method">方法</a><a href="#data">数据</a><a href="#results">实验</a><a href="#demos">真机演示</a><a href="#analysis">分析</a><a href="#community">交流群</a></nav></div></header>
 <main id="main">
 <section class="masthead wrap" id="top" aria-labelledby="title">
   <p class="eyebrow">机器人操作学习 · 技术报告 · 2026.10.13</p>
@@ -680,6 +691,22 @@
         <h3>Writing</h3>
         <p><a href="https://getterupper.github.io/" target="_blank" rel="noopener noreferrer">Xiang Li</a>, <a href="https://ucaszyp.github.io/" target="_blank" rel="noopener noreferrer">Yupeng Zheng</a>, Chaoyue Li, Secant, <a href="https://scholar.google.com/citations?user=bJrZ3kUAAAAJ&amp;hl=zh-CN" target="_blank" rel="noopener noreferrer">Yichen Zhang</a></p>
       </div>
+    </div>
+  </div>
+</section>
+<section class="section" id="community" aria-labelledby="community-heading">
+  <div class="wrap">
+    <div class="section-heading"><div><h2 id="community-heading">交流群</h2></div></div>
+    <div class="community-layout">
+      <div class="community-copy">
+        <h3>MWA-Phoenix 微信交流群</h3>
+        <p>欢迎加入交流群，讨论模型训练、基准评测和机器人部署，分享复现结果与使用问题。</p>
+        <p class="community-validity">二维码标注在 2026 年 10 月 29 日前有效。</p>
+      </div>
+      <figure>
+        <a class="community-qr" href="assets/community-wechat-20261023.png" target="_blank" rel="noopener noreferrer" aria-label="使用微信扫码入群；点击图片可查看原图。"><img src="assets/community-wechat-20261023.png" width="966" height="1518" loading="lazy" alt="MWA-Phoenix 微信交流群 QR code"></a>
+        <figcaption>使用微信扫码入群；点击图片可查看原图。</figcaption>
+      </figure>
     </div>
   </div>
 </section>

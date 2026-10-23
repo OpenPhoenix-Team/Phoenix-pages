@@ -536,6 +536,17 @@ footer::before{content:"";position:absolute;top:0;height:1px;background:var(--li
   #contributions .contribution-leads { gap: 4px; }
 }
 </style>
+<style id="community-style">
+#community .community-layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:48px;align-items:center}
+#community .community-copy h3{margin:0 0 18px;font-size:24px;line-height:1.4}
+#community .community-copy p{font-size:16px;line-height:1.8}
+#community .community-copy .community-validity{margin-top:20px;font-size:13px;color:var(--muted)}
+#community figure{margin:0;width:100%;max-width:320px}
+#community .community-qr{display:block;background:#fff;border:1px solid var(--line)}
+#community .community-qr img{display:block;width:100%;height:auto}
+#community figcaption{margin-top:12px;font-size:12px;line-height:1.6;color:var(--muted)}
+@media(max-width:680px){#community .community-layout{grid-template-columns:1fr;gap:24px}#community figure{justify-self:center}}
+</style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to article</a>
@@ -549,6 +560,7 @@ footer::before{content:"";position:absolute;top:0;height:1px;background:var(--li
 <div class="toc-group"><a class="toc-level-1" href="#section-6" aria-expanded="false" aria-controls="toc-subsections-6">VI. Analysis<span class="toc-chevron" aria-hidden="true">›</span></a><div class="toc-submenu" id="toc-subsections-6" hidden><nav aria-label="VI. Analysis subsections"><a href="#section-6-1">VI.1 Dual-teacher distillation</a><a href="#section-6-2">VI.2 Representation &amp; pretraining</a><a href="#section-6-3">VI.3 Interaction latents</a><a href="#section-6-4">VI.4 World model policy refinement</a></nav></div></div>
 <a class="toc-level-1" href="#section-7">BibTeX</a>
 <a class="toc-level-1" href="#contributions-heading">Contribution</a>
+<a class="toc-level-1" href="#community">Community</a>
 </aside>
 <main id="main">
 <section class="masthead wrap" id="top" aria-labelledby="title">
@@ -1213,6 +1225,22 @@ footer::before{content:"";position:absolute;top:0;height:1px;background:var(--li
         <h3>Writing</h3>
         <p><a href="https://getterupper.github.io/" target="_blank" rel="noopener noreferrer">Xiang Li</a>, <a href="https://ucaszyp.github.io/" target="_blank" rel="noopener noreferrer">Yupeng Zheng</a>, Chaoyue Li, Secant, <a href="https://scholar.google.com/citations?user=bJrZ3kUAAAAJ&amp;hl=zh-CN" target="_blank" rel="noopener noreferrer">Yichen Zhang</a></p>
       </div>
+    </div>
+  </div>
+</section>
+<section class="section" id="community" aria-labelledby="community-heading">
+  <div class="wrap">
+    <div class="section-heading"><div><h2 id="community-heading">Community</h2></div></div>
+    <div class="community-layout">
+      <div class="community-copy">
+        <h3>MWA-Phoenix WeChat Group</h3>
+        <p>Join the WeChat group to discuss model training, benchmark evaluation, and robot deployment, and share reproduction results and questions.</p>
+        <p class="community-validity">The QR card is marked valid before October 29, 2026.</p>
+      </div>
+      <figure>
+        <a class="community-qr" href="assets/community-wechat-20261023.png" target="_blank" rel="noopener noreferrer" aria-label="Scan with WeChat to join. Click the image to open the original."><img src="assets/community-wechat-20261023.png" width="966" height="1518" loading="lazy" alt="MWA-Phoenix WeChat Group QR code"></a>
+        <figcaption>Scan with WeChat to join. Click the image to open the original.</figcaption>
+      </figure>
     </div>
   </div>
 </section>
