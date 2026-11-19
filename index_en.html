@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#f8faf9">
 <meta name="description" content="Phoenix brings together scalable pretraining, world-action modeling, contact-rich skills, and reinforcement learning in a learned world model.">
-<title>Phoenix</title>
+<title>Phoenix: Learning Scene Structure Representations for Generalizable World-Action Models</title>
 <style>:root{--paper:#f8faf9;--white:#fff;--ink:#203537;--muted:#627574;--teal:#216f65;--line:#dce6e2;--mint:#eaf3ef;--blue:#bad0eb;--green:#c5ddcd;--cyan:#a8d0d5;--width:1120px;color-scheme:light}
 *{box-sizing:border-box;letter-spacing:0}html{scroll-behavior:smooth;scroll-padding-top:100px}body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;font-size:16px;line-height:1.8;-webkit-font-smoothing:antialiased}a{color:inherit;text-underline-offset:4px}button,select{font:inherit}button{cursor:pointer;color:inherit}a,button,select,summary{-webkit-tap-highlight-color:transparent}button:focus-visible,a:focus-visible,select:focus-visible,summary:focus-visible,[tabindex]:focus-visible{outline:3px solid #508fbc;outline-offset:4px}img{display:block;max-width:100%;height:auto}h1,h2,h3,p,figure{margin:0}h1,h2,h3{line-height:1.3}h2{font-size:34px;font-weight:600}h3{font-size:22px;font-weight:600}p+p{margin-top:16px}strong{font-weight:650}sub{line-height:0}code{font-size:12px;background:#edf1ef;padding:2px 4px;border-radius:3px}.wrap{width:min(100% - 64px,var(--width));margin-inline:auto;min-width:0}[hidden]{display:none!important}
 .skip{position:fixed;top:-90px;left:16px;z-index:90;background:white;padding:10px}.skip:focus{top:10px}.topbar{position:sticky;top:0;z-index:20;background:rgba(248,250,249,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}.nav-inner{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:28px}.wordmark{display:inline-flex;align-items:center;gap:10px;font-size:24px;font-weight:700;text-decoration:none;white-space:nowrap}.brand-dot{width:10px;height:10px;background:var(--teal);border-radius:2px;transform:rotate(-12deg)}nav{display:flex;gap:28px}nav a{text-decoration:none;color:var(--muted);font-size:13px;white-space:nowrap}nav a:hover,nav a[aria-current="location"]{color:var(--teal)}.eyebrow{font-size:11px;color:var(--teal);font-weight:600;line-height:1.5}
@@ -577,7 +577,7 @@ footer::before{content:"";position:absolute;top:0;height:1px;background:var(--li
     
   </div>
   <div class="university-brands" id="tsinghua-brand-row"><span class="organization-brand drl-brand"><img src="assets/drl-casia-transparent.png" alt="DRL CASIA"></span><span class="casia-brand" id="casia-brand" aria-label="Institute of Automation, Chinese Academy of Sciences"><img src="assets/casia-transparent.png" alt="CASIA"></span><span aria-label="Tsinghua University official website"><img src="assets/tsinghua-transparent.png" alt="Tsinghua University"></span><span class="nus-brand" id="nus-brand"><img src="assets/nus-transparent.png" alt="National University of Singapore"></span></div>
-  <h1 id="title"><span class="title-phoenix">Phoenix<span class="title-colon">:</span></span> <span class="title-description">Scaling Robotic Manipulation through Visual and Interaction Representations</span></h1>
+  <h1 id="title"><span class="title-phoenix">Phoenix<span class="title-colon">:</span></span> <span class="title-description">Learning Scene Structure Representations for Generalizable World-Action Models</span></h1>
 
   <div class="hero-actions"><a class="resource-button" href="https://arxiv.org/pdf/2611.24938" target="_blank" rel="noopener noreferrer">Phoenix-MWA Paper</a><a class="resource-button" href="https://github.com/Anyverse-Dynamics/Phoenix-MWA" target="_blank" rel="noopener noreferrer"><svg class="resource-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 .297C5.37.297 0 5.67 0 12.297c0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.043-1.61-4.043-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.09-.745.083-.729.083-.729 1.205.084 1.838 1.237 1.838 1.237 1.07 1.835 2.809 1.305 3.495.998.108-.776.418-1.305.762-1.605-2.665-.305-5.467-1.334-5.467-5.93 0-1.31.467-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23a11.51 11.51 0 0 1 3-.404c1.02.005 2.045.138 3 .404 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg><span>Code</span></a><a class="resource-button" href="https://huggingface.co/AnyverseDynamics" target="_blank" rel="noopener noreferrer"><span class="resource-icon huggingface-icon" aria-hidden="true">🤗</span><span>Models</span></a>
     <a class="resource-button" href="https://arxiv.org/abs/2610.18855" target="_blank" rel="noopener noreferrer" title="Interaction Latents as Actions for Contact-Rich Manipulation">ILA Paper</a>
@@ -1232,14 +1232,15 @@ footer::before{content:"";position:absolute;top:0;height:1px;background:var(--li
 </div></section>
 <section class="section" id="bibtex"><div class="wrap">
 <div class="section-heading"><div><h2 id="section-7">BibTeX</h2></div></div>
-<div class="citation-box"><div class="citation-toolbar"><span>BibTeX</span><button type="button" id="copy-bibtex" aria-label="Copy BibTeX citation">Copy</button></div>
-<pre tabindex="0" aria-label="BibTeX citation"><code id="bibtex-code">@misc{openphoenix2026phoenix,
-    title  = {Phoenix: Scaling Robotic Manipulation through Visual and Interaction Representations},
-    author = {{Anyverse Dynamics} and {OpenPhoenix Team}},
-    year   = {2026},
-    month  = {October},
-    url    = {https://openphoenix-team.github.io/Phoenix-pages},
-    note   = {Blog post}
+<div class="citation-box"><div class="citation-toolbar"><span>BibTeX · <a href="citation.bib" download>Download</a></span><button type="button" id="copy-bibtex" aria-label="Copy BibTeX citation">Copy</button></div>
+<pre tabindex="0" aria-label="BibTeX citation"><code id="bibtex-code">@misc{zheng2026phoenixlearningscenestructure,
+      title={Phoenix: Learning Scene Structure Representations for Generalizable World-Action Models},
+      author={Yupeng Zheng and Chaoyue Li and Linbo Wang and Xiang Li and Yuhang Zheng and Xiaotong Su and Songen Gu and Yichen Zhang and Zebin Xing and Shuai Tian and Jingxiang Guo and Jing Li and Zhiyong Zhao and Zhongpu Xia and Qichao Zhang and Haoran Li and Shuicheng Yan and Dongbin Zhao},
+      year={2026},
+      eprint={2611.24938},
+      archivePrefix={arXiv},
+      primaryClass={cs.RO},
+      url={https://arxiv.org/abs/2611.24938},
 }</code></pre></div>
 <span id="bibtex-copy-status" role="status" aria-live="polite"></span>
 </div></section>

@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#f8faf9">
 <meta name="description" content="Phoenix 技术报告：多教师视觉表征、世界动作模型、规模化预训练、精细交互与世界模型强化学习。">
-<title>Phoenix</title>
+<title>Phoenix: Learning Scene Structure Representations for Generalizable World-Action Models</title>
 <style>:root{--paper:#f8faf9;--white:#fff;--ink:#203537;--muted:#627574;--teal:#216f65;--line:#dce6e2;--mint:#eaf3ef;--blue:#bad0eb;--green:#c5ddcd;--cyan:#a8d0d5;--width:1120px;color-scheme:light}
 *{box-sizing:border-box;letter-spacing:0}html{scroll-behavior:smooth;scroll-padding-top:100px}body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;font-size:16px;line-height:1.8;-webkit-font-smoothing:antialiased}a{color:inherit;text-underline-offset:4px}button,select{font:inherit}button{cursor:pointer;color:inherit}a,button,select,summary{-webkit-tap-highlight-color:transparent}button:focus-visible,a:focus-visible,select:focus-visible,summary:focus-visible,[tabindex]:focus-visible{outline:3px solid #508fbc;outline-offset:4px}img{display:block;max-width:100%;height:auto}h1,h2,h3,p,figure{margin:0}h1,h2,h3{line-height:1.3}h2{font-size:34px;font-weight:600}h3{font-size:22px;font-weight:600}p+p{margin-top:16px}strong{font-weight:650}sub{line-height:0}code{font-size:12px;background:#edf1ef;padding:2px 4px;border-radius:3px}.wrap{width:min(100% - 64px,var(--width));margin-inline:auto;min-width:0}[hidden]{display:none!important}
 .skip{position:fixed;top:-90px;left:16px;z-index:90;background:white;padding:10px}.skip:focus{top:10px}.topbar{position:sticky;top:0;z-index:20;background:rgba(248,250,249,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}.nav-inner{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:28px}.wordmark{display:inline-flex;align-items:center;gap:10px;font-size:24px;font-weight:700;text-decoration:none;white-space:nowrap}.brand-dot{width:10px;height:10px;background:var(--teal);border-radius:2px;transform:rotate(-12deg)}nav{display:flex;gap:28px}nav a{text-decoration:none;color:var(--muted);font-size:13px;white-space:nowrap}nav a:hover,nav a[aria-current="location"]{color:var(--teal)}.eyebrow{font-size:11px;color:var(--teal);font-weight:600;line-height:1.5}
@@ -109,14 +109,15 @@
 .paper-result-note{font-size:14px;line-height:1.65;margin:0 0 14px;color:var(--muted)}
 #analysis .analysis-block > .detail-heading{margin-top:28px}
 </style>
+<style>.paper-citation{border:1px solid var(--line);border-radius:8px;padding:24px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.8}.paper-citation code{font:13px/1.8 ui-monospace,SFMono-Regular,Consolas,monospace;background:none;padding:0}</style>
 </head>
 <body>
 <a class="skip" href="#main">跳至正文</a>
 <header class="topbar"><div class="wrap nav-inner"><a class="wordmark" href="#top" aria-label="Phoenix 首页"><span class="brand-dot" aria-hidden="true"></span>Phoenix</a><nav aria-label="章节导航"><a href="#method">方法</a><a href="#data">数据</a><a href="#results">实验</a><a href="#demos">真机演示</a><a href="#analysis">分析</a><a href="#community">交流群</a></nav></div></header>
 <main id="main">
 <section class="masthead wrap" id="top" aria-labelledby="title">
-  <p class="eyebrow">机器人操作学习 · 技术报告 · 2026.10.13</p>
-  <h1 id="title">Phoenix</h1><p class="headline">从操作视频预训练到真机接触控制</p>
+  <p class="eyebrow">机器人操作学习 · arXiv 论文 · 2026.11.18</p>
+  <h1 id="title">Phoenix</h1><p class="headline">Learning Scene Structure Representations for Generalizable World-Action Models</p>
   <p class="hero-copy">Phoenix-MWA 联合预测视觉状态与动作，Phoenix-ILA 学习接触技能，Phoenix-PhysCanvas 支持世界模型中的强化学习。</p>
   <div class="hero-actions"><a class="button" href="https://arxiv.org/pdf/2611.24938" target="_blank" rel="noopener noreferrer">Phoenix-MWA 论文</a><a class="button primary" href="#demos">观看真机演示</a><a class="button" href="#method">探索模型方法</a><a class="text-link" href="https://github.com/Anyverse-Dynamics/Phoenix-MWA" target="_blank" rel="noopener noreferrer">代码 ↗</a><a class="text-link" href="https://huggingface.co/AnyverseDynamics" target="_blank" rel="noopener noreferrer">权重 ↗</a>
     <a class="button" href="https://arxiv.org/abs/2610.18855" target="_blank" rel="noopener noreferrer" title="Interaction Latents as Actions for Contact-Rich Manipulation">ILA 论文</a>
@@ -704,6 +705,19 @@
 </tbody>
 </table>
 </div><div class="split-stats"><div><span>试管任务 · 平均成功率</span><strong>58.33% <span>→</span> 75.00%</strong></div><div><span>积木任务 · 平均成功率</span><strong>80.00% <span>→</span> 86.67%</strong></div></div><div class="expanded-details"><h4 class="detail-heading">结果边界与局限性</h4><div class="detail-body"><p>试管任务的平均成功率从 58.33% 提升至 75.00%，积木任务从 80.00% 提升至 86.67%，分别增加 16.67 和 6.67 个百分点。两项任务在三种条件下均有改善，但收益幅度不同：试管任务的总体标准差由 8.50 pp 增至 16.33 pp，积木任务由 0.00 pp 增至 2.36 pp。当前实验只覆盖两项任务，更广泛的迁移能力与稳定性仍需检验。</p></div></div></article>
+</div></section>
+<section class="section" id="bibtex"><div class="wrap">
+<h2>BibTeX</h2>
+<p><a href="citation.bib" download>下载 BibTeX</a> · <a href="https://arxiv.org/abs/2611.24938">arXiv 论文</a></p>
+<pre class="paper-citation" tabindex="0" aria-label="BibTeX citation"><code id="bibtex-code">@misc{zheng2026phoenixlearningscenestructure,
+      title={Phoenix: Learning Scene Structure Representations for Generalizable World-Action Models},
+      author={Yupeng Zheng and Chaoyue Li and Linbo Wang and Xiang Li and Yuhang Zheng and Xiaotong Su and Songen Gu and Yichen Zhang and Zebin Xing and Shuai Tian and Jingxiang Guo and Jing Li and Zhiyong Zhao and Zhongpu Xia and Qichao Zhang and Haoran Li and Shuicheng Yan and Dongbin Zhao},
+      year={2026},
+      eprint={2611.24938},
+      archivePrefix={arXiv},
+      primaryClass={cs.RO},
+      url={https://arxiv.org/abs/2611.24938},
+}</code></pre>
 </div></section>
 <section class="section" id="contributions" aria-labelledby="contributions-heading">
   <div class="wrap">
