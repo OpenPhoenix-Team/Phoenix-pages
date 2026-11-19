@@ -547,6 +547,10 @@ footer::before{content:"";position:absolute;top:0;height:1px;background:var(--li
 #community figcaption{margin-top:12px;font-size:12px;line-height:1.6;color:var(--muted)}
 @media(max-width:680px){#community .community-layout{grid-template-columns:1fr;gap:24px}#community figure{justify-self:center}}
 </style>
+<style id="paper-results-20261119">
+.paper-result-note{font-size:14px;line-height:1.65;margin:0 0 14px;color:var(--muted)}
+#analysis .analysis-block > .detail-heading{margin-top:28px}
+</style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to article</a>
@@ -581,11 +585,11 @@ footer::before{content:"";position:absolute;top:0;height:1px;background:var(--li
   </div>
 </section>
 <section id="overview" class="overview wrap" aria-label="Overview of Phoenix world-action modeling">
-  <div class="intro-grid"><h2 id="section-1">I. Learning manipulation from large-scale experience</h2><div class="abstract-copy"><figure class="intro-benchmark-figure"><div class="figure-link"><img src="assets/phoenix-benchmark-overview-sota-20261021.webp" width="1800" height="1800" decoding="async" alt="Success-rate comparison across six benchmarks: Phoenix-MWA, open-source previous SOTA and π0.5"></div><figcaption><strong>Figure 1.</strong> Success rates on six manipulation benchmarks under the settings reported below.</figcaption></figure><p><strong>Phoenix</strong> studies how robots can learn from large collections of manipulation recordings and adapt that knowledge to physical tasks. The work, developed by Anyverse Dynamics and the reinforcement learning team at CASIA, combines a pretrained world-action model with two post-training methods: learning contact skills from demonstrations and improving policies through interaction with a learned simulator.</p>
+  <div class="intro-grid"><h2 id="section-1">I. Learning manipulation from large-scale experience</h2><div class="abstract-copy"><figure class="intro-benchmark-figure"><div class="figure-link"><img src="assets/phoenix-benchmark-overview-20261119.png" width="879" height="930" decoding="async" alt="Figure 1 from arXiv 2611.24938: Phoenix results across six benchmarks"></div><figcaption><strong>Figure 1.</strong> Six-benchmark overview from the <a href="https://arxiv.org/pdf/2611.24938#page=1">November 2026 paper</a>. Full baseline comparisons and evaluation settings are listed below.</figcaption></figure><p><strong>Phoenix</strong> studies how robots can learn from large collections of manipulation recordings and adapt that knowledge to physical tasks. The work, developed by Anyverse Dynamics and the reinforcement learning team at CASIA, combines a pretrained world-action model with two post-training methods: learning contact skills from demonstrations and improving policies through interaction with a learned simulator.</p>
 
 <p><strong>Phoenix-MWA</strong> predicts future visual states and actions from current observations and language instructions. Phoenix Encoder learns geometric and temporal features from two teachers; a causal-semantic VAE compresses these features for joint video-action generation. The data pool contains approximately <strong>54,400 raw hours</strong>, <strong>39,300 effective hours</strong>, and <strong>3.38 billion raw frames</strong> from robot demonstrations, egocentric videos, and UMI recordings.</p>
 
-<p>After task-specific post-training, Phoenix-MWA reaches <strong>94.63% on LIBERO-Plus</strong>, <strong>66.48% on LIBERO-Pro</strong>, <strong>82.67% on RoboCasa-GR1</strong>, and <strong>45.6% on Bench2Dex</strong>, ranking first in the reported comparisons. It also records <strong>72.42% on RoboTwin 2.0 C2R</strong> and <strong>26.11% on RoboDojo-RealWorld</strong>. Each result uses the corresponding benchmark’s post-training and evaluation setting.</p>
+<p>After task-specific post-training, Phoenix-MWA reaches <strong>94.8% on LIBERO-Plus</strong>, <strong>66.5% on LIBERO-Pro</strong>, <strong>82.7% on RoboCasa-GR1</strong>, and <strong>45.6% on Bench2Dex</strong>, ranking first in the reported comparisons. It also records <strong>72.4% on RoboTwin 2.0 C2R</strong> and <strong>30.0% on RoboDojo-RealWorld</strong>. Each result uses the corresponding benchmark’s post-training and evaluation setting.</p>
 
 <p><strong>Phoenix-ILA</strong> adapts the pretrained model to contact-rich tasks by learning latents that encode both motion and tactile changes. <strong>Phoenix-PhysCanvas</strong> provides a visual-tactile simulator for reinforcement learning, allowing a policy to compare the outcomes of different actions. We evaluate these two post-training methods on peeling, wiping, test-tube insertion, and block manipulation. Code and model releases are linked above.</p>
 </div></div>
@@ -734,147 +738,128 @@ footer::before{content:"";position:absolute;top:0;height:1px;background:var(--li
 </article>
 </div></section>
 <section class="section" id="results"><div class="wrap">
-  <div class="section-heading"><div><h2 id="section-5">V. Benchmark results</h2></div><p>We report results on LIBERO-Plus, LIBERO-Pro, RoboCasa-GR1, RoboTwin 2.0 Clean2Random, Bench2Dex, and RoboDojo-RealWorld. Each benchmark uses its corresponding post-training and evaluation configuration.</p></div>
+  <div class="section-heading"><div><h2 id="section-5">V. Benchmark results</h2></div><p>Updated to arXiv 2611.24938 (November 2026), Tables 1–3 and S1–S2. All values are success rates (%), with the precision reported in the paper. Each benchmark uses its own post-training and evaluation setting.</p></div>
   <div id="panel-plus" class="benchmark-panel" role="region" aria-label="LIBERO-Plus">
-<div class="benchmark-summary"><div><h3 id="section-5-1">V.1 LIBERO-Plus</h3></div><div class="benchmark-score"><strong>94.63<small>%</small></strong></div></div>
-<p class="prose benchmark-analysis">LIBERO-Plus tests seven perturbation categories: camera, robot, language, lighting, background, noise, and layout. Phoenix-MWA reaches <strong>94.63%</strong> overall success, with the highest scores among the compared methods in the robot, language, lighting, noise, and layout categories.</p>
-    <div class="bar-chart" aria-label="LIBERO-Plus success-rate comparison"><div class="bar-row"><span>Phoenix-MWA <small>w/o. Pretrain</small></span><div class="bar-track"><span class="bar-fill baseline" style="width:88.16%"></span></div><strong>88.16%</strong></div><div class="bar-row"><span>Phoenix-MWA <small>w. Pretrain</small></span><div class="bar-track"><span class="bar-fill" style="width:94.63%"></span></div><strong>94.63%</strong></div></div>
-<p class="prose benchmark-analysis">Without pretraining, Phoenix-MWA reaches <strong>88.16%</strong> overall success, including <strong>79.36%</strong> under camera perturbations and <strong>94.82%</strong> under noise perturbations. Pretraining raises overall success by <strong>6.47 percentage points</strong> to <strong>94.63%</strong>, with gains in all seven categories.</p>
-    <div class="expanded-details"><h4 class="detail-heading" id="section-5-1-1"><span>Comparison across seven distribution shifts</span><span class="summary-meta">Success rate (%)</span></h4><div class="detail-body"><div class="table-scroll" tabindex="0" role="region" aria-label="Complete LIBERO-Plus results"><table id="libero-plus-comparison" class="report-table">
-  <thead>
-    <tr><th scope="col">Method</th><th scope="col">Camera</th><th scope="col">Robot</th><th scope="col">Language</th><th scope="col">Light</th><th scope="col">Background</th><th scope="col">Noise</th><th scope="col">Layout</th><th scope="col">Total ↑</th></tr>
-  </thead>
-  <tbody>
-    <tr class="table-group"><th colspan="9" scope="row">VLA</th></tr>
-    <tr><th scope="row">OpenVLA</th><td>0.80</td><td>3.50</td><td>23.00</td><td>8.10</td><td>34.80</td><td>15.20</td><td>28.50</td><td>15.60</td></tr>
-    <tr><th scope="row">π0</th><td>13.80</td><td>6.00</td><td>58.80</td><td>85.00</td><td>81.40</td><td>79.00</td><td>68.90</td><td>53.60</td></tr>
-    <tr><th scope="row">π0-FAST</th><td>65.10</td><td>21.60</td><td>61.00</td><td>73.20</td><td>73.20</td><td>74.40</td><td>68.80</td><td>61.60</td></tr>
-
-    <tr><th scope="row">OpenVLA-OFT</th><td>56.40</td><td>31.90</td><td>79.50</td><td>88.70</td><td>93.30</td><td>75.80</td><td>74.20</td><td>69.60</td></tr>
-
-    <tr><th scope="row">StarVLA-OFT</th><td>47.00</td><td>60.10</td><td>87.00</td><td>96.30</td><td>95.30</td><td>73.10</td><td>79.20</td><td>75.00</td></tr>
-
-    <tr><th scope="row">ABot-M0</th><td>60.40</td><td>67.90</td><td>86.40</td><td>96.20</td><td>91.60</td><td>86.40</td><td>82.60</td><td>80.50</td></tr>
-
-
-
-    <tr><th scope="row">InternVLA-A1.5</th><td>83.10</td><td>55.10</td><td>86.90</td><td>96.40</td><td>98.20</td><td>95.60</td><td>85.20</td><td>84.80</td></tr>
-    <tr><th scope="row">π0.5</th><td>75.80</td><td>79.40</td><td>83.30</td><td>95.50</td><td>95.00</td><td>89.60</td><td>87.00</td><td>85.70</td></tr>
-
-
-
-    <tr><th scope="row">Qwen-RobotManip-Context</th><td><u>89.90</u></td><td>83.90</td><td>86.50</td><td><u>98.60</u></td><td><strong>99.90</strong></td><td><u>97.90</u></td><td>87.50</td><td>91.40</td></tr>
-  </tbody>
-  <tbody>
-    <tr class="table-group"><th colspan="9" scope="row">WAM</th></tr>
-    <tr><th scope="row">Fast-WAM</th><td>16.40</td><td>44.50</td><td>68.90</td><td>78.20</td><td>53.70</td><td>37.70</td><td>60.70</td><td>51.50</td></tr>
-    <tr><th scope="row">OpenWAM-α</th><td>33.80</td><td>76.10</td><td>88.00</td><td>97.00</td><td>87.10</td><td>39.80</td><td>77.50</td><td>69.20</td></tr>
-
-
-
-
-    <tr><th scope="row">Being-H0.7</th><td>82.00</td><td>59.00</td><td>82.80</td><td>97.80</td><td>90.00</td><td>93.50</td><td><u>88.50</u></td><td>82.10</td></tr>
-    <tr><th scope="row">Cosmos-Policy</th><td>75.80</td><td>63.30</td><td>81.70</td><td>96.50</td><td>88.90</td><td>92.70</td><td>82.20</td><td>82.20</td></tr>
-
-
-    <tr><th scope="row">ImageWAM</th><td>80.80</td><td>50.30</td><td>91.40</td><td>98.10</td><td>85.50</td><td>93.80</td><td>80.50</td><td>83.10</td></tr>
-    <tr><th scope="row">ABot-M0.5</th><td>70.50</td><td>87.40</td><td>88.60</td><td>94.00</td><td>89.70</td><td>75.50</td><td>85.20</td><td>83.40</td></tr>
-    <tr><th scope="row">InternW0-Δ</th><td><strong>90.60</strong></td><td><u>91.10</u></td><td><u>92.90</u></td><td>95.80</td><td><u>99.40</u></td><td>94.00</td><td>88.40</td><td><u>92.80</u></td></tr>
-    <tr class="ours"><th scope="row">Phoenix-MWA (w/o. Pretrain)</th><td>79.36</td><td>90.19</td><td>83.73</td><td>97.72</td><td>87.73</td><td>94.82</td><td>85.90</td><td>88.16</td></tr>
-    <tr class="ours"><th scope="row">Phoenix-MWA (w. Pretrain)</th><td>88.24</td><td><strong>94.00</strong></td><td><strong>95.51</strong></td><td><strong>99.91</strong></td><td>98.88</td><td><strong>98.31</strong></td><td><strong>90.23</strong></td><td><strong>94.63</strong></td></tr>
-  </tbody>
-</table>
+<div class="benchmark-summary"><div><h3 id="section-5-1">V.1 LIBERO-Plus</h3></div><div class="benchmark-score"><strong>94.8<small>%</small></strong></div></div>
+<p class="prose benchmark-analysis">LIBERO-Plus tests seven perturbation categories: camera, robot, language, lighting, background, noise, and layout. Phoenix-MWA reaches <strong>94.8%</strong> overall success, with the highest scores among the compared methods in the robot, language, lighting, noise, and layout categories.</p>
+    <div class="bar-chart" aria-label="LIBERO-Plus success-rate comparison"><div class="bar-row"><span>Phoenix-MWA <small>w/o. Pretrain</small></span><div class="bar-track"><span class="bar-fill baseline" style="width:88.2%"></span></div><strong>88.2%</strong></div><div class="bar-row"><span>Phoenix-MWA <small>w. Pretrain</small></span><div class="bar-track"><span class="bar-fill" style="width:94.8%"></span></div><strong>94.8%</strong></div></div>
+<p class="prose benchmark-analysis">Phoenix reaches <strong>94.8%</strong> aggregate success over 10,030 evaluation instances, compared with <strong>92.8%</strong> for InternW0-Δ. The no-WAM-pretraining ablation in Table 5 reaches <strong>88.2%</strong>; the full pretrained model improves this by <strong>6.6 percentage points</strong> using the rounded paper values.</p>
+    <div class="expanded-details"><h4 class="detail-heading" id="section-5-1-1"><span>Comparison across seven distribution shifts</span><span class="summary-meta">Success rate (%)</span></h4><div class="detail-body"><p class="paper-result-note">Table 1: 10,030 evaluation instances across seven perturbation categories, after adaptation on 2,000 LIBERO demonstrations. <a href="https://arxiv.org/pdf/2611.24938" target="_blank" rel="noopener noreferrer">arXiv 2611.24938</a></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Complete LIBERO-Plus results"><table id="libero-plus-comparison" class="report-table">
+<thead><tr>
+<th scope="col">Method</th>
+<th scope="col">Camera</th>
+<th scope="col">Robot</th>
+<th scope="col">Language</th>
+<th scope="col">Light</th>
+<th scope="col">Background</th>
+<th scope="col">Noise</th>
+<th scope="col">Layout</th>
+<th scope="col">Total ↑</th>
+</tr></thead><tbody>
+<tr class="table-group"><th colspan="9" scope="row">VLA</th></tr>
+<tr><th scope="row">OpenVLA</th><td>0.8</td><td>3.5</td><td>23.0</td><td>8.1</td><td>34.8</td><td>15.2</td><td>28.5</td><td>15.6</td></tr>
+<tr><th scope="row">π0</th><td>13.8</td><td>6.0</td><td>58.8</td><td>85.0</td><td>81.4</td><td>79.0</td><td>68.9</td><td>53.6</td></tr>
+<tr><th scope="row">OpenVLA-OFT</th><td>56.4</td><td>31.9</td><td>79.5</td><td>88.7</td><td>93.3</td><td>75.8</td><td>74.2</td><td>69.6</td></tr>
+<tr><th scope="row">StarVLA</th><td>47.0</td><td>60.1</td><td>87.0</td><td>96.3</td><td>95.3</td><td>73.1</td><td>79.2</td><td>75.0</td></tr>
+<tr><th scope="row">ABot-M0</th><td>60.4</td><td>67.9</td><td>86.4</td><td>96.2</td><td>91.6</td><td>86.4</td><td>82.6</td><td>80.5</td></tr>
+<tr><th scope="row">π0.5</th><td>75.8</td><td>79.4</td><td>83.3</td><td>95.5</td><td>95.0</td><td>89.6</td><td>87.0</td><td>85.7</td></tr>
+<tr><th scope="row">Qwen-RobotManip-Context</th><td><u>89.9</u></td><td>83.9</td><td>86.5</td><td><u>98.6</u></td><td><strong>99.9</strong></td><td><u>97.9</u></td><td>87.5</td><td>91.4</td></tr>
+<tr class="table-group"><th colspan="9" scope="row">WAM</th></tr>
+<tr><th scope="row">Fast-WAM</th><td>16.4</td><td>44.5</td><td>68.9</td><td>78.2</td><td>53.7</td><td>37.7</td><td>60.7</td><td>51.5</td></tr>
+<tr><th scope="row">OpenWAM-α</th><td>33.8</td><td>76.1</td><td>88.0</td><td>97.0</td><td>87.1</td><td>39.8</td><td>77.5</td><td>69.2</td></tr>
+<tr><th scope="row">Cosmos-Policy</th><td>75.8</td><td>63.3</td><td>81.7</td><td>96.5</td><td>88.9</td><td>92.7</td><td>82.2</td><td>82.2</td></tr>
+<tr><th scope="row">ImageWAM</th><td>80.8</td><td>50.3</td><td>91.4</td><td>98.1</td><td>85.5</td><td>93.8</td><td>80.5</td><td>83.1</td></tr>
+<tr><th scope="row">InternW0-Δ</th><td><strong>90.6</strong></td><td><u>91.1</u></td><td><u>92.9</u></td><td>95.8</td><td><u>99.4</u></td><td>94.0</td><td><u>88.4</u></td><td><u>92.8</u></td></tr>
+<tr class="ours"><th scope="row">Phoenix (Ours)</th><td><u>89.9</u></td><td><strong>94.0</strong></td><td><strong>94.7</strong></td><td><strong>99.9</strong></td><td>98.6</td><td><strong>98.7</strong></td><td><strong>90.0</strong></td><td><strong>94.8</strong></td></tr>
+</tbody></table>
 </div></div></div>
   </div>
-  <div id="panel-pro" class="benchmark-panel" role="region" aria-label="LIBERO-Pro"><div class="benchmark-summary"><div><h3 id="section-5-2">V.2 LIBERO-Pro</h3></div><div class="benchmark-score"><strong>66.48<small>%</small></strong></div></div><div class="expanded-details"><h4 class="detail-heading" id="section-5-2-1"><span>Full comparison</span><span class="summary-meta">Success rate (%)</span></h4><div class="detail-body"><div class="table-scroll" tabindex="0" role="region" aria-label="Complete LIBERO-Pro results"><table id="libero-pro-comparison" class="report-table">
-  <thead>
-    <tr><th scope="col">Method</th><th scope="col">Obj.</th><th scope="col">Pos.</th><th scope="col">Sem.</th><th scope="col">Task</th><th scope="col">Avg.</th></tr>
-  </thead>
-  <tbody>
-    <tr class="table-group"><th colspan="6" scope="row">VLA</th></tr>
-    <tr><th scope="row">OpenVLA-OFT</th><td>27.63</td><td>5.75</td><td>59.00</td><td>0.63</td><td>23.25</td></tr>
-    <tr><th scope="row">NORA</th><td>70.50</td><td>0.00</td><td>86.25</td><td>0.00</td><td>39.00</td></tr>
-    <tr><th scope="row">MolmoAct</th><td>76.00</td><td>1.50</td><td>85.75</td><td>1.50</td><td>41.00</td></tr>
-    <tr><th scope="row">π0</th><td>90.50</td><td>0.00</td><td>90.50</td><td>0.00</td><td>45.25</td></tr>
-    <tr><th scope="row">X-VLA</th><td>79.00</td><td>0.75</td><td>96.75</td><td>6.75</td><td>46.00</td></tr>
-    <tr><th scope="row">VLA-Adapter</th><td>73.75</td><td>0.00</td><td>90.75</td><td>19.75</td><td>46.06</td></tr>
-    <tr><th scope="row">OpenVLA</th><td><u>93.00</u></td><td>0.00</td><td>97.25</td><td>0.00</td><td>47.56</td></tr>
-    <tr><th scope="row">SimVLA</th><td>81.50</td><td>8.30</td><td><u>98.80</u></td><td>6.00</td><td>48.60</td></tr>
-    <tr><th scope="row">HABILIS Brain 0</th><td>71.85</td><td>18.05</td><td>93.00</td><td>21.45</td><td>51.09</td></tr>
-    <tr><th scope="row">π0.5</th><td><strong>96.00</strong></td><td>20.75</td><td>95.75</td><td>0.75</td><td>53.31</td></tr>
-    <tr><th scope="row">Quantile Head</th><td>85.80</td><td>31.30</td><td>97.80</td><td>26.00</td><td>60.20</td></tr>
-    <tr><th scope="row">QuoVLA</th><td>88.25</td><td>36.00</td><td><strong>99.50</strong></td><td>25.50</td><td>62.31</td></tr>
-    <tr><th scope="row">Continuous Reasoning</th><td>84.60</td><td><u>39.30</u></td><td>94.90</td><td><u>37.10</u></td><td><u>64.00</u></td></tr>
-  </tbody>
-  <tbody>
-    <tr class="table-group"><th colspan="6" scope="row">WAM</th></tr>
-    <tr><th scope="row">PatchWAM</th><td>80.80</td><td>8.80</td><td>96.80</td><td>5.00</td><td>47.85</td></tr>
-    <tr><th scope="row">Flex-π</th><td>87.25</td><td>11.75</td><td>98.25</td><td>5.00</td><td>51.00</td></tr>
-    <tr><th scope="row">GAM</th><td>75.75</td><td>32.75</td><td>95.00</td><td><strong>40.50</strong></td><td>61.00</td></tr>
-    <tr class="ours"><th scope="row">Phoenix-MWA (w. Pretrain)</th><td>91.30</td><td><strong>42.55</strong></td><td>98.50</td><td>33.55</td><td><strong>66.48</strong></td></tr>
-  </tbody>
-</table>
+  <div id="panel-pro" class="benchmark-panel" role="region" aria-label="LIBERO-Pro"><div class="benchmark-summary"><div><h3 id="section-5-2">V.2 LIBERO-Pro</h3></div><div class="benchmark-score"><strong>66.5<small>%</small></strong></div></div><div class="expanded-details"><h4 class="detail-heading" id="section-5-2-1"><span>Full comparison</span><span class="summary-meta">Success rate (%)</span></h4><div class="detail-body"><p class="paper-result-note">Table S1: four perturbation settings; 40 tasks and 50 episodes per task in each setting. The aggregate is the mean of the four settings. <a href="https://arxiv.org/pdf/2611.24938" target="_blank" rel="noopener noreferrer">arXiv 2611.24938</a></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Complete LIBERO-Pro results"><table id="libero-pro-comparison" class="report-table">
+<thead><tr>
+<th scope="col">Method</th>
+<th scope="col">Obj.</th>
+<th scope="col">Pos.</th>
+<th scope="col">Sem.</th>
+<th scope="col">Task</th>
+<th scope="col">Avg.</th>
+</tr></thead><tbody>
+<tr class="table-group"><th colspan="6" scope="row">VLA</th></tr>
+<tr><th scope="row">OpenVLA-OFT</th><td>27.6</td><td>5.8</td><td>59.0</td><td>0.6</td><td>23.3</td></tr>
+<tr><th scope="row">NORA</th><td>70.5</td><td>0.0</td><td>86.3</td><td>0.0</td><td>39.0</td></tr>
+<tr><th scope="row">MolmoAct</th><td>76.0</td><td>1.5</td><td>85.8</td><td>1.5</td><td>41.0</td></tr>
+<tr><th scope="row">π0</th><td>90.5</td><td>0.0</td><td>90.5</td><td>0.0</td><td>45.3</td></tr>
+<tr><th scope="row">X-VLA</th><td>79.0</td><td>0.8</td><td>96.8</td><td>6.8</td><td>46.0</td></tr>
+<tr><th scope="row">VLA-Adapter</th><td>73.8</td><td>0.0</td><td>90.8</td><td>19.8</td><td>46.1</td></tr>
+<tr><th scope="row">OpenVLA</th><td><u>93.0</u></td><td>0.0</td><td>97.3</td><td>0.0</td><td>47.6</td></tr>
+<tr><th scope="row">SimVLA</th><td>81.5</td><td>8.3</td><td><u>98.8</u></td><td>6.0</td><td>48.6</td></tr>
+<tr><th scope="row">HABILIS Brain 0</th><td>71.9</td><td>18.1</td><td>93.0</td><td>21.5</td><td>51.1</td></tr>
+<tr><th scope="row">π0.5</th><td><strong>96.0</strong></td><td>20.8</td><td>95.8</td><td>0.8</td><td>53.3</td></tr>
+<tr><th scope="row">Quantile Head</th><td>85.8</td><td>31.3</td><td>97.8</td><td>26.0</td><td>60.2</td></tr>
+<tr><th scope="row">QuoVLA</th><td>88.3</td><td>36.0</td><td><strong>99.5</strong></td><td>25.5</td><td>62.3</td></tr>
+<tr><th scope="row">Continuous Reasoning</th><td>84.6</td><td><u>39.3</u></td><td>94.9</td><td><u>37.1</u></td><td><u>64.0</u></td></tr>
+<tr class="table-group"><th colspan="6" scope="row">WAM</th></tr>
+<tr><th scope="row">PatchWAM</th><td>80.8</td><td>8.8</td><td>96.8</td><td>5.0</td><td>47.9</td></tr>
+<tr><th scope="row">Flex-π</th><td>87.3</td><td>11.8</td><td>98.3</td><td>5.0</td><td>51.0</td></tr>
+<tr><th scope="row">GAM</th><td>75.8</td><td>32.8</td><td>95.0</td><td><strong>40.5</strong></td><td>61.0</td></tr>
+<tr class="ours"><th scope="row">Phoenix (Ours)</th><td>91.3</td><td><strong>42.6</strong></td><td>98.5</td><td>33.6</td><td><strong>66.5</strong></td></tr>
+</tbody></table>
 </div></div></div></div>
-  <div id="panel-robocasa" class="benchmark-panel" role="region" aria-label="RoboCasa-GR1"><div class="benchmark-summary"><div><h3 id="section-5-3">V.3 RoboCasa-GR1</h3></div><div class="benchmark-score"><strong>82.67<small>%</small></strong></div></div><div class="expanded-details"><h4 class="detail-heading" id="section-5-3-1"><span>Full comparison</span><span class="summary-meta">Success rate (%)</span></h4><div class="detail-body"><div class="table-scroll" tabindex="0" role="region" aria-label="Complete RoboCasa-GR1 results"><table id="robocasa-gr1-comparison" class="report-table">
-  <thead>
-    <tr><th scope="col">Method</th><th scope="col">Art.</th><th scope="col">P&amp;P</th><th scope="col">Avg.</th></tr>
-  </thead>
-  <tbody>
-    <tr class="table-group"><th colspan="4" scope="row">VLA</th></tr>
-    <tr><th scope="row">π0.5</th><td>—</td><td>—</td><td>37.00</td></tr>
-    <tr><th scope="row">GR00T N1.6</th><td>24.20</td><td>55.40</td><td>47.60</td></tr>
-    <tr><th scope="row">StarVLA-OFT</th><td>43.70</td><td>50.40</td><td>48.80</td></tr>
-    <tr><th scope="row">StarVLA-α</th><td>49.00</td><td>55.40</td><td>53.80</td></tr>
-    <tr><th scope="row">TwinBrainVLA</th><td>56.70</td><td>53.90</td><td>54.60</td></tr>
-    <tr><th scope="row">CoRE-VLA</th><td>56.20</td><td>56.60</td><td>56.50</td></tr>
-    <tr><th scope="row">ABot-M0</th><td>61.70</td><td>57.10</td><td>58.30</td></tr>
-    <tr><th scope="row">RLDX-1</th><td>57.67</td><td>59.00</td><td>58.70</td></tr>
-    <tr><th scope="row">JoyAI-RA 0.1</th><td>71.67</td><td>60.38</td><td>63.20</td></tr>
-    <tr><th scope="row">DIAL</th><td>74.30</td><td>68.90</td><td>70.20</td></tr>
-    <tr><th scope="row">ACE-Ego-0</th><td>59.00</td><td>77.40</td><td>72.80</td></tr>
-  </tbody>
-  <tbody>
-    <tr class="table-group"><th colspan="4" scope="row">WAM</th></tr>
-    <tr><th scope="row">DiT4DiT</th><td>50.30</td><td>50.90</td><td>50.80</td></tr>
-    <tr><th scope="row">LDA-1B</th><td>56.30</td><td>55.10</td><td>55.40</td></tr>
-    <tr><th scope="row">OpenWAM-α</th><td>—</td><td>—</td><td>60.50</td></tr>
-    <tr><th scope="row">Fast-WAM-IDM</th><td>59.70</td><td>78.70</td><td>73.90</td></tr>
-    <tr><th scope="row">Fast-WAM</th><td>62.00</td><td>78.80</td><td>74.60</td></tr>
-    <tr><th scope="row">WALA</th><td><u>80.33</u></td><td>73.45</td><td>75.17</td></tr>
-    <tr><th scope="row">LAWA (Full)</th><td>73.00</td><td><u>83.44</u></td><td>80.80</td></tr>
-    <tr><th scope="row">CF-WAM</th><td>75.00</td><td><strong>85.00</strong></td><td><u>82.50</u></td></tr>
-    <tr class="ours"><th scope="row">Phoenix-MWA (w. Pretrain)</th><td><strong>84.33</strong></td><td>82.11</td><td><strong>82.67</strong></td></tr>
-  </tbody>
-</table>
+  <div id="panel-robocasa" class="benchmark-panel" role="region" aria-label="RoboCasa-GR1"><div class="benchmark-summary"><div><h3 id="section-5-3">V.3 RoboCasa-GR1</h3></div><div class="benchmark-score"><strong>82.7<small>%</small></strong></div></div><div class="expanded-details"><h4 class="detail-heading" id="section-5-3-1"><span>Full comparison</span><span class="summary-meta">Success rate (%)</span></h4><div class="detail-body"><p class="paper-result-note">Table S2: 24 tasks, 1,000 demonstrations and 50 evaluation rollouts per task. The aggregate weights all 24 tasks equally. <a href="https://arxiv.org/pdf/2611.24938" target="_blank" rel="noopener noreferrer">arXiv 2611.24938</a></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Complete RoboCasa-GR1 results"><table id="robocasa-gr1-comparison" class="report-table">
+<thead><tr>
+<th scope="col">Method</th>
+<th scope="col">Art.</th>
+<th scope="col">P&amp;P</th>
+<th scope="col">Avg.</th>
+</tr></thead><tbody>
+<tr class="table-group"><th colspan="4" scope="row">VLA</th></tr>
+<tr><th scope="row">π0.5</th><td>–</td><td>–</td><td>37.0</td></tr>
+<tr><th scope="row">GR00T N1.6</th><td>24.2</td><td>55.4</td><td>47.6</td></tr>
+<tr><th scope="row">StarVLA</th><td>43.7</td><td>50.4</td><td>48.8</td></tr>
+<tr><th scope="row">StarVLA-α</th><td>49.0</td><td>55.4</td><td>53.8</td></tr>
+<tr><th scope="row">TwinBrainVLA</th><td>56.7</td><td>53.9</td><td>54.6</td></tr>
+<tr><th scope="row">CoRE-VLA</th><td>56.2</td><td>56.6</td><td>56.5</td></tr>
+<tr><th scope="row">ABot-M0</th><td>61.7</td><td>57.1</td><td>58.3</td></tr>
+<tr><th scope="row">RLDX-1</th><td>57.7</td><td>59.0</td><td>58.7</td></tr>
+<tr><th scope="row">JoyAI-RA 0.1</th><td>71.7</td><td>60.4</td><td>63.2</td></tr>
+<tr><th scope="row">DIAL</th><td>74.3</td><td>68.9</td><td>70.2</td></tr>
+<tr><th scope="row">ACE-Ego-0</th><td>59.0</td><td>77.4</td><td>72.8</td></tr>
+<tr class="table-group"><th colspan="4" scope="row">WAM</th></tr>
+<tr><th scope="row">DiT4DiT</th><td>50.3</td><td>50.9</td><td>50.8</td></tr>
+<tr><th scope="row">LDA-1B</th><td>56.3</td><td>55.1</td><td>55.4</td></tr>
+<tr><th scope="row">OpenWAM-α</th><td>–</td><td>–</td><td>60.5</td></tr>
+<tr><th scope="row">Fast-WAM-IDM</th><td>59.7</td><td>78.7</td><td>73.9</td></tr>
+<tr><th scope="row">Fast-WAM</th><td>62.0</td><td>78.8</td><td>74.6</td></tr>
+<tr><th scope="row">WALA</th><td><u>80.3</u></td><td>73.5</td><td>75.2</td></tr>
+<tr><th scope="row">LAWA (Full)</th><td>73.0</td><td><u>83.4</u></td><td>80.8</td></tr>
+<tr><th scope="row">CF-WAM</th><td>75.0</td><td><strong>85.0</strong></td><td><u>82.5</u></td></tr>
+<tr class="ours"><th scope="row">Phoenix (Ours)</th><td><strong>84.3</strong></td><td>82.1</td><td><strong>82.7</strong></td></tr>
+</tbody></table>
 </div></div></div></div>
 
 <div id="panel-robotwin" class="benchmark-panel" role="region" aria-label="RoboTwin 2.0 C2R">
-<div class="benchmark-summary"><div><h3 id="section-5-4">V.4 RoboTwin 2.0 C2R</h3></div><div class="benchmark-score"><strong>72.42<small>%</small></strong></div></div>
+<div class="benchmark-summary"><div><h3 id="section-5-4">V.4 RoboTwin 2.0 C2R</h3></div><div class="benchmark-score"><strong>72.4<small>%</small></strong></div></div>
 <div class="expanded-details"><h4 class="detail-heading" id="section-5-4-1"><span>Full comparison</span><span class="summary-meta">Success rate (%)</span></h4><div class="detail-body">
+<p class="paper-result-note">Table 1: 50 clean demonstrations per task, followed by 100 randomized evaluation rollouts per task across 50 tasks (5,000 episodes). <a href="https://arxiv.org/pdf/2611.24938" target="_blank" rel="noopener noreferrer">arXiv 2611.24938</a></p>
 <div class="table-scroll" tabindex="0" role="region" aria-label="Complete RoboTwin 2.0 Clean2Random results"><table id="robotwin-c2r-comparison" class="report-table">
-<thead><tr><th scope="col">Method</th><th scope="col">Clean2Random</th></tr></thead>
-<tbody>
+<thead><tr>
+<th scope="col">Method</th>
+<th scope="col">Clean2Random</th>
+</tr></thead><tbody>
 <tr class="table-group"><th colspan="2" scope="row">VLA</th></tr>
-<tr><th scope="row">StarVLA</th><td>10.60</td></tr>
-<tr><th scope="row">GR00T-N1.7</th><td>20.70</td></tr>
-<tr><th scope="row">X-VLA</th><td>20.90</td></tr>
-<tr><th scope="row">Spatial Forcing</th><td>26.70</td></tr>
-<tr><th scope="row">ABot-M0</th><td>36.00</td></tr>
-<tr><th scope="row">π0.5</th><td>47.90</td></tr>
-<tr><th scope="row">GigaBrain-0.7</th><td>67.90</td></tr>
-<tr><th scope="row">Qwen-RobotManip-Context</th><td>69.40</td></tr>
-</tbody>
-<tbody>
+<tr><th scope="row">π0</th><td>16.3</td></tr>
+<tr><th scope="row">StarVLA</th><td>10.6</td></tr>
+<tr><th scope="row">ABot-M0</th><td>36.0</td></tr>
+<tr><th scope="row">π0.5</th><td>46.0</td></tr>
+<tr><th scope="row">Qwen-RobotManip-Context</th><td>69.4</td></tr>
 <tr class="table-group"><th colspan="2" scope="row">WAM</th></tr>
-<tr><th scope="row">Fast-WAM</th><td>1.90</td></tr>
-<tr><th scope="row">AHA-WAM</th><td>3.20</td></tr>
-<tr><th scope="row">X-WAM</th><td>25.80</td></tr>
-<tr><th scope="row">4D-WAM</th><td>41.80</td></tr>
-<tr><th scope="row">OpenWAM-α</th><td>48.70</td></tr>
-<tr><th scope="row">InternW0-Δ</th><td><u>71.90</u></td></tr>
-<tr class="ours"><th scope="row">Phoenix-MWA (w. Pretrain)</th><td><strong>72.42</strong></td></tr>
-</tbody>
-</table></div>
+<tr><th scope="row">Fast-WAM</th><td>1.9</td></tr>
+<tr><th scope="row">OpenWAM-α</th><td>48.7</td></tr>
+<tr><th scope="row">InternW0-Δ</th><td><u>71.9</u></td></tr>
+<tr class="ours"><th scope="row">Phoenix (Ours)</th><td><strong>72.4</strong></td></tr>
+</tbody></table></div>
 
 </div></div></div>
 
@@ -960,30 +945,100 @@ footer::before{content:"";position:absolute;top:0;height:1px;background:var(--li
 </div>
 </div>
 <div id="panel-robodojo-realworld" class="benchmark-panel" role="region" aria-labelledby="section-5-6">
-<div class="benchmark-summary"><div><h3 id="section-5-6">V.6 RoboDojo-RealWorld</h3></div><div class="benchmark-score"><strong>26.11<small>%</small></strong></div></div>
+<div class="benchmark-summary"><div><h3 id="section-5-6">V.6 RoboDojo-RealWorld</h3></div><div class="benchmark-score"><strong>30.0<small>%</small></strong></div></div>
 <div class="expanded-details"><h4 class="detail-heading"><span>Full comparison</span><span class="summary-meta">Success rate (%)</span></h4><div class="detail-body">
+<p class="paper-result-note">Table 3: 18 real-world tasks, six per embodiment, with 100 demonstrations and 10 evaluation trials per task (180 trials). The mean weights tasks and embodiments equally. <a href="https://arxiv.org/pdf/2611.24938" target="_blank" rel="noopener noreferrer">arXiv 2611.24938</a></p>
 <div class="table-scroll" tabindex="0" role="region" aria-label="RoboDojo-RealWorld success rates"><table id="robodojo-realworld-comparison" class="report-table">
-<thead><tr><th scope="col">Method</th><th scope="col">ARX X5</th><th scope="col">Piper</th><th scope="col">Piper X</th><th scope="col">Average</th></tr></thead>
-<tbody><tr class="table-group"><th colspan="5" scope="row">VLA</th></tr>
-<tr><th scope="row">DM0</th><td>0.00%</td><td>0.00%</td><td>0.00%</td><td>0.00%</td></tr>
-<tr><th scope="row">Spirit v1.5</th><td>0.00%</td><td>1.70%</td><td>0.00%</td><td>0.60%</td></tr>
-<tr><th scope="row">StarVLA</th><td>0.00%</td><td>5.00%</td><td>0.00%</td><td>1.70%</td></tr>
-<tr><th scope="row">π0</th><td>0.00%</td><td>5.00%</td><td>0.00%</td><td>1.70%</td></tr>
-<tr><th scope="row">GR00T-N1.7</th><td>1.70%</td><td>3.30%</td><td>0.00%</td><td>1.70%</td></tr>
-<tr><th scope="row">X-VLA</th><td>1.70%</td><td>8.30%</td><td>0.00%</td><td>3.30%</td></tr>
-<tr><th scope="row">Xiaomi-Robotics-0</th><td>8.30%</td><td>3.30%</td><td>0.00%</td><td>3.90%</td></tr>
-<tr><th scope="row">GalaxeaVLA (G0)</th><td>0.00%</td><td>13.30%</td><td>0.00%</td><td>4.40%</td></tr>
-<tr><th scope="row">InternVLA-A1</th><td>3.30%</td><td>18.30%</td><td>0.00%</td><td>7.20%</td></tr>
-<tr><th scope="row">π0.5</th><td>13.30%</td><td>21.70%</td><td>3.30%</td><td>12.80%</td></tr>
-</tbody><tbody><tr class="table-group"><th colspan="5" scope="row">WAM</th></tr>
-<tr><th scope="row">OpenWAM-α</th><td><strong>23.30%</strong></td><td><u>36.70%</u></td><td><u>13.30%</u></td><td><u>24.40%</u></td></tr>
-<tr class="ours"><th scope="row">Phoenix-MWA (w. Pretrain)</th><td><u>16.67%</u></td><td><strong>48.33%</strong></td><td><strong>13.33%</strong></td><td><strong>26.11%</strong></td></tr>
+<thead><tr>
+<th scope="col">Method</th>
+<th scope="col">ARX X5</th>
+<th scope="col">Piper</th>
+<th scope="col">Piper X</th>
+<th scope="col">Avg.</th>
+</tr></thead><tbody>
+<tr class="table-group"><th colspan="5" scope="row">VLA</th></tr>
+<tr><th scope="row">StarVLA</th><td>0.0</td><td>5.0</td><td>0.0</td><td>1.7</td></tr>
+<tr><th scope="row">π0</th><td>0.0</td><td>5.0</td><td>0.0</td><td>1.7</td></tr>
+<tr><th scope="row">X-VLA</th><td>1.7</td><td>8.3</td><td>0.0</td><td>3.3</td></tr>
+<tr><th scope="row">π0.5</th><td>13.3</td><td>21.7</td><td>3.3</td><td>12.8</td></tr>
+<tr class="table-group"><th colspan="5" scope="row">WAM</th></tr>
+<tr><th scope="row">OpenWAM-α</th><td><u>23.3</u></td><td><strong>36.7</strong></td><td><u>13.3</u></td><td><u>24.4</u></td></tr>
+<tr class="ours"><th scope="row">Phoenix (Ours)</th><td><strong>33.3</strong></td><td><u>31.7</u></td><td><strong>25.0</strong></td><td><strong>30.0</strong></td></tr>
 </tbody></table></div></div></div></div>
 </div></section>
 
 <section class="section" id="analysis"><div class="wrap">
-  <div class="section-heading"><div><h2 id="section-6">VI. Analysis</h2></div><p>We measure changes in visual features and future-video prediction, then evaluate contact post-training and simulator-based reinforcement learning on real tasks.</p></div>
-  <article class="analysis-block"><div class="subsection-heading"><h3 id="section-6-1">VI.1 Visual feature analysis</h3></div><p class="prose">Phoenix Encoder starts from the DINO backbone in VGGT-Ω, denoted DINOv3 (VGGT-Ω). This initialization has a lower effective rank than the original DINOv3. We test whether dual-teacher distillation spreads feature variation across more directions while retaining the geometric initialization.</p><p class="prose">We sample 10,000 frames each from the pretraining validation set and LIBERO-Plus, using identical frames for all three encoders. CLS and Patch Mean refer to the CLS token and the average of the remaining image patch tokens, respectively. We compute effective rank from the singular values of the centered feature matrices to measure how evenly feature variation is distributed across principal directions.</p><figure><div class="figure-link"><img loading="lazy" src="assets/figure8-effective-rank-centered.webp" width="3156" height="1285" alt="Effective rank of DINOv3, DINOv3 (VGGT-Ω), and Phoenix Encoder across two data domains"></div><figcaption><strong>Figure 9.</strong> Effective rank before and after dual-teacher distillation on two data domains.</figcaption></figure><p class="prose analysis-summary">Compared with DINOv3 (VGGT-Ω), the CLS / Patch Mean effective ranks increase by <strong>5.81% / 7.86%</strong> on the pretraining validation set and <strong>2.44% / 6.55%</strong> on LIBERO-Plus. This measures a more even distribution of feature variation. It is evidence about the representation, not a direct measure of manipulation performance.</p></article>
+  <div class="section-heading"><div><h2 id="section-6">VI. Analysis</h2></div><p>The Phoenix paper reports scene-representation probing, ablations, data efficiency, and future-video prediction. The ILA and PhysCanvas sections below retain their separate project results.</p></div>
+  <article class="analysis-block">
+<div class="subsection-heading"><h3 id="section-6-1">VI.1 Representation and data efficiency</h3></div>
+<p class="prose">Tables 4–5 and Figures 4–5 evaluate frozen scene representations, representation ablations, pretraining scale, and post-training data efficiency. <a href="https://arxiv.org/pdf/2611.24938#page=6" target="_blank" rel="noopener noreferrer">arXiv 2611.24938</a>.</p>
+<h4 class="detail-heading">Frozen-feature probing (Table 4)</h4>
+<p class="prose">Phoenix Encoder has the best average rank (1.80) and direct future-feature prediction score (34.42%). Depth and instance are losses; view, direct prediction, and path integration are higher-is-better readouts.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Frozen-feature probing (Table 4)"><table id="scene-probing-results" class="report-table">
+<thead><tr>
+<th scope="col">Encoder</th>
+<th scope="col">Depth ↓</th>
+<th scope="col">Instance ↓</th>
+<th scope="col">View ↑</th>
+<th scope="col">Direct ↑</th>
+<th scope="col">Path ↑</th>
+<th scope="col">Avg. rank ↓</th>
+</tr></thead><tbody>
+<tr><th scope="row">DINOv2-L</th><td>0.1422</td><td><strong>1.3828</strong></td><td>95.57</td><td><u>23.73</u></td><td>9.00</td><td><u>2.60</u></td></tr>
+<tr><th scope="row">Fast3R</th><td><strong>0.1386</strong></td><td>1.6072</td><td><strong>98.08</strong></td><td>1.33</td><td>1.90</td><td>3.40</td></tr>
+<tr><th scope="row">VideoMAE-L</th><td>0.2968</td><td>4.1571</td><td>91.18</td><td>5.31</td><td>6.85</td><td>5.60</td></tr>
+<tr><th scope="row">V-JEPA 2-L</th><td>0.2708</td><td>2.9211</td><td>92.56</td><td>6.25</td><td><strong>15.88</strong></td><td>3.80</td></tr>
+<tr><th scope="row">Qwen2.5-VL</th><td>0.2244</td><td>2.9476</td><td>93.85</td><td>17.12</td><td>9.03</td><td>3.80</td></tr>
+<tr class="ours"><th scope="row">Phoenix Encoder</th><td><u>0.1411</u></td><td><u>1.5738</u></td><td><u>96.18</u></td><td><strong>34.42</strong></td><td><u>15.01</u></td><td><strong>1.80</strong></td></tr>
+</tbody></table></div>
+<h4 class="detail-heading">Representation ablations (Table 5)</h4>
+<p class="prose">All configurations retain the appearance VAE and are post-trained without WAM pretraining. With Phoenix Encoder fixed, replacing PCA48 with CS-VAE raises LIBERO-Plus success from 84.4% to 88.2%.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Representation ablations (Table 5)"><table id="representation-ablation-results" class="report-table">
+<thead><tr>
+<th scope="col">Encoder / Compression</th>
+<th scope="col">Camera</th>
+<th scope="col">Robot</th>
+<th scope="col">Language</th>
+<th scope="col">Light</th>
+<th scope="col">Background</th>
+<th scope="col">Noise</th>
+<th scope="col">Layout</th>
+<th scope="col">Total ↑</th>
+</tr></thead><tbody>
+<tr><th scope="row">VAE only</th><td>75.5</td><td>69.0</td><td>81.9</td><td>84.7</td><td>55.0</td><td>88.3</td><td>79.0</td><td>76.9</td></tr>
+<tr><th scope="row">VGGT-Ω / PCA48</th><td><strong>81.9</strong></td><td>60.4</td><td>64.5</td><td>94.2</td><td>85.0</td><td>90.0</td><td>77.9</td><td>78.3</td></tr>
+<tr><th scope="row">V-JEPA 2.1-L / PCA48</th><td>77.1</td><td><u>72.3</u></td><td>76.9</td><td><strong>98.7</strong></td><td><u>86.9</u></td><td>92.8</td><td>83.0</td><td>83.2</td></tr>
+<tr><th scope="row">DINOv3 / PCA48</th><td>61.7</td><td>66.2</td><td>68.3</td><td>88.2</td><td>79.2</td><td>86.1</td><td>76.6</td><td>74.4</td></tr>
+<tr class="ours"><th scope="row">Phoenix Encoder / PCA48</th><td>79.0</td><td>70.2</td><td><u>82.8</u></td><td><u>98.5</u></td><td>86.4</td><td><u>94.4</u></td><td><u>83.3</u></td><td><u>84.4</u></td></tr>
+<tr class="ours"><th scope="row">Phoenix Encoder / CS-VAE</th><td><u>79.4</u></td><td><strong>90.2</strong></td><td><strong>83.7</strong></td><td>97.7</td><td><strong>87.7</strong></td><td><strong>94.8</strong></td><td><strong>85.9</strong></td><td><strong>88.2</strong></td></tr>
+</tbody></table></div>
+<h4 class="detail-heading">Pretraining data scale (Figure 4)</h4>
+<p class="prose">RoboTwin 2.0 C2R success (%). Fast-WAM is pretrained under the same data-scaling protocol as Phoenix here; its 47.7% full-data result uses a different training setting from the original Fast-WAM result in the benchmark comparison.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Pretraining data scale (Figure 4)"><table id="pretraining-scaling-results" class="report-table">
+<thead><tr>
+<th scope="col">Method</th>
+<th scope="col">0%</th>
+<th scope="col">25%</th>
+<th scope="col">50%</th>
+<th scope="col">100%</th>
+</tr></thead><tbody>
+<tr><th scope="row">Fast-WAM</th><td><u>1.9</u></td><td><u>36.3</u></td><td><u>44.8</u></td><td><u>47.7</u></td></tr>
+<tr class="ours"><th scope="row">Phoenix</th><td><strong>4.6</strong></td><td><strong>45.4</strong></td><td><strong>67.7</strong></td><td><strong>72.4</strong></td></tr>
+</tbody></table></div>
+<h4 class="detail-heading">Post-training data efficiency (Figure 5)</h4>
+<p class="prose">Starting from the same full-data pretrained checkpoint, each benchmark uses 25%, 50%, 75%, or 100% of its task demonstrations. Full data means 50 demonstrations per task. With only 25%, Phoenix reaches 91.1% on LIBERO-Plus and 58.6% on RoboTwin C2R.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Post-training data efficiency (Figure 5)"><table id="posttraining-efficiency-results" class="report-table">
+<thead><tr>
+<th scope="col">Benchmark</th>
+<th scope="col">25%</th>
+<th scope="col">50%</th>
+<th scope="col">75%</th>
+<th scope="col">100%</th>
+</tr></thead><tbody>
+<tr><th scope="row">LIBERO-Plus</th><td>91.1</td><td>94.0</td><td>94.4</td><td>94.8</td></tr>
+<tr><th scope="row">RoboTwin 2.0 C2R</th><td>58.6</td><td>66.1</td><td>66.4</td><td>72.4</td></tr>
+</tbody></table></div>
+</article>
   <article class="analysis-block"><div class="subsection-heading"><h3 id="section-6-2">VI.2 Future-video prediction</h3></div><p class="prose">We compare FastWAM with Phoenix-MWA trained with and without pretraining on LIBERO-Plus and RoboTwin 2.0 C2R. The comparison measures whether the visual representation and pretraining improve future-video prediction.</p><p class="prose">We evaluate three models on 200 complete windows per benchmark, matched by task and window identifiers. Only the eight future frames are scored against each model’s own rollout observations. Scores are averaged equally across views (main and wrist for LIBERO-Plus; main, left wrist, and right wrist for RoboTwin) and then across windows.</p><div class="table-scroll" tabindex="0" role="region" aria-label="Video prediction quality"><table class="report-table" id="video-prediction-quality">
 <thead>
 <tr>

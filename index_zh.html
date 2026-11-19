@@ -105,6 +105,10 @@
 #community figcaption{margin-top:12px;font-size:12px;line-height:1.6;color:var(--muted)}
 @media(max-width:680px){#community .community-layout{grid-template-columns:1fr;gap:24px}#community figure{justify-self:center}}
 </style>
+<style id="paper-results-20261119">
+.paper-result-note{font-size:14px;line-height:1.65;margin:0 0 14px;color:var(--muted)}
+#analysis .analysis-block > .detail-heading{margin-top:28px}
+</style>
 </head>
 <body>
 <a class="skip" href="#main">跳至正文</a>
@@ -118,7 +122,7 @@
     <a class="button" href="https://arxiv.org/abs/2610.18855" target="_blank" rel="noopener noreferrer" title="Interaction Latents as Actions for Contact-Rich Manipulation">ILA 论文</a>
     <a class="button" href="https://arxiv.org/abs/2610.28613" target="_blank" rel="noopener noreferrer" title="Physical Canvas: A Vision Tactile World Model For Robot Policy Evaluation And Learning">PhysCanvas 论文</a>
   </div>
-  <div class="hero-metrics" aria-label="基准成功率"><div><strong>94.63<span>%</span></strong><span>LIBERO-Plus</span></div><div><strong>66.48<span>%</span></strong><span>LIBERO-Pro</span></div><div><strong>82.67<span>%</span></strong><span>RoboCasa-GR1</span></div><div><strong>72.42<span>%</span></strong><span>RoboTwin 2.0 C2R</span></div><div><strong>45.6<span>%</span></strong><span>Bench2Dex</span></div><div><strong>26.11<span>%</span></strong><span>RoboDojo-RealWorld</span></div></div>
+  <div class="hero-metrics" aria-label="基准成功率"><div><strong>94.8<span>%</span></strong><span>LIBERO-Plus</span></div><div><strong>66.5<span>%</span></strong><span>LIBERO-Pro</span></div><div><strong>82.7<span>%</span></strong><span>RoboCasa-GR1</span></div><div><strong>72.4<span>%</span></strong><span>RoboTwin 2.0 C2R</span></div><div><strong>45.6<span>%</span></strong><span>Bench2Dex</span></div><div><strong>30.0<span>%</span></strong><span>RoboDojo-RealWorld</span></div></div>
   <p class="metric-note">Phoenix-MWA，在各基准对应的后训练配置下评估。</p>
 </section>
 <section class="overview wrap" aria-label="Phoenix 世界动作模型总览">
@@ -127,7 +131,7 @@
 
 <p><strong>Phoenix-MWA</strong> 根据当前图像、机器人状态和语言指令，联合预测未来视觉状态与动作。Phoenix Encoder 从几何和时序教师中蒸馏特征，CS-VAE 将特征压缩为适合生成的潜变量。数据池包含机器人示范、第一人称视频和 UMI 记录，共约 <strong>5.44 万小时原始视频</strong>、<strong>3.93 万小时有效数据</strong>和 <strong>33.8 亿原始帧</strong>。</p>
 
-<p>在各基准对应的后训练配置下，Phoenix-MWA 在 <strong>LIBERO-Plus、LIBERO-Pro、RoboCasa-GR1 和 Bench2Dex</strong> 上分别取得 <strong>94.63%、66.48%、82.67% 和 45.6%</strong> 的成功率，在所报告的比较中排名第一；在 <strong>RoboTwin 2.0 C2R</strong> 和 <strong>RoboDojo-RealWorld</strong> 上分别取得 <strong>72.42%</strong> 和 <strong>26.11%</strong>。具体设置与对比方法见实验部分。</p>
+<p>在各基准对应的后训练配置下，Phoenix-MWA 在 <strong>LIBERO-Plus、LIBERO-Pro、RoboCasa-GR1 和 Bench2Dex</strong> 上分别取得 <strong>94.8%、66.5%、82.7% 和 45.6%</strong> 的成功率，在所报告的比较中排名第一；在 <strong>RoboTwin 2.0 C2R</strong> 和 <strong>RoboDojo-RealWorld</strong> 上分别取得 <strong>72.4%</strong> 和 <strong>30.0%</strong>。具体设置与对比方法见实验部分。</p>
 
 <p><strong>Phoenix-ILA</strong> 从同步的运动与触觉示范中学习交互潜变量，用于削皮、擦拭等接触密集任务。<strong>Phoenix-PhysCanvas</strong> 根据动作预测视觉与触觉反馈，让策略在仿真中比较不同动作的结果，并通过强化学习更新。后训练后的策略再回到真机上评估。</p>
 </div></div>
@@ -246,145 +250,128 @@
 </div><p>状态使用末端绝对位姿及连续 6D 旋转表示。动作使用关节、夹爪绝对目标，以及参考坐标系下的平移增量和末端局部坐标系下的旋转向量。维数表示接口容量，不代表每条样本均有完整监督。</p></div></div>
 </div></section>
 <section class="section" id="results"><div class="wrap">
-  <div class="section-heading"><div><p class="eyebrow">03 / Benchmarks</p><h2>六项操作基准</h2></div><p>报告 LIBERO-Plus、LIBERO-Pro、RoboCasa-GR1、RoboTwin 2.0 C2R、Bench2Dex 和 RoboDojo-RealWorld 六项结果。各基准采用对应的后训练与评估设置。</p></div>
+  <div class="section-heading"><div><p class="eyebrow">03 / Benchmarks</p><h2>六项操作基准</h2></div><p>结果更新至 2026 年 11 月论文 arXiv 2611.24938，采用表 1–3 和表 S1–S2 的数值与精度。各基准采用对应的后训练与评测设置，单位均为成功率（%）。</p></div>
   <div class="benchmark-links" aria-label="基准跳转"><a href="#panel-plus">LIBERO-Plus</a><a href="#panel-pro">LIBERO-Pro</a><a href="#panel-robocasa">RoboCasa-GR1</a><a href="#panel-robotwin">RoboTwin 2.0 C2R</a><a href="#panel-bench2dex">Bench2Dex</a><a href="#panel-robodojo-realworld">RoboDojo-RealWorld</a></div>
   <div id="panel-plus" class="benchmark-panel" role="region" aria-label="LIBERO-Plus">
-    <div class="benchmark-summary"><div><p class="eyebrow">Seven Distribution Shifts</p><h3>LIBERO-Plus</h3><p>相机、初始状态、语言、光照、背景、噪声与布局扰动。</p></div><div class="benchmark-score"><strong>94.63<small>%</small></strong><span>Phoenix-MWA · w. Pretrain</span></div></div>
-    <div class="bar-chart" aria-label="LIBERO-Plus 成功率对比"><div class="bar-row"><span>Phoenix-MWA <small>w/o. Pretrain</small></span><div class="bar-track"><span class="bar-fill baseline" style="width:88.16%"></span></div><strong>88.16%</strong></div><div class="bar-row"><span>Phoenix-MWA <small>w. Pretrain</small></span><div class="bar-track"><span class="bar-fill" style="width:94.63%"></span></div><strong>94.63%</strong></div></div><p class="result-callout">预训练后，总成功率提高 <strong>6.47 pp</strong>。</p>
-    <div class="expanded-details"><h4 class="detail-heading"><span>完整对比 · 七类扰动</span><span class="summary-meta">Success rate (%)</span></h4><div class="detail-body"><div class="table-scroll" tabindex="0" role="region" aria-label="LIBERO-Plus 完整结果表"><table id="libero-plus-comparison" class="report-table">
-  <thead>
-    <tr><th scope="col">Method</th><th scope="col">Camera</th><th scope="col">Robot</th><th scope="col">Language</th><th scope="col">Light</th><th scope="col">Background</th><th scope="col">Noise</th><th scope="col">Layout</th><th scope="col">Total ↑</th></tr>
-  </thead>
-  <tbody>
-    <tr class="table-group"><th colspan="9" scope="row">VLA</th></tr>
-    <tr><th scope="row">OpenVLA</th><td>0.80</td><td>3.50</td><td>23.00</td><td>8.10</td><td>34.80</td><td>15.20</td><td>28.50</td><td>15.60</td></tr>
-    <tr><th scope="row">π0</th><td>13.80</td><td>6.00</td><td>58.80</td><td>85.00</td><td>81.40</td><td>79.00</td><td>68.90</td><td>53.60</td></tr>
-    <tr><th scope="row">π0-FAST</th><td>65.10</td><td>21.60</td><td>61.00</td><td>73.20</td><td>73.20</td><td>74.40</td><td>68.80</td><td>61.60</td></tr>
-    <tr><th scope="row">RIPT-VLA</th><td>55.20</td><td>31.20</td><td>77.60</td><td>88.40</td><td>91.60</td><td>73.50</td><td>74.20</td><td>68.40</td></tr>
-    <tr><th scope="row">OpenVLA-OFT</th><td>56.40</td><td>31.90</td><td>79.50</td><td>88.70</td><td>93.30</td><td>75.80</td><td>74.20</td><td>69.60</td></tr>
-    <tr><th scope="row">StarVLA</th><td>52.50</td><td>49.80</td><td>88.50</td><td>95.70</td><td>95.70</td><td>73.00</td><td>76.90</td><td>74.10</td></tr>
-    <tr><th scope="row">StarVLA-OFT</th><td>47.00</td><td>60.10</td><td>87.00</td><td>96.30</td><td>95.30</td><td>73.10</td><td>79.20</td><td>75.00</td></tr>
-    <tr><th scope="row">VLA-JEPA</th><td>63.30</td><td>67.10</td><td>85.40</td><td>95.60</td><td>93.60</td><td>66.30</td><td>85.10</td><td>79.50</td></tr>
-    <tr><th scope="row">ABot-M0</th><td>60.40</td><td>67.90</td><td>86.40</td><td>96.20</td><td>91.60</td><td>86.40</td><td>82.60</td><td>80.50</td></tr>
-    <tr><th scope="row">FoMoVLA</th><td>64.00</td><td>62.20</td><td><u>94.00</u></td><td>94.10</td><td>96.20</td><td>82.20</td><td>79.60</td><td>80.50</td></tr>
-    <tr><th scope="row">VLAct</th><td>73.90</td><td>68.40</td><td>81.50</td><td>96.70</td><td>96.70</td><td>86.00</td><td>83.30</td><td>82.60</td></tr>
-    <tr><th scope="row">VLANeXt</th><td><u>90.40</u></td><td>65.70</td><td>81.80</td><td>95.90</td><td>82.50</td><td>94.10</td><td>80.80</td><td>83.90</td></tr>
-    <tr><th scope="row">InternVLA-A1.5</th><td>83.10</td><td>55.10</td><td>86.90</td><td>96.40</td><td>98.20</td><td>95.60</td><td>85.20</td><td>84.80</td></tr>
-    <tr><th scope="row">π0.5</th><td>75.80</td><td>79.40</td><td>83.30</td><td>95.50</td><td>95.00</td><td>89.60</td><td>87.00</td><td>85.70</td></tr>
-    <tr><th scope="row">ACoT-VLA</th><td>72.60</td><td>82.60</td><td>87.50</td><td>97.70</td><td>96.50</td><td>87.80</td><td>88.10</td><td>86.60</td></tr>
-    <tr><th scope="row">Quantile Head</th><td>71.60</td><td>80.70</td><td>87.60</td><td>96.10</td><td>97.20</td><td>94.80</td><td>87.80</td><td>87.10</td></tr>
-    <tr><th scope="row">QuoVLA</th><td>82.30</td><td>87.60</td><td>88.20</td><td>98.20</td><td>95.90</td><td>90.80</td><td><u>89.30</u></td><td>90.30</td></tr>
-    <tr><th scope="row">Qwen-RobotManip-Context</th><td>89.90</td><td>83.90</td><td>86.50</td><td><u>98.60</u></td><td><strong>99.90</strong></td><td><u>97.90</u></td><td>87.50</td><td>91.40</td></tr>
-  </tbody>
-  <tbody>
-    <tr class="table-group"><th colspan="9" scope="row">WAM</th></tr>
-    <tr><th scope="row">Fast-WAM</th><td>16.40</td><td>44.50</td><td>68.90</td><td>78.20</td><td>53.70</td><td>37.70</td><td>60.70</td><td>51.50</td></tr>
-    <tr><th scope="row">OpenWAM-α</th><td>33.80</td><td>76.10</td><td>88.00</td><td>97.00</td><td>87.10</td><td>39.80</td><td>77.50</td><td>69.20</td></tr>
-    <tr><th scope="row">4D-WAM</th><td>45.20</td><td>64.30</td><td>90.60</td><td>94.30</td><td>57.70</td><td>69.10</td><td>79.20</td><td>71.00</td></tr>
-    <tr><th scope="row">ST-WAM</th><td>55.40</td><td>60.10</td><td>79.30</td><td>93.00</td><td>74.20</td><td>79.50</td><td>74.30</td><td>72.80</td></tr>
-    <tr><th scope="row">Faster-WAM</th><td>67.90</td><td>49.00</td><td>92.10</td><td>94.30</td><td>57.00</td><td>82.30</td><td>82.70</td><td>75.00</td></tr>
-    <tr><th scope="row">JEPA-WAM</th><td>79.20</td><td>59.20</td><td>68.20</td><td>93.30</td><td>94.60</td><td>83.60</td><td>76.10</td><td>79.20</td></tr>
-    <tr><th scope="row">Being-H0.7</th><td>82.00</td><td>59.00</td><td>82.80</td><td>97.80</td><td>90.00</td><td>93.50</td><td>88.50</td><td>82.10</td></tr>
-    <tr><th scope="row">Cosmos-Policy</th><td>75.80</td><td>63.30</td><td>81.70</td><td>96.50</td><td>88.90</td><td>92.70</td><td>82.20</td><td>82.20</td></tr>
-    <tr><th scope="row">Fast-WAM-IDM</th><td>65.40</td><td>86.00</td><td>89.50</td><td>96.30</td><td>74.40</td><td>87.60</td><td>80.70</td><td>82.60</td></tr>
-    <tr><th scope="row">CF-WAM</th><td>66.92</td><td>84.90</td><td>90.50</td><td>98.25</td><td>67.84</td><td>88.94</td><td>81.11</td><td>82.65</td></tr>
-    <tr><th scope="row">ImageWAM</th><td>80.80</td><td>50.30</td><td>91.40</td><td>98.10</td><td>85.50</td><td>93.80</td><td>80.50</td><td>83.10</td></tr>
-    <tr><th scope="row">ABot-M0.5</th><td>70.50</td><td>87.40</td><td>88.60</td><td>94.00</td><td>89.70</td><td>75.50</td><td>85.20</td><td>83.40</td></tr>
-    <tr><th scope="row">InternW0-Δ</th><td><strong>90.60</strong></td><td><u>91.10</u></td><td>92.90</td><td>95.80</td><td><u>99.40</u></td><td>94.00</td><td>88.40</td><td><u>92.80</u></td></tr>
-    <tr class="ours"><th scope="row">Phoenix-MWA (w/o. Pretrain)</th><td>79.36</td><td>90.19</td><td>83.73</td><td>97.72</td><td>87.73</td><td>94.82</td><td>85.90</td><td>88.16</td></tr>
-    <tr class="ours"><th scope="row">Phoenix-MWA (w. Pretrain)</th><td>88.24</td><td><strong>94.00</strong></td><td><strong>95.51</strong></td><td><strong>99.91</strong></td><td>98.88</td><td><strong>98.31</strong></td><td><strong>90.23</strong></td><td><strong>94.63</strong></td></tr>
-  </tbody>
-</table>
+    <div class="benchmark-summary"><div><p class="eyebrow">Seven Distribution Shifts</p><h3>LIBERO-Plus</h3><p>相机、初始状态、语言、光照、背景、噪声与布局扰动。</p></div><div class="benchmark-score"><strong>94.8<small>%</small></strong><span>Phoenix-MWA · w. Pretrain</span></div></div>
+    <div class="bar-chart" aria-label="LIBERO-Plus 成功率对比"><div class="bar-row"><span>Phoenix-MWA <small>w/o. Pretrain</small></span><div class="bar-track"><span class="bar-fill baseline" style="width:88.2%"></span></div><strong>88.2%</strong></div><div class="bar-row"><span>Phoenix-MWA <small>w. Pretrain</small></span><div class="bar-track"><span class="bar-fill" style="width:94.8%"></span></div><strong>94.8%</strong></div></div><p class="result-callout">预训练后，总成功率提高 <strong>6.6 pp</strong>。</p>
+    <div class="expanded-details"><h4 class="detail-heading"><span>完整对比 · 七类扰动</span><span class="summary-meta">Success rate (%)</span></h4><div class="detail-body"><p class="paper-result-note">表 1：使用 2,000 条 LIBERO 演示适配，在七类扰动下的 10,030 个评测实例上报告总体成功率。 <a href="https://arxiv.org/pdf/2611.24938" target="_blank" rel="noopener noreferrer">arXiv 2611.24938</a></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="LIBERO-Plus 完整结果表"><table id="libero-plus-comparison" class="report-table">
+<thead><tr>
+<th scope="col">Method</th>
+<th scope="col">Camera</th>
+<th scope="col">Robot</th>
+<th scope="col">Language</th>
+<th scope="col">Light</th>
+<th scope="col">Background</th>
+<th scope="col">Noise</th>
+<th scope="col">Layout</th>
+<th scope="col">Total ↑</th>
+</tr></thead><tbody>
+<tr class="table-group"><th colspan="9" scope="row">VLA</th></tr>
+<tr><th scope="row">OpenVLA</th><td>0.8</td><td>3.5</td><td>23.0</td><td>8.1</td><td>34.8</td><td>15.2</td><td>28.5</td><td>15.6</td></tr>
+<tr><th scope="row">π0</th><td>13.8</td><td>6.0</td><td>58.8</td><td>85.0</td><td>81.4</td><td>79.0</td><td>68.9</td><td>53.6</td></tr>
+<tr><th scope="row">OpenVLA-OFT</th><td>56.4</td><td>31.9</td><td>79.5</td><td>88.7</td><td>93.3</td><td>75.8</td><td>74.2</td><td>69.6</td></tr>
+<tr><th scope="row">StarVLA</th><td>47.0</td><td>60.1</td><td>87.0</td><td>96.3</td><td>95.3</td><td>73.1</td><td>79.2</td><td>75.0</td></tr>
+<tr><th scope="row">ABot-M0</th><td>60.4</td><td>67.9</td><td>86.4</td><td>96.2</td><td>91.6</td><td>86.4</td><td>82.6</td><td>80.5</td></tr>
+<tr><th scope="row">π0.5</th><td>75.8</td><td>79.4</td><td>83.3</td><td>95.5</td><td>95.0</td><td>89.6</td><td>87.0</td><td>85.7</td></tr>
+<tr><th scope="row">Qwen-RobotManip-Context</th><td><u>89.9</u></td><td>83.9</td><td>86.5</td><td><u>98.6</u></td><td><strong>99.9</strong></td><td><u>97.9</u></td><td>87.5</td><td>91.4</td></tr>
+<tr class="table-group"><th colspan="9" scope="row">WAM</th></tr>
+<tr><th scope="row">Fast-WAM</th><td>16.4</td><td>44.5</td><td>68.9</td><td>78.2</td><td>53.7</td><td>37.7</td><td>60.7</td><td>51.5</td></tr>
+<tr><th scope="row">OpenWAM-α</th><td>33.8</td><td>76.1</td><td>88.0</td><td>97.0</td><td>87.1</td><td>39.8</td><td>77.5</td><td>69.2</td></tr>
+<tr><th scope="row">Cosmos-Policy</th><td>75.8</td><td>63.3</td><td>81.7</td><td>96.5</td><td>88.9</td><td>92.7</td><td>82.2</td><td>82.2</td></tr>
+<tr><th scope="row">ImageWAM</th><td>80.8</td><td>50.3</td><td>91.4</td><td>98.1</td><td>85.5</td><td>93.8</td><td>80.5</td><td>83.1</td></tr>
+<tr><th scope="row">InternW0-Δ</th><td><strong>90.6</strong></td><td><u>91.1</u></td><td><u>92.9</u></td><td>95.8</td><td><u>99.4</u></td><td>94.0</td><td><u>88.4</u></td><td><u>92.8</u></td></tr>
+<tr class="ours"><th scope="row">Phoenix (Ours)</th><td><u>89.9</u></td><td><strong>94.0</strong></td><td><strong>94.7</strong></td><td><strong>99.9</strong></td><td>98.6</td><td><strong>98.7</strong></td><td><strong>90.0</strong></td><td><strong>94.8</strong></td></tr>
+</tbody></table>
 </div></div></div>
   </div>
-  <div id="panel-pro" class="benchmark-panel" role="region" aria-label="LIBERO-Pro"><div class="benchmark-summary"><div><p class="eyebrow">Object · Position · Semantics · Task</p><h3>LIBERO-Pro</h3><p>从物体、位置、语义与任务维度考察泛化能力。</p></div><div class="benchmark-score"><strong>66.48<small>%</small></strong><span>Phoenix-MWA · w. Pretrain</span></div></div><div class="expanded-details"><h4 class="detail-heading"><span>完整对比</span><span class="summary-meta">Success rate (%)</span></h4><div class="detail-body"><div class="table-scroll" tabindex="0" role="region" aria-label="LIBERO-Pro 完整结果表"><table id="libero-pro-comparison" class="report-table">
-  <thead>
-    <tr><th scope="col">Method</th><th scope="col">Obj.</th><th scope="col">Pos.</th><th scope="col">Sem.</th><th scope="col">Task</th><th scope="col">Avg.</th></tr>
-  </thead>
-  <tbody>
-    <tr class="table-group"><th colspan="6" scope="row">VLA</th></tr>
-    <tr><th scope="row">OpenVLA-OFT</th><td>27.63</td><td>5.75</td><td>59.00</td><td>0.63</td><td>23.25</td></tr>
-    <tr><th scope="row">NORA</th><td>70.50</td><td>0.00</td><td>86.25</td><td>0.00</td><td>39.00</td></tr>
-    <tr><th scope="row">MolmoAct</th><td>76.00</td><td>1.50</td><td>85.75</td><td>1.50</td><td>41.00</td></tr>
-    <tr><th scope="row">π0</th><td>90.50</td><td>0.00</td><td>90.50</td><td>0.00</td><td>45.25</td></tr>
-    <tr><th scope="row">X-VLA</th><td>79.00</td><td>0.75</td><td>96.75</td><td>6.75</td><td>46.00</td></tr>
-    <tr><th scope="row">VLA-Adapter</th><td>73.75</td><td>0.00</td><td>90.75</td><td>19.75</td><td>46.06</td></tr>
-    <tr><th scope="row">OpenVLA</th><td><u>93.00</u></td><td>0.00</td><td>97.25</td><td>0.00</td><td>47.56</td></tr>
-    <tr><th scope="row">SimVLA</th><td>81.50</td><td>8.30</td><td><u>98.80</u></td><td>6.00</td><td>48.60</td></tr>
-    <tr><th scope="row">HABILIS Brain 0</th><td>71.85</td><td>18.05</td><td>93.00</td><td>21.45</td><td>51.09</td></tr>
-    <tr><th scope="row">π0.5</th><td><strong>96.00</strong></td><td>20.75</td><td>95.75</td><td>0.75</td><td>53.31</td></tr>
-    <tr><th scope="row">Quantile Head</th><td>85.80</td><td>31.30</td><td>97.80</td><td>26.00</td><td>60.20</td></tr>
-    <tr><th scope="row">QuoVLA</th><td>88.25</td><td>36.00</td><td><strong>99.50</strong></td><td>25.50</td><td>62.31</td></tr>
-    <tr><th scope="row">Continuous Reasoning</th><td>84.60</td><td><u>39.30</u></td><td>94.90</td><td><u>37.10</u></td><td><u>64.00</u></td></tr>
-  </tbody>
-  <tbody>
-    <tr class="table-group"><th colspan="6" scope="row">WAM</th></tr>
-    <tr><th scope="row">PatchWAM</th><td>80.80</td><td>8.80</td><td>96.80</td><td>5.00</td><td>47.85</td></tr>
-    <tr><th scope="row">Flex-π</th><td>87.25</td><td>11.75</td><td>98.25</td><td>5.00</td><td>51.00</td></tr>
-    <tr><th scope="row">GAM</th><td>75.75</td><td>32.75</td><td>95.00</td><td><strong>40.50</strong></td><td>61.00</td></tr>
-    <tr class="ours"><th scope="row">Phoenix-MWA (w. Pretrain)</th><td>91.30</td><td><strong>42.55</strong></td><td>98.50</td><td>33.55</td><td><strong>66.48</strong></td></tr>
-  </tbody>
-</table>
+  <div id="panel-pro" class="benchmark-panel" role="region" aria-label="LIBERO-Pro"><div class="benchmark-summary"><div><p class="eyebrow">Object · Position · Semantics · Task</p><h3>LIBERO-Pro</h3><p>从物体、位置、语义与任务维度考察泛化能力。</p></div><div class="benchmark-score"><strong>66.5<small>%</small></strong><span>Phoenix-MWA · w. Pretrain</span></div></div><div class="expanded-details"><h4 class="detail-heading"><span>完整对比</span><span class="summary-meta">Success rate (%)</span></h4><div class="detail-body"><p class="paper-result-note">表 S1：四类扰动各评测 40 项任务，每项任务 50 次；总分为四类扰动成功率的算术平均。 <a href="https://arxiv.org/pdf/2611.24938" target="_blank" rel="noopener noreferrer">arXiv 2611.24938</a></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="LIBERO-Pro 完整结果表"><table id="libero-pro-comparison" class="report-table">
+<thead><tr>
+<th scope="col">Method</th>
+<th scope="col">Obj.</th>
+<th scope="col">Pos.</th>
+<th scope="col">Sem.</th>
+<th scope="col">Task</th>
+<th scope="col">Avg.</th>
+</tr></thead><tbody>
+<tr class="table-group"><th colspan="6" scope="row">VLA</th></tr>
+<tr><th scope="row">OpenVLA-OFT</th><td>27.6</td><td>5.8</td><td>59.0</td><td>0.6</td><td>23.3</td></tr>
+<tr><th scope="row">NORA</th><td>70.5</td><td>0.0</td><td>86.3</td><td>0.0</td><td>39.0</td></tr>
+<tr><th scope="row">MolmoAct</th><td>76.0</td><td>1.5</td><td>85.8</td><td>1.5</td><td>41.0</td></tr>
+<tr><th scope="row">π0</th><td>90.5</td><td>0.0</td><td>90.5</td><td>0.0</td><td>45.3</td></tr>
+<tr><th scope="row">X-VLA</th><td>79.0</td><td>0.8</td><td>96.8</td><td>6.8</td><td>46.0</td></tr>
+<tr><th scope="row">VLA-Adapter</th><td>73.8</td><td>0.0</td><td>90.8</td><td>19.8</td><td>46.1</td></tr>
+<tr><th scope="row">OpenVLA</th><td><u>93.0</u></td><td>0.0</td><td>97.3</td><td>0.0</td><td>47.6</td></tr>
+<tr><th scope="row">SimVLA</th><td>81.5</td><td>8.3</td><td><u>98.8</u></td><td>6.0</td><td>48.6</td></tr>
+<tr><th scope="row">HABILIS Brain 0</th><td>71.9</td><td>18.1</td><td>93.0</td><td>21.5</td><td>51.1</td></tr>
+<tr><th scope="row">π0.5</th><td><strong>96.0</strong></td><td>20.8</td><td>95.8</td><td>0.8</td><td>53.3</td></tr>
+<tr><th scope="row">Quantile Head</th><td>85.8</td><td>31.3</td><td>97.8</td><td>26.0</td><td>60.2</td></tr>
+<tr><th scope="row">QuoVLA</th><td>88.3</td><td>36.0</td><td><strong>99.5</strong></td><td>25.5</td><td>62.3</td></tr>
+<tr><th scope="row">Continuous Reasoning</th><td>84.6</td><td><u>39.3</u></td><td>94.9</td><td><u>37.1</u></td><td><u>64.0</u></td></tr>
+<tr class="table-group"><th colspan="6" scope="row">WAM</th></tr>
+<tr><th scope="row">PatchWAM</th><td>80.8</td><td>8.8</td><td>96.8</td><td>5.0</td><td>47.9</td></tr>
+<tr><th scope="row">Flex-π</th><td>87.3</td><td>11.8</td><td>98.3</td><td>5.0</td><td>51.0</td></tr>
+<tr><th scope="row">GAM</th><td>75.8</td><td>32.8</td><td>95.0</td><td><strong>40.5</strong></td><td>61.0</td></tr>
+<tr class="ours"><th scope="row">Phoenix (Ours)</th><td>91.3</td><td><strong>42.6</strong></td><td>98.5</td><td>33.6</td><td><strong>66.5</strong></td></tr>
+</tbody></table>
 </div></div></div></div>
-  <div id="panel-robocasa" class="benchmark-panel" role="region" aria-label="RoboCasa-GR1"><div class="benchmark-summary"><div><p class="eyebrow">Articulated Objects · Pick &amp; Place</p><h3>RoboCasa-GR1</h3><p>关节物体操作与抓放任务。</p></div><div class="benchmark-score"><strong>82.67<small>%</small></strong><span>Phoenix-MWA · w. Pretrain</span></div></div><div class="split-stats"><div><span>Articulated objects</span><strong>84.33%</strong></div><div><span>Pick &amp; Place</span><strong>82.11%</strong></div></div><div class="expanded-details"><h4 class="detail-heading"><span>完整对比</span><span class="summary-meta">Success rate (%)</span></h4><div class="detail-body"><div class="table-scroll" tabindex="0" role="region" aria-label="RoboCasa-GR1 完整结果表"><table id="robocasa-gr1-comparison" class="report-table">
-  <thead>
-    <tr><th scope="col">Method</th><th scope="col">Art.</th><th scope="col">P&amp;P</th><th scope="col">Avg.</th></tr>
-  </thead>
-  <tbody>
-    <tr class="table-group"><th colspan="4" scope="row">VLA</th></tr>
-    <tr><th scope="row">GR00T N1.6</th><td>24.20</td><td>55.40</td><td>47.60</td></tr>
-    <tr><th scope="row">StarVLA-OFT</th><td>43.70</td><td>50.40</td><td>48.80</td></tr>
-    <tr><th scope="row">StarVLA-α</th><td>49.00</td><td>55.40</td><td>53.80</td></tr>
-    <tr><th scope="row">TwinBrainVLA</th><td>56.70</td><td>53.90</td><td>54.60</td></tr>
-    <tr><th scope="row">CoRE-VLA</th><td>56.20</td><td>56.60</td><td>56.50</td></tr>
-    <tr><th scope="row">ABot-M0</th><td>61.70</td><td>57.10</td><td>58.30</td></tr>
-    <tr><th scope="row">RLDX-1</th><td>57.67</td><td>59.00</td><td>58.70</td></tr>
-    <tr><th scope="row">JoyAI-RA 0.1</th><td>71.67</td><td>60.38</td><td>63.20</td></tr>
-    <tr><th scope="row">DIAL</th><td>74.30</td><td>68.90</td><td>70.20</td></tr>
-    <tr><th scope="row">ACE-Ego-0</th><td>59.00</td><td>77.40</td><td>72.80</td></tr>
-  </tbody>
-  <tbody>
-    <tr class="table-group"><th colspan="4" scope="row">WAM</th></tr>
-    <tr><th scope="row">DiT4DiT</th><td>50.30</td><td>50.90</td><td>50.80</td></tr>
-    <tr><th scope="row">LDA-1B</th><td>56.30</td><td>55.10</td><td>55.40</td></tr>
-    <tr><th scope="row">Fast-WAM-IDM</th><td>59.70</td><td>78.70</td><td>73.90</td></tr>
-    <tr><th scope="row">Fast-WAM</th><td>62.00</td><td>78.80</td><td>74.60</td></tr>
-    <tr><th scope="row">WALA</th><td><u>80.33</u></td><td>73.45</td><td>75.17</td></tr>
-    <tr><th scope="row">LAWA (Full)</th><td>73.00</td><td><u>83.44</u></td><td>80.80</td></tr>
-    <tr><th scope="row">CF-WAM</th><td>75.00</td><td><strong>85.00</strong></td><td><u>82.50</u></td></tr>
-    <tr class="ours"><th scope="row">Phoenix-MWA (w. Pretrain)</th><td><strong>84.33</strong></td><td>82.11</td><td><strong>82.67</strong></td></tr>
-  </tbody>
-</table>
+  <div id="panel-robocasa" class="benchmark-panel" role="region" aria-label="RoboCasa-GR1"><div class="benchmark-summary"><div><p class="eyebrow">Articulated Objects · Pick &amp; Place</p><h3>RoboCasa-GR1</h3><p>关节物体操作与抓放任务。</p></div><div class="benchmark-score"><strong>82.7<small>%</small></strong><span>Phoenix-MWA · w. Pretrain</span></div></div><div class="split-stats"><div><span>Articulated objects</span><strong>84.3%</strong></div><div><span>Pick &amp; Place</span><strong>82.1%</strong></div></div><div class="expanded-details"><h4 class="detail-heading"><span>完整对比</span><span class="summary-meta">Success rate (%)</span></h4><div class="detail-body"><p class="paper-result-note">表 S2：24 项任务，每项使用 1,000 条演示、评测 50 次；总分对 24 项任务等权平均。 <a href="https://arxiv.org/pdf/2611.24938" target="_blank" rel="noopener noreferrer">arXiv 2611.24938</a></p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="RoboCasa-GR1 完整结果表"><table id="robocasa-gr1-comparison" class="report-table">
+<thead><tr>
+<th scope="col">Method</th>
+<th scope="col">Art.</th>
+<th scope="col">P&amp;P</th>
+<th scope="col">Avg.</th>
+</tr></thead><tbody>
+<tr class="table-group"><th colspan="4" scope="row">VLA</th></tr>
+<tr><th scope="row">π0.5</th><td>–</td><td>–</td><td>37.0</td></tr>
+<tr><th scope="row">GR00T N1.6</th><td>24.2</td><td>55.4</td><td>47.6</td></tr>
+<tr><th scope="row">StarVLA</th><td>43.7</td><td>50.4</td><td>48.8</td></tr>
+<tr><th scope="row">StarVLA-α</th><td>49.0</td><td>55.4</td><td>53.8</td></tr>
+<tr><th scope="row">TwinBrainVLA</th><td>56.7</td><td>53.9</td><td>54.6</td></tr>
+<tr><th scope="row">CoRE-VLA</th><td>56.2</td><td>56.6</td><td>56.5</td></tr>
+<tr><th scope="row">ABot-M0</th><td>61.7</td><td>57.1</td><td>58.3</td></tr>
+<tr><th scope="row">RLDX-1</th><td>57.7</td><td>59.0</td><td>58.7</td></tr>
+<tr><th scope="row">JoyAI-RA 0.1</th><td>71.7</td><td>60.4</td><td>63.2</td></tr>
+<tr><th scope="row">DIAL</th><td>74.3</td><td>68.9</td><td>70.2</td></tr>
+<tr><th scope="row">ACE-Ego-0</th><td>59.0</td><td>77.4</td><td>72.8</td></tr>
+<tr class="table-group"><th colspan="4" scope="row">WAM</th></tr>
+<tr><th scope="row">DiT4DiT</th><td>50.3</td><td>50.9</td><td>50.8</td></tr>
+<tr><th scope="row">LDA-1B</th><td>56.3</td><td>55.1</td><td>55.4</td></tr>
+<tr><th scope="row">OpenWAM-α</th><td>–</td><td>–</td><td>60.5</td></tr>
+<tr><th scope="row">Fast-WAM-IDM</th><td>59.7</td><td>78.7</td><td>73.9</td></tr>
+<tr><th scope="row">Fast-WAM</th><td>62.0</td><td>78.8</td><td>74.6</td></tr>
+<tr><th scope="row">WALA</th><td><u>80.3</u></td><td>73.5</td><td>75.2</td></tr>
+<tr><th scope="row">LAWA (Full)</th><td>73.0</td><td><u>83.4</u></td><td>80.8</td></tr>
+<tr><th scope="row">CF-WAM</th><td>75.0</td><td><strong>85.0</strong></td><td><u>82.5</u></td></tr>
+<tr class="ours"><th scope="row">Phoenix (Ours)</th><td><strong>84.3</strong></td><td>82.1</td><td><strong>82.7</strong></td></tr>
+</tbody></table>
 </div></div></div></div>
-  <p class="caption">数据来自技术报告第 4 节；总分提升不代表每项扰动均有提升。完整表保留原报告的分组、加粗和下划线标记。</p>
+  <p class="caption">数据来自论文表 1–3 和表 S1–S2。加粗和下划线分别表示当前表中最优和次优结果。</p>
 
 <div id="panel-robotwin" class="benchmark-panel" role="region" aria-label="RoboTwin 2.0 C2R">
-<div class="benchmark-summary"><div><h3 id="section-5-4">RoboTwin 2.0 C2R</h3></div><div class="benchmark-score"><strong>72.42<small>%</small></strong></div></div>
+<div class="benchmark-summary"><div><h3 id="section-5-4">RoboTwin 2.0 C2R</h3></div><div class="benchmark-score"><strong>72.4<small>%</small></strong></div></div>
 <div class="expanded-details"><h4 class="detail-heading" id="section-5-4-1"><span>完整对比</span><span class="summary-meta">成功率（%）</span></h4><div class="detail-body">
+<p class="paper-result-note">表 1：50 项任务，每项使用 50 条干净场景演示，在随机化场景中评测 100 次，共 5,000 次。 <a href="https://arxiv.org/pdf/2611.24938" target="_blank" rel="noopener noreferrer">arXiv 2611.24938</a></p>
 <div class="table-scroll" tabindex="0" role="region" aria-label="Complete RoboTwin 2.0 Clean2Random results"><table id="robotwin-c2r-comparison" class="report-table">
-<thead><tr><th scope="col">Method</th><th scope="col">Clean2Random</th></tr></thead>
-<tbody>
+<thead><tr>
+<th scope="col">Method</th>
+<th scope="col">Clean2Random</th>
+</tr></thead><tbody>
 <tr class="table-group"><th colspan="2" scope="row">VLA</th></tr>
-<tr><th scope="row">StarVLA</th><td>10.60</td></tr>
-<tr><th scope="row">GR00T-N1.7</th><td>20.70</td></tr>
-<tr><th scope="row">X-VLA</th><td>20.90</td></tr>
-<tr><th scope="row">Spatial Forcing</th><td>26.70</td></tr>
-<tr><th scope="row">ABot-M0</th><td>36.00</td></tr>
-<tr><th scope="row">π0.5</th><td>47.90</td></tr>
-<tr><th scope="row">GigaBrain-0.7</th><td>67.90</td></tr>
-<tr><th scope="row">Qwen-RobotManip-Context</th><td>69.40</td></tr>
-</tbody>
-<tbody>
+<tr><th scope="row">π0</th><td>16.3</td></tr>
+<tr><th scope="row">StarVLA</th><td>10.6</td></tr>
+<tr><th scope="row">ABot-M0</th><td>36.0</td></tr>
+<tr><th scope="row">π0.5</th><td>46.0</td></tr>
+<tr><th scope="row">Qwen-RobotManip-Context</th><td>69.4</td></tr>
 <tr class="table-group"><th colspan="2" scope="row">WAM</th></tr>
-<tr><th scope="row">Fast-WAM</th><td>1.90</td></tr>
-<tr><th scope="row">AHA-WAM</th><td>3.20</td></tr>
-<tr><th scope="row">X-WAM</th><td>25.80</td></tr>
-<tr><th scope="row">4D-WAM</th><td>41.80</td></tr>
-<tr><th scope="row">OpenWAM-α</th><td>48.70</td></tr>
-<tr><th scope="row">InternW0-Δ</th><td><u>71.90</u></td></tr>
-<tr class="ours"><th scope="row">Phoenix-MWA (w. Pretrain)</th><td><strong>72.42</strong></td></tr>
-</tbody>
-</table></div>
+<tr><th scope="row">Fast-WAM</th><td>1.9</td></tr>
+<tr><th scope="row">OpenWAM-α</th><td>48.7</td></tr>
+<tr><th scope="row">InternW0-Δ</th><td><u>71.9</u></td></tr>
+<tr class="ours"><th scope="row">Phoenix (Ours)</th><td><strong>72.4</strong></td></tr>
+</tbody></table></div>
 
 </div></div></div>
 
@@ -472,24 +459,25 @@
 </div>
 
 <div id="panel-robodojo-realworld" class="benchmark-panel" role="region" aria-labelledby="section-5-6">
-<div class="benchmark-summary"><div><h3 id="section-5-6">RoboDojo-RealWorld</h3></div><div class="benchmark-score"><strong>26.11<small>%</small></strong></div></div>
+<div class="benchmark-summary"><div><h3 id="section-5-6">RoboDojo-RealWorld</h3></div><div class="benchmark-score"><strong>30.0<small>%</small></strong></div></div>
 <div class="expanded-details"><h4 class="detail-heading"><span>完整对比</span><span class="summary-meta">成功率（%）</span></h4><div class="detail-body">
+<p class="paper-result-note">表 3：18 项真机任务，每种本体 6 项；每项使用 100 条演示、评测 10 次，共 180 次。先对各本体内任务等权平均，再对三种本体等权平均。 <a href="https://arxiv.org/pdf/2611.24938" target="_blank" rel="noopener noreferrer">arXiv 2611.24938</a></p>
 <div class="table-scroll" tabindex="0" role="region" aria-label="RoboDojo-RealWorld success rates"><table id="robodojo-realworld-comparison" class="report-table">
-<thead><tr><th scope="col">Method</th><th scope="col">ARX X5</th><th scope="col">Piper</th><th scope="col">Piper X</th><th scope="col">Average</th></tr></thead>
-<tbody><tr class="table-group"><th colspan="5" scope="row">VLA</th></tr>
-<tr><th scope="row">DM0</th><td>0.00%</td><td>0.00%</td><td>0.00%</td><td>0.00%</td></tr>
-<tr><th scope="row">Spirit v1.5</th><td>0.00%</td><td>1.70%</td><td>0.00%</td><td>0.60%</td></tr>
-<tr><th scope="row">StarVLA</th><td>0.00%</td><td>5.00%</td><td>0.00%</td><td>1.70%</td></tr>
-<tr><th scope="row">π0</th><td>0.00%</td><td>5.00%</td><td>0.00%</td><td>1.70%</td></tr>
-<tr><th scope="row">GR00T-N1.7</th><td>1.70%</td><td>3.30%</td><td>0.00%</td><td>1.70%</td></tr>
-<tr><th scope="row">X-VLA</th><td>1.70%</td><td>8.30%</td><td>0.00%</td><td>3.30%</td></tr>
-<tr><th scope="row">Xiaomi-Robotics-0</th><td>8.30%</td><td>3.30%</td><td>0.00%</td><td>3.90%</td></tr>
-<tr><th scope="row">GalaxeaVLA (G0)</th><td>0.00%</td><td>13.30%</td><td>0.00%</td><td>4.40%</td></tr>
-<tr><th scope="row">InternVLA-A1</th><td>3.30%</td><td>18.30%</td><td>0.00%</td><td>7.20%</td></tr>
-<tr><th scope="row">π0.5</th><td>13.30%</td><td>21.70%</td><td>3.30%</td><td>12.80%</td></tr>
-</tbody><tbody><tr class="table-group"><th colspan="5" scope="row">WAM</th></tr>
-<tr><th scope="row">OpenWAM-α</th><td><strong>23.30%</strong></td><td><u>36.70%</u></td><td><u>13.30%</u></td><td><u>24.40%</u></td></tr>
-<tr class="ours"><th scope="row">Phoenix-MWA (w. Pretrain)</th><td><u>16.67%</u></td><td><strong>48.33%</strong></td><td><strong>13.33%</strong></td><td><strong>26.11%</strong></td></tr>
+<thead><tr>
+<th scope="col">Method</th>
+<th scope="col">ARX X5</th>
+<th scope="col">Piper</th>
+<th scope="col">Piper X</th>
+<th scope="col">Avg.</th>
+</tr></thead><tbody>
+<tr class="table-group"><th colspan="5" scope="row">VLA</th></tr>
+<tr><th scope="row">StarVLA</th><td>0.0</td><td>5.0</td><td>0.0</td><td>1.7</td></tr>
+<tr><th scope="row">π0</th><td>0.0</td><td>5.0</td><td>0.0</td><td>1.7</td></tr>
+<tr><th scope="row">X-VLA</th><td>1.7</td><td>8.3</td><td>0.0</td><td>3.3</td></tr>
+<tr><th scope="row">π0.5</th><td>13.3</td><td>21.7</td><td>3.3</td><td>12.8</td></tr>
+<tr class="table-group"><th colspan="5" scope="row">WAM</th></tr>
+<tr><th scope="row">OpenWAM-α</th><td><u>23.3</u></td><td><strong>36.7</strong></td><td><u>13.3</u></td><td><u>24.4</u></td></tr>
+<tr class="ours"><th scope="row">Phoenix (Ours)</th><td><strong>33.3</strong></td><td><u>31.7</u></td><td><strong>25.0</strong></td><td><strong>30.0</strong></td></tr>
 </tbody></table></div></div></div></div>
 </div></section>
 <section class="section tint" id="demos"><div class="wrap">
@@ -506,43 +494,78 @@
   <noscript><ul><li><a href="demo/jimu_step015000_rtc_three_views.mp4">积木</a></li><li><a href="demo/bottle_02_step015000_rtc_three_views.mp4">瓶盖</a></li><li><a href="demo/mofang_step015000_rtc_three_views.mp4">魔方</a></li><li><a href="demo/huanggua_three_views_background_blur_v3.mp4">削黄瓜</a></li><li><a href="demo/plate_rtc_three_views_background_blur_v3.mp4">擦盘子</a></li><li><a href="demo/pouch2459_50k_rollout000004_left_base_right_titlebar.mp4">笔袋</a></li><li><a href="demo/breakfast273_30k_rtc_three_views.mp4">早餐物品操作</a></li></ul></noscript>
 </div></section>
 <section class="section" id="analysis"><div class="wrap">
-  <div class="section-heading"><div><p class="eyebrow">05 / Analysis</p><h2>实验分析</h2></div><p>分别检查视觉表征、未来视频预测、接触后训练和世界模型强化学习的实验结果。</p></div>
-  <article class="analysis-block"><div class="subsection-heading"><span class="module-code">05.1 / REPRESENTATION</span><h3>更均衡的视觉特征谱</h3></div><p class="prose">从预训练验证集与 LIBERO-Plus 各抽取 10,000 帧，三个编码器共享相同采样帧。通过对中心化 CLS 和 Patch Mean 特征矩阵进行奇异值分解，计算 Effective Rank，衡量特征变化在主方向上的分布均衡程度。</p><figure><div class="figure-link"><img loading="lazy" src="assets/pptx_tnr_20261015/effective_rank_tnr.webp" width="2880" height="1132" alt="DINOv3、DINOv3 (VGGT-Ω) 与 Phoenix Encoder 在两个数据域上的有效秩对比"></div><figcaption>相较 VGGT-Ω 初始化模型，Phoenix Encoder 在两个数据域上的有效秩均有所回升；DINOv3 原始模型的有效秩仍然最高。</figcaption></figure><div class="expanded-details"><h4 class="detail-heading">完整有效秩数值与解释</h4><div class="detail-body"><div class="table-scroll" tabindex="0" role="region" aria-label="有效秩结果表"><table class="report-table">
-<thead>
-<tr>
-<th scope="col">Model</th>
-<th scope="col">Pretraining Validation Set<br>CLS</th>
-<th scope="col">Pretraining Validation Set<br>Patch Mean</th>
-<th scope="col">LIBERO-Plus<br>CLS</th>
-<th scope="col">LIBERO-Plus<br>Patch Mean</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>DINOv3</td>
-<td>714.80</td>
-<td>608.17</td>
-<td>605.73</td>
-<td>505.93</td>
-</tr>
-<tr>
-<td>DINOv3 (VGGT-Ω)</td>
-<td>603.69</td>
-<td>526.75</td>
-<td>470.49</td>
-<td>413.01</td>
-</tr>
-<tr class="ours">
-<td>Phoenix Encoder (Ours)</td>
-<td>638.80</td>
-<td>568.13</td>
-<td>481.96</td>
-<td>440.06</td>
-</tr>
-</tbody>
-</table>
-</div><p>相较 DINOv3 (VGGT-Ω)，Phoenix Encoder 的 CLS / Patch Mean 有效秩在预训练验证集分别提高 5.81% / 7.86%，在 LIBERO-Plus 分别提高 2.44% / 6.55%。这表示特征变化分布在更多相对均衡的方向上，是关于表征结构的证据，不能直接等同于操作成功率提升。</p></div></div></article>
-  <article class="analysis-block"><div class="subsection-heading"><span class="module-code">05.2 / FUTURE PREDICTION</span><h3>更准确的未来视频预测</h3></div><p class="prose">三组统一在 LIBERO 后训练 20k steps，对 LIBERO-Plus 中预先固定的 200 个共同完整窗口评分。每个窗口只评估 8 个未来帧，主视角、腕部视角与窗口之间等权平均。</p><div class="table-scroll" tabindex="0" role="region" aria-label="视频生成质量结果表"><table class="report-table">
+  <div class="section-heading"><div><p class="eyebrow">05 / Analysis</p><h2>实验分析</h2></div><p>同步论文中的表征探测、消融与数据效率结果；ILA 和 PhysCanvas 保留各自项目的独立实验结果。</p></div>
+  <article class="analysis-block">
+<div class="subsection-heading"><h3 id="section-6-1">表征消融与数据效率</h3></div>
+<p class="prose">论文表 4–5 与图 4–5 分别报告冻结表征探测、表征消融、预训练规模和后训练数据效率。 <a href="https://arxiv.org/pdf/2611.24938#page=6" target="_blank" rel="noopener noreferrer">arXiv 2611.24938</a>.</p>
+<h4 class="detail-heading">冻结表征探测（表 4）</h4>
+<p class="prose">Phoenix Encoder 的平均排名为 1.80，直接未来特征预测为 34.42%，在所比较编码器中均排名第一。深度和实例指标为损失，越低越好；视角、直接预测和路径积分指标越高越好。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="冻结表征探测（表 4）"><table id="scene-probing-results" class="report-table">
+<thead><tr>
+<th scope="col">Encoder</th>
+<th scope="col">Depth ↓</th>
+<th scope="col">Instance ↓</th>
+<th scope="col">View ↑</th>
+<th scope="col">Direct ↑</th>
+<th scope="col">Path ↑</th>
+<th scope="col">Avg. rank ↓</th>
+</tr></thead><tbody>
+<tr><th scope="row">DINOv2-L</th><td>0.1422</td><td><strong>1.3828</strong></td><td>95.57</td><td><u>23.73</u></td><td>9.00</td><td><u>2.60</u></td></tr>
+<tr><th scope="row">Fast3R</th><td><strong>0.1386</strong></td><td>1.6072</td><td><strong>98.08</strong></td><td>1.33</td><td>1.90</td><td>3.40</td></tr>
+<tr><th scope="row">VideoMAE-L</th><td>0.2968</td><td>4.1571</td><td>91.18</td><td>5.31</td><td>6.85</td><td>5.60</td></tr>
+<tr><th scope="row">V-JEPA 2-L</th><td>0.2708</td><td>2.9211</td><td>92.56</td><td>6.25</td><td><strong>15.88</strong></td><td>3.80</td></tr>
+<tr><th scope="row">Qwen2.5-VL</th><td>0.2244</td><td>2.9476</td><td>93.85</td><td>17.12</td><td>9.03</td><td>3.80</td></tr>
+<tr class="ours"><th scope="row">Phoenix Encoder</th><td><u>0.1411</u></td><td><u>1.5738</u></td><td><u>96.18</u></td><td><strong>34.42</strong></td><td><u>15.01</u></td><td><strong>1.80</strong></td></tr>
+</tbody></table></div>
+<h4 class="detail-heading">表征与压缩消融（表 5）</h4>
+<p class="prose">所有配置均保留外观 VAE 分支，并在不做 WAM 预训练的条件下后训练。固定 Phoenix Encoder，将 PCA48 换为 CS-VAE 后，LIBERO-Plus 总成功率从 84.4% 升至 88.2%。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="表征与压缩消融（表 5）"><table id="representation-ablation-results" class="report-table">
+<thead><tr>
+<th scope="col">Encoder / Compression</th>
+<th scope="col">Camera</th>
+<th scope="col">Robot</th>
+<th scope="col">Language</th>
+<th scope="col">Light</th>
+<th scope="col">Background</th>
+<th scope="col">Noise</th>
+<th scope="col">Layout</th>
+<th scope="col">Total ↑</th>
+</tr></thead><tbody>
+<tr><th scope="row">VAE only</th><td>75.5</td><td>69.0</td><td>81.9</td><td>84.7</td><td>55.0</td><td>88.3</td><td>79.0</td><td>76.9</td></tr>
+<tr><th scope="row">VGGT-Ω / PCA48</th><td><strong>81.9</strong></td><td>60.4</td><td>64.5</td><td>94.2</td><td>85.0</td><td>90.0</td><td>77.9</td><td>78.3</td></tr>
+<tr><th scope="row">V-JEPA 2.1-L / PCA48</th><td>77.1</td><td><u>72.3</u></td><td>76.9</td><td><strong>98.7</strong></td><td><u>86.9</u></td><td>92.8</td><td>83.0</td><td>83.2</td></tr>
+<tr><th scope="row">DINOv3 / PCA48</th><td>61.7</td><td>66.2</td><td>68.3</td><td>88.2</td><td>79.2</td><td>86.1</td><td>76.6</td><td>74.4</td></tr>
+<tr class="ours"><th scope="row">Phoenix Encoder / PCA48</th><td>79.0</td><td>70.2</td><td><u>82.8</u></td><td><u>98.5</u></td><td>86.4</td><td><u>94.4</u></td><td><u>83.3</u></td><td><u>84.4</u></td></tr>
+<tr class="ours"><th scope="row">Phoenix Encoder / CS-VAE</th><td><u>79.4</u></td><td><strong>90.2</strong></td><td><strong>83.7</strong></td><td>97.7</td><td><strong>87.7</strong></td><td><strong>94.8</strong></td><td><strong>85.9</strong></td><td><strong>88.2</strong></td></tr>
+</tbody></table></div>
+<h4 class="detail-heading">预训练数据规模（图 4）</h4>
+<p class="prose">RoboTwin 2.0 C2R 成功率（%）。这里的 Fast-WAM 使用与 Phoenix 相同的数据扩展协议；其完整数据结果 47.7% 与基准表中引用的原始 Fast-WAM 结果属于不同训练设置。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="预训练数据规模（图 4）"><table id="pretraining-scaling-results" class="report-table">
+<thead><tr>
+<th scope="col">Method</th>
+<th scope="col">0%</th>
+<th scope="col">25%</th>
+<th scope="col">50%</th>
+<th scope="col">100%</th>
+</tr></thead><tbody>
+<tr><th scope="row">Fast-WAM</th><td><u>1.9</u></td><td><u>36.3</u></td><td><u>44.8</u></td><td><u>47.7</u></td></tr>
+<tr class="ours"><th scope="row">Phoenix</th><td><strong>4.6</strong></td><td><strong>45.4</strong></td><td><strong>67.7</strong></td><td><strong>72.4</strong></td></tr>
+</tbody></table></div>
+<h4 class="detail-heading">后训练数据效率（图 5）</h4>
+<p class="prose">从完整预训练数据得到的同一检查点开始，分别使用每项任务 25%、50%、75%、100% 的演示后训练。100% 对应每项任务 50 条演示。仅用 25% 演示时，LIBERO-Plus / RoboTwin C2R 成功率为 91.1% / 58.6%。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="后训练数据效率（图 5）"><table id="posttraining-efficiency-results" class="report-table">
+<thead><tr>
+<th scope="col">Benchmark</th>
+<th scope="col">25%</th>
+<th scope="col">50%</th>
+<th scope="col">75%</th>
+<th scope="col">100%</th>
+</tr></thead><tbody>
+<tr><th scope="row">LIBERO-Plus</th><td>91.1</td><td>94.0</td><td>94.4</td><td>94.8</td></tr>
+<tr><th scope="row">RoboTwin 2.0 C2R</th><td>58.6</td><td>66.1</td><td>66.4</td><td>72.4</td></tr>
+</tbody></table></div>
+</article>
+  <article class="analysis-block"><div class="subsection-heading"><span class="module-code">05.2 / FUTURE PREDICTION</span><h3>更准确的未来视频预测</h3></div><p class="prose">采用论文表 6 的结果：LIBERO-Plus 和 RoboTwin 2.0 C2R 各评测 200 个窗口，按任务和窗口标识对齐。每个窗口仅对 8 个未来帧评分，覆盖 32 个动作步；各未来帧、视角和窗口等权平均。</p><div class="table-scroll" tabindex="0" role="region" aria-label="视频生成质量结果表"><table class="report-table" id="video-prediction-quality">
 <thead>
 <tr>
 <th scope="col">Model</th>
@@ -553,7 +576,8 @@
 <th scope="col">CLIP-GT ↑</th>
 </tr>
 </thead>
-<tbody>
+<tbody id="video-prediction-libero">
+<tr class="table-group"><th colspan="6" scope="rowgroup">LIBERO-Plus</th></tr>
 <tr>
 <td>FastWAM</td>
 <td>20.75</td>
@@ -577,6 +601,33 @@
 <td><strong>0.12</strong></td>
 <td><strong>90.28</strong></td>
 <td><strong>93.09</strong></td>
+</tr>
+</tbody>
+<tbody id="video-prediction-robotwin">
+<tr class="table-group"><th colspan="6" scope="rowgroup">RoboTwin 2.0 C2R</th></tr>
+<tr>
+<td>FastWAM</td>
+<td>16.51</td>
+<td>0.61</td>
+<td>0.39</td>
+<td>60.33</td>
+<td>83.27</td>
+</tr>
+<tr class="ours">
+<td>Phoenix-MWA (w/o. Pretrain)</td>
+<td>21.19</td>
+<td>0.75</td>
+<td>0.30</td>
+<td>76.02</td>
+<td>88.96</td>
+</tr>
+<tr class="ours">
+<td>Phoenix-MWA (w. Pretrain)</td>
+<td><strong>26.30</strong></td>
+<td><strong>0.82</strong></td>
+<td><strong>0.16</strong></td>
+<td><strong>86.12</strong></td>
+<td><strong>93.95</strong></td>
 </tr>
 </tbody>
 </table>
